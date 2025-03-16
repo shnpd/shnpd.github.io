@@ -1,0 +1,358 @@
+---
+title: 【Go】slice切片详解
+toc: true
+date: 2024-11-28 17:56:02
+tags: golang 算法
+categories: Golang
+---
+
+​点击阅读更多查看文章内容<!--more-->
+
+# 切片详解
+## 切片的实现
+
+Go 中的切片本质上是一个结构体，包含以下三个部分：
+
+- **指向底层数组的指针**（`array`）：切片指向一个底层数组，数组中存储着切片的数据。
+- **切片的长度**（`len`）：切片中当前元素的个数。
+- **切片的容量**（`cap`）：底层数组的总容量，即底层数组能够存储的元素个数。
+
+```go
+type slice struct {
+    array unsafe.Pointer
+    len   int
+    cap   int
+}
+```
+
+## 切片的扩容
+
+> 切片在添加元素（如append操作）时，如果切片的长度大于容量，那么会重新分配一个新的容量更大的底层数组来存储新切片
+
+切片在初始化的时候长度等于容量，当向切片添加元素时切片的长度就会大于容量，此时就会为其分配一个新的底层数组
+
+```go
+func main() {
+	t := []int{1, 2, 3}
+	fmt.Println(cap(t))
+	fmt.Printf("%p\n", t)
+	t = append(t, 1)
+	fmt.Println(cap(t))
+	fmt.Printf("%p\n", t)
+
+	//3
+	//0xc0000120a8
+	//6
+	//0xc00000c360
+}
+```
+
+在该示例中，初始化切片的长度为3，容量也为3，切片的底层数组的地址为0xc0000120a8，当向其添加一个元素后，切片的容量为6，并指向了一个新的地址0xc00000c360
+
+> Tips：使用 `fmt.Printf("%p\n", t)` 获得的是切片指向的底层数组的地址与 `fmt.Printf("%p\n", unsafe.Pointer(&t[0]))` 的值相同，使用 `fmt.Printf("%p\n", &t)` 获得的是切片变量本身的地址
+
+
+
+我们可以使用make()创建一个容量大于长度的切片，这样在向切片添加元素时，长度就不会超过容量，就不会分配新的数组
+
+```go
+func main() {
+	t := make([]int, 3, 5)
+	fmt.Println(len(t))
+	fmt.Println(cap(t))
+	fmt.Printf("%p\n", t)
+
+	t = append(t, 1)
+	fmt.Println(cap(t))
+	fmt.Printf("%p\n", t)
+
+	//3
+	//5
+	//0xc00000c360
+	//5
+	//0xc00000c360
+}
+```
+
+在该示例中，我们使用`make([]int, 3, 5)`创建了一个长度为3，容量为5的切片，随后我们向其添加了一个元素，长度为4没有超过容量，此时底层数组的地址与添加元素前的地址一致，并没有分配新的数组。
+
+### 切片扩容的实现
+
+在第一个示例中，当我们向一个容量为3的切片添加一个元素后，新分配的切片容量为6，这个是如何得出的呢？
+
+切片扩容的代码为 `growslice`：
+
+```go
+func growslice(oldPtr unsafe.Pointer, newLen, oldCap, num int, et *_type) slice {
+    oldLen := newLen - num
+    if raceenabled {
+       callerpc := getcallerpc()
+       racereadrangepc(oldPtr, uintptr(oldLen*int(et.Size_)), callerpc, abi.FuncPCABIInternal(growslice))
+    }
+    if msanenabled {
+       msanread(oldPtr, uintptr(oldLen*int(et.Size_)))
+    }
+    if asanenabled {
+       asanread(oldPtr, uintptr(oldLen*int(et.Size_)))
+    }
+
+    if newLen < 0 {
+       panic(errorString("growslice: len out of range"))
+    }
+
+    if et.Size_ == 0 {
+       // append should not create a slice with nil pointer but non-zero len.
+       // We assume that append doesn't need to preserve oldPtr in this case.
+       return slice{unsafe.Pointer(&zerobase), newLen, newLen}
+    }
+
+    newcap := nextslicecap(newLen, oldCap)
+
+    var overflow bool
+    var lenmem, newlenmem, capmem uintptr
+    // Specialize for common values of et.Size.
+    // For 1 we don't need any division/multiplication.
+    // For goarch.PtrSize, compiler will optimize division/multiplication into a shift by a constant.
+    // For powers of 2, use a variable shift.
+    noscan := !et.Pointers()
+    switch {
+    case et.Size_ == 1:
+       lenmem = uintptr(oldLen)
+       newlenmem = uintptr(newLen)
+       capmem = roundupsize(uintptr(newcap), noscan)
+       overflow = uintptr(newcap) > maxAlloc
+       newcap = int(capmem)
+    case et.Size_ == goarch.PtrSize:
+       lenmem = uintptr(oldLen) * goarch.PtrSize
+       newlenmem = uintptr(newLen) * goarch.PtrSize
+       capmem = roundupsize(uintptr(newcap)*goarch.PtrSize, noscan)
+       overflow = uintptr(newcap) > maxAlloc/goarch.PtrSize
+       newcap = int(capmem / goarch.PtrSize)
+    case isPowerOfTwo(et.Size_):
+       var shift uintptr
+       if goarch.PtrSize == 8 {
+          // Mask shift for better code generation.
+          shift = uintptr(sys.TrailingZeros64(uint64(et.Size_))) & 63
+       } else {
+          shift = uintptr(sys.TrailingZeros32(uint32(et.Size_))) & 31
+       }
+       lenmem = uintptr(oldLen) << shift
+       newlenmem = uintptr(newLen) << shift
+       capmem = roundupsize(uintptr(newcap)<<shift, noscan)
+       overflow = uintptr(newcap) > (maxAlloc >> shift)
+       newcap = int(capmem >> shift)
+       capmem = uintptr(newcap) << shift
+    default:
+       lenmem = uintptr(oldLen) * et.Size_
+       newlenmem = uintptr(newLen) * et.Size_
+       capmem, overflow = math.MulUintptr(et.Size_, uintptr(newcap))
+       capmem = roundupsize(capmem, noscan)
+       newcap = int(capmem / et.Size_)
+       capmem = uintptr(newcap) * et.Size_
+    }
+
+    // The check of overflow in addition to capmem > maxAlloc is needed
+    // to prevent an overflow which can be used to trigger a segfault
+    // on 32bit architectures with this example program:
+    //
+    // type T [1<<27 + 1]int64
+    //
+    // var d T
+    // var s []T
+    //
+    // func main() {
+    //   s = append(s, d, d, d, d)
+    //   print(len(s), "\n")
+    // }
+    if overflow || capmem > maxAlloc {
+       panic(errorString("growslice: len out of range"))
+    }
+
+    var p unsafe.Pointer
+    if !et.Pointers() {
+       p = mallocgc(capmem, nil, false)
+       // The append() that calls growslice is going to overwrite from oldLen to newLen.
+       // Only clear the part that will not be overwritten.
+       // The reflect_growslice() that calls growslice will manually clear
+       // the region not cleared here.
+       memclrNoHeapPointers(add(p, newlenmem), capmem-newlenmem)
+    } else {
+       // Note: can't use rawmem (which avoids zeroing of memory), because then GC can scan uninitialized memory.
+       p = mallocgc(capmem, et, true)
+       if lenmem > 0 && writeBarrier.enabled {
+          // Only shade the pointers in oldPtr since we know the destination slice p
+          // only contains nil pointers because it has been cleared during alloc.
+          //
+          // It's safe to pass a type to this function as an optimization because
+          // from and to only ever refer to memory representing whole values of
+          // type et. See the comment on bulkBarrierPreWrite.
+          bulkBarrierPreWriteSrcOnly(uintptr(p), uintptr(oldPtr), lenmem-et.Size_+et.PtrBytes, et)
+       }
+    }
+    memmove(p, oldPtr, lenmem)
+
+    return slice{p, newLen, newcap}
+}
+```
+
+
+
+- `oldPtr unsafe.Pointer`：指向当前切片的底层数组的指针。
+
+- `newLen int`：扩展后的切片的目标长度。
+
+- `oldCap int`：当前切片的容量。
+
+- `num int`：额外需要的空间量，通常用于处理切片扩容时的新数据量。
+
+- `et *_type`：元素的类型，用来确定切片元素的大小和是否是指针类型（如 `int`、`*struct`）。
+
+首先处理一些边界条件，随后调用`nextslicecap`方法计算新切片的容量，具体细节如下
+
+```go
+func nextslicecap(newLen, oldCap int) int {
+	newcap := oldCap
+	doublecap := newcap + newcap
+	if newLen > doublecap {
+		return newLen
+	}
+
+	const threshold = 256
+	if oldCap < threshold {
+		return doublecap
+	}
+	for {
+		// Transition from growing 2x for small slices
+		// to growing 1.25x for large slices. This formula
+		// gives a smooth-ish transition between the two.
+		newcap += (newcap + 3*threshold) >> 2
+
+		// We need to check `newcap >= newLen` and whether `newcap` overflowed.
+		// newLen is guaranteed to be larger than zero, hence
+		// when newcap overflows then `uint(newcap) > uint(newLen)`.
+		// This allows to check for both with the same comparison.
+		if uint(newcap) >= uint(newLen) {
+			break
+		}
+	}
+
+	// Set newcap to the requested cap when
+	// the newcap calculation overflowed.
+	if newcap <= 0 {
+		return newLen
+	}
+	return newcap
+}
+```
+
+注意，以上计算出的容量并不是新切片最终的容量，在接下来的33行的switch中，还会进行一些内存管理的操作，因为内存都是成块分配的，所以实际分配的容量可能会由于内存对齐等原因大于`nextslicecap`计算出的newcap；
+
+最后使用mallogc分配实际的内存大小capmem
+
+## 切片传参
+
+go语言中只有值传递，没有引用传递，也就是说任何变量在传递时都会复制一份副本
+
+```go
+func main() {
+	t := []int{1, 2, 3}
+	fmt.Printf("slice array address: %p\n", t)
+	fmt.Printf("slice address: %p\n", &t)
+	test(t)
+
+	//slice array address: 0xc0000120a8
+	//slice address: 0xc000008030
+	//slice array address(in function): 0xc0000120a8
+	//slice address(in function): 0xc000008060
+}
+
+func test(t []int) {
+	fmt.Printf("slice array address(in function): %p\n", t)
+	fmt.Printf("slice address(in function): %p\n", &t)
+}
+```
+
+以上示例可以看到函数内外的切片地址并不相同，但是他们指向的底层数组是相同的，这符合值传递的特征。
+
+这里我们在结合之前提到的切片扩容进行分析
+
+```go
+func main() {
+	t := []int{1, 2, 3}
+	fmt.Printf("%p\n", t)
+	test(t)
+	fmt.Printf("%p\n", t)
+	//0xc0000120a8
+	//0xc0000120a8
+	//0xc00000c360
+	//0xc0000120a8
+}
+
+func test(t []int) {
+	fmt.Printf("%p\n", t)
+	t = append(t, 1)
+	fmt.Printf("%p\n", t)
+}
+```
+
+以上示例中，方法中接收的切片在开始时与原始切片指向同一个数组，但是在添加一个元素后，切片的容量超过了长度，此时为方法内的切片分配了一个新的底层数组，但是由于是值传递，两个切片本身指向不同的地址，所以方法外的切片的数组并没有改变。
+
+```go
+func main() {
+    t := make([]int, 3, 10)
+    fmt.Printf("%p\n", t)
+    test(t)
+    fmt.Printf("%p\n", t)
+    //0xc000014140
+    //0xc000014140
+    //0xc000014140
+    //0xc000014140
+}
+
+func test(t []int) {
+    fmt.Printf("%p\n", t)
+    t = append(t, 1)
+    fmt.Printf("%p\n", t)
+}
+```
+
+以上示例中切片的容量足够，所以不会分配新的数组，**但是要注意的是虽然没有分配新的数组，但是切片的长度发生了改变。**
+
+```go
+func main() {
+	t := make([]int, 3, 10)
+	test(t)
+	fmt.Println(t)
+	//[0 0 0 1]
+	//[0 0 0]
+}
+
+func test(t []int) {
+	t = append(t, 1)
+	fmt.Println(t)
+}
+```
+
+以上示例可以看出，在函数内外输出的切片并不一致，这是因为值传递，函数内的切片的长度发生了改变并不会改变函数外的切片长度
+
+```go
+func main() {
+    t := make([]int, 3, 10)
+    test(t)
+    fmt.Println(t)
+    
+    newt := t[0:4]
+    fmt.Println(newt)
+    //[0 0 0 1]
+    //[0 0 0]
+    //[0 0 0 1]
+}
+
+func test(t []int) {
+    t = append(t, 1)
+    fmt.Println(t)
+}
+```
+
+这里我们通过将t赋值给一个新的切片来取出它的第4个元素可以看到与函数内的修改一致，证明他们确实是同一个底层数组，注意这里不能通过下标的方式直接取值会报越界错误。
+

@@ -1,0 +1,57 @@
+widgets:
+    # Profile widget configurations
+    # -
+    #     # Where should the widget be placed, left sidebar or right sidebar
+    #     position: left
+    #     type: profile
+    #     # Author name
+    #     author: ShiHaonan
+    #     # Author title
+    #     author_title: Student
+    #     # Author's current location
+    #     location: Jiangsu Nanjing
+    #     # URL or path to the avatar image
+    #     avatar: /images/head.jpg
+    #     # Whether show the rounded avatar image
+    #     avatar_rounded: false
+    #     social_links:
+    #         Github: https://github.com/shnpd
+    #         CSDN: https://blog.csdn.net/shn111
+    #         Leetcode: https://leetcode.cn/u/time-7d/
+    # # Table of contents widget configurations
+    -
+        # Where should the widget be placed, left sidebar or right sidebar
+        position: left
+        type: toc
+        # Whether to show the index of each heading
+        index: true
+        # Whether to collapse sub-headings when they are out-of-view
+        collapsed: true
+        # Maximum level of headings to show (1-6)
+        depth: 3
+            # Recent posts widget configurations
+    -
+        # Where should the widget be placed, left sidebar or right sidebar
+        position: left
+        type: recent_posts
+    # Categories widget configurations
+    -
+        # Where should the widget be placed, left sidebar or right sidebar
+        position: left
+        type: categories
+    # Archives widget configurations
+    # -
+    #     # Where should the widget be placed, left sidebar or right sidebar
+    #     position: left
+    #     type: archives
+    # Tags widget configurations
+    # -
+    #     # Where should the widget be placed, left sidebar or right sidebar
+    #     position: left
+    #     type: tags
+    #     # How to order tags. For example 'name' to order by name in ascending order, and '-length' to order by number of posts in each tags in descending order
+    #     order_by: name
+    #     # Amount of tags to show. Will show all if not set.
+    #     amount: 
+    #     # Whether to show tags count, i.e. number of posts in the tag.
+    #     show_count: true
