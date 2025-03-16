@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>【redis】简介 - shn&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="shn&#039;s blog"><meta name="msapplication-TileImage" content="/images/icon_blog.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="shn&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="点击阅读更多查看文章内容"><meta property="og:type" content="blog"><meta property="og:title" content="【redis】简介"><meta property="og:url" content="https://shnpd.github.io/2025/03/03/interview/redis/%E3%80%90redis%E3%80%91%E7%AE%80%E4%BB%8B/"><meta property="og:site_name" content="shn&#039;s blog"><meta property="og:description" content="点击阅读更多查看文章内容"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618055.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618056.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618057.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618058.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618059.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618060.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618062.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618063.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618064.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618065.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618066.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618067.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618068.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618069.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618070.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618071.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618072.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618073.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618074.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618075.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618076.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618077.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618078.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618079.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618080.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618081.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618082.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618083.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618084.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618085.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618086.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618087.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618089.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618090.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618091.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618092.png"><meta property="article:published_time" content="2025-03-02T16:00:00.000Z"><meta property="article:modified_time" content="2025-03-16T14:34:12.313Z"><meta property="article:author" content="ShiHaonan"><meta property="article:tag" content="redis"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618055.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://shnpd.github.io/2025/03/03/interview/redis/%E3%80%90redis%E3%80%91%E7%AE%80%E4%BB%8B/"},"headline":"【redis】简介","image":["https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618055.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618056.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618057.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618058.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618059.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618060.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618062.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618063.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618064.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618065.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618066.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618067.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618068.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618069.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618070.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618071.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618072.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618073.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618074.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618075.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618076.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618077.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618078.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618079.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618080.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618081.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618082.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618083.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618084.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618085.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618086.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618087.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618089.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618090.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618091.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618092.png"],"datePublished":"2025-03-02T16:00:00.000Z","dateModified":"2025-03-16T14:34:12.313Z","author":{"@type":"Person","name":"ShiHaonan"},"publisher":{"@type":"Organization","name":"shn's blog","logo":{"@type":"ImageObject","url":{"text":"shn's blog"}}},"description":"点击阅读更多查看文章内容"}</script><link rel="canonical" href="https://shnpd.github.io/2025/03/03/interview/redis/%E3%80%90redis%E3%80%91%E7%AE%80%E4%BB%8B/"><link rel="icon" href="/images/icon_blog.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><meta name="msvalidate.01" content="E38AFEA650A8300110261393E7FD0A39"><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">shn&#039;s blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-03-02T16:00:00.000Z" title="3/3/2025, 12:00:00 AM">2025-03-03</time>发表</span><span class="level-item"><time dateTime="2025-03-16T14:34:12.313Z" title="3/16/2025, 10:34:12 PM">2025-03-16</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">知识点整理</a><span> / </span><a class="link-muted" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/">redis</a></span><span class="level-item">16 分钟读完 (大约2380个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">【redis】简介</h1><div class="content"><p>点击阅读更多查看文章内容<span id="more"></span></p>
+<h2 id="什么是redis"><a href="#什么是redis" class="headerlink" title="什么是redis"></a>什么是redis</h2><p>Redis诞生于2009年全称是Remote Dictionary Server，远程词典服务器，是一个基于内存的键值型NoSQL数据库。</p>
+<p>特征：</p>
+<ul>
+<li>键值型，value支持多种不同数据结构，功能丰富</li>
+<li>单线程，redis处理命令请求是单线程的避免上下文切换</li>
+<li>低延迟，速度快（基于内存、IO多路复用、良好的编码）</li>
+<li>支持数据持久化（redis数据会落到磁盘持久化）</li>
+<li>支持主从集群、分片集群</li>
+<li>支持多语言客户端</li>
+</ul>
+<h2 id="安装redis"><a href="#安装redis" class="headerlink" title="安装redis"></a>安装redis</h2><p><a target="_blank" rel="noopener" href="https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/install-redis-on-windows/">Install Redis on Windows | Docs</a></p>
+<p>windows下需要安装wsl，通过wsl进入linux子系统</p>
+<p>通过redis-cli进入redis命令行客户端进行交互</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618055.png" alt="image-20250214191352253" style="zoom:67%;" />
+
+<h2 id="redis常见命令"><a href="#redis常见命令" class="headerlink" title="redis常见命令"></a>redis常见命令</h2><h3 id="数据结构介绍"><a href="#数据结构介绍" class="headerlink" title="数据结构介绍"></a>数据结构介绍</h3><p>key一般是String类型，不过value类型多样，前五种为基本类型，后三种为特殊类型</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618056.png" alt="image-20250214191735105" style="zoom:50%;" />
+
+<p>命令帮助文档：<a target="_blank" rel="noopener" href="https://redis.io/docs/latest/commands/">Commands | Docs</a></p>
+<p>通过命令行中 <code>help @数据类型</code>，也可以查看对应类型的文档</p>
+<h3 id="通用命令"><a href="#通用命令" class="headerlink" title="通用命令"></a>通用命令</h3><ul>
+<li>keys：查看符合模板的所有key，pattern是redis的通配符，不建议在生产环境设备中使用，匹配时间较长单线程会阻塞</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618057.png" alt="image-20250214192257206"></p>
+<ul>
+<li>del：删除一个指定的key</li>
+<li>exists：判断key是否存在</li>
+<li>expire：给一个key设置有效期，有效期到期时该key会被自动删除，节省内存空间（短期验证码）</li>
+<li>ttl：查看一个key的剩余有效期</li>
+</ul>
+<h3 id="String类型"><a href="#String类型" class="headerlink" title="String类型"></a>String类型</h3><p>根据字符串的格式不同，又可以分为3类：</p>
+<ul>
+<li>string：普通字符串</li>
+<li>int：整数类型，可以做自增、自减操作</li>
+<li>float：浮点类型，可以做自增、自减操作</li>
+</ul>
+<p>不管哪种格式，底层都是字节数组形式存储，只不过编码方式不同，字符串类型的最大空间不超过512m</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618058.png" alt="image-20250214193133049" style="zoom: 33%;" />
+
+<p>常见命令：</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618059.png" alt="image-20250214193159019" style="zoom: 33%;" />
+
+<h3 id="key的层级格式"><a href="#key的层级格式" class="headerlink" title="key的层级格式"></a>key的层级格式</h3><p>Redis没有类似MySQL中的Table的概念，我们该如何区分不同类型的key呢?</p>
+<p>例如，需要存储用户、商品信息到redis,有一个用户id是1,有一个商品id恰好也是1</p>
+<p>Redis的key允许有多个单词形成<strong>层级结构</strong>，多个单词之间用 ‘:’ 隔开，例如：</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618060.png" alt="image-20250214194202898" style="zoom:50%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618062.png" alt="image-20250214194217918" style="zoom: 33%;" />
+
+<p>如果value是一个对象，则可以将对象序列化为json字符串后存储：  </p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618063.png" alt="image-20250214194257951" style="zoom:33%;" />
+
+<h3 id="Hash类型"><a href="#Hash类型" class="headerlink" title="Hash类型"></a>Hash类型</h3><p>其value是一个无序字典，类似于哈希表</p>
+<p>存储对象时使用JSON序列化修改不方便</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618064.png" alt="image-20250214194730112" style="zoom: 33%;" />
+
+<p>hash可以将对象中的每个字段独立存储，针对单个字段做CRUD</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618065.png" alt="image-20250214194809233" style="zoom:33%;" />
+
+<p>常见命令：</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618066.png" alt="image-20250214194853155" style="zoom:33%;" />
+
+<h3 id="List类型"><a href="#List类型" class="headerlink" title="List类型"></a>List类型</h3><p>list可以看做是一个双向链表的结构，既可以支持正向检索也可以支持反向检索</p>
+<ul>
+<li>有序</li>
+<li>元素可以重复</li>
+<li>插入和删除快（直接修改节点指向）</li>
+<li>查询速度一般（遍历）</li>
+</ul>
+<p>常用来存储一个<strong>有序</strong>数据：朋友圈点赞列表、评论列表等</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618067.png" alt="image-20250214200237901" style="zoom:33%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618068.png" alt="image-20250214200858462" style="zoom:33%;" />
+
+<h3 id="Set类型"><a href="#Set类型" class="headerlink" title="Set类型"></a>Set类型</h3><p>集合</p>
+<ul>
+<li>无序</li>
+<li>元素不可重复</li>
+<li>查找快</li>
+<li>支持交集、并集、差集等功能</li>
+</ul>
+<p>常见命令：</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618069.png" alt="image-20250214201622112" style="zoom:33%;" />
+
+<h3 id="SortedSet类型"><a href="#SortedSet类型" class="headerlink" title="SortedSet类型"></a>SortedSet类型</h3><p>SortedSet是一个可排序的set集合，SortedSet中的每一个元素都带有一个score属性，可以基于score属性对元素排序，底层的实现是一个跳表加hash表</p>
+<ul>
+<li>可排序</li>
+<li>元素不重复</li>
+<li>查询速度快</li>
+</ul>
+<p>因为SortedSet的可排序特性，经常被用来实现排行榜这样的功能</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618070.png" alt="image-20250214202545320" style="zoom:33%;" />
+
+<hr>
+<h2 id="go-redis"><a href="#go-redis" class="headerlink" title="go-redis"></a>go-redis</h2><p><a target="_blank" rel="noopener" href="https://github.com/redis/go-redis">redis&#x2F;go-redis: Redis Go client</a></p>
+<p>文档：<a target="_blank" rel="noopener" href="https://redis.uptrace.dev/zh/">Golang Redis客户端</a></p>
+<p>安装：<code>go get github.com/redis/go-redis/v9</code></p>
+<p>建立连接：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rdb := redis.NewClient(&amp;redis.Options&#123;</span><br><span class="line">    Addr:     <span class="string">&quot;localhost:6379&quot;</span>,</span><br><span class="line">    Password: <span class="string">&quot;&quot;</span>, <span class="comment">// 没有密码，默认值</span></span><br><span class="line">    DB:       <span class="number">0</span>,  <span class="comment">// 默认DB 0</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>Set&#x2F;Get：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ctx := context.Background()</span><br><span class="line">err := rdb.Set(ctx, <span class="string">&quot;key&quot;</span>, <span class="string">&quot;value&quot;</span>, <span class="number">10</span>*time.Second).Err()</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="built_in">panic</span>(err)</span><br><span class="line">&#125;</span><br><span class="line">val, err := rdb.Get(ctx, <span class="string">&quot;key&quot;</span>).Result()</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="built_in">panic</span>(err)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="短信登陆"><a href="#短信登陆" class="headerlink" title="短信登陆"></a>短信登陆</h2><p>基于session</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618071.png" alt="image-20250215131829814" style="zoom: 80%;" />
+
+<p>集群的session共享问题：多台服务器并不共享session存储空间，当请求切换到不同的服务器时会导致数据丢失的问题。</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618072.png" alt="image-20250215133747768" style="zoom: 33%;" />
+
+<p>session的替代方案应该满足：</p>
+<ul>
+<li>数据共享</li>
+<li>内存存储</li>
+<li>key-value数据结构</li>
+</ul>
+<p><strong>基于Redis实现共享session登录</strong></p>
+ <img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618073.png" alt="image-20250215134531249" style="zoom:33%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618074.png" alt="image-20250215134451373" style="zoom:33%;" />
+
+<h2 id="商户查询缓存"><a href="#商户查询缓存" class="headerlink" title="商户查询缓存"></a>商户查询缓存</h2><p>什么是缓存？</p>
+<p>缓存就是数据交换的缓冲区（Cache），是存贮数据的临时地方，一般<strong>读写性能较高</strong>。它可以位于内存中，也可以位于 CPU、磁盘等位置。缓存的主要目的是减少访问 <strong>慢速存储</strong>（如磁盘或数据库）的时间，从而提高系统性能。</p>
+<blockquote>
+<p>CPU内部具有一个缓存，通过缓存读写数据比内存或磁盘快得多。</p>
+</blockquote>
+<p>web应用开发中缓存的使用场景：</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618075.png" alt="image-20250215140503531" style="zoom: 25%;" />
+
+<p>作用：</p>
+<ul>
+<li>降低后端负载</li>
+<li>提高读写效率，降低响应时间</li>
+</ul>
+<p>成本：</p>
+<ul>
+<li>数据一致性成本</li>
+<li>代码维护成本（解决一致性问题）</li>
+<li>运维成本（缓存穿透、缓存雪崩、缓存击穿）</li>
+</ul>
+<h3 id="添加Redis缓存"><a href="#添加Redis缓存" class="headerlink" title="添加Redis缓存"></a>添加Redis缓存</h3><p>在查询商户时添加缓存</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618076.png" alt="image-20250215143003012" style="zoom: 50%;" />
+
+<h3 id="缓存更新策略"><a href="#缓存更新策略" class="headerlink" title="缓存更新策略"></a>缓存更新策略</h3><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618077.png" alt="image-20250215143806462" style="zoom:33%;" />
+
+   
+
+<p>主动更新策略：</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618078.png" alt="image-20250215143939272" style="zoom:33%;" />
+
+ 
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618079.png" alt="image-20250215144351275" style="zoom:33%;" />
+
+<p>线程安全问题： <strong>线程安全问题</strong> 是指在 <strong>多线程环境</strong> 中，多个线程同时访问共享资源时，如果没有采取适当的同步机制，可能导致程序的行为变得不确定，甚至出现错误的情况。</p>
+<ul>
+<li>先删除缓存，再操作数据库：线程1删除缓存后，在更新数据库之前，线程2查询缓存未命中再查询数据库将旧的数据写入缓存。线程1更新数据库的操作是比较慢的，线程2查询的操作相对比较快，因此这种缓存与数据库不一致的现象发生的概率是比较高的。</li>
+<li>先操作数据库，再操作缓存：线程1查询缓存未命中，查询数据库的数据，再将数据写入缓存之前，线程2更新了数据库并删除缓存了，此时线程1将更新前的数据写入缓存。线程1写缓存的速度是非常快的，在这期间内线程2要完成数据库更新以及缓存删除的操作，这种现象发生的概率是比较低的。</li>
+</ul>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618080.png" alt="image-20250215145836960" style="zoom: 33%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618081.png" alt="image-20250215150003534" style="zoom:33%;" />
+
+<hr>
+<h3 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h3><p> 缓存穿透：客户端请求的数据在缓存和数据库中都不存在，这样缓存永远不会生效，这些请求都会打到数据库。</p>
+<p>解决方案：</p>
+<ul>
+<li><p>缓存空对象</p>
+<ul>
+<li><p>实现简单，维护方便</p>
+</li>
+<li><p>额外的内存消耗；可能造成短期的不一致</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618082.png" alt="image-20250215152154261" style="zoom:33%;" /></li>
+</ul>
+</li>
+<li><p>布隆过滤</p>
+<ul>
+<li>内存占用少，没有多余key</li>
+<li>实现复杂，存在误判可能</li>
+</ul>
+</li>
+</ul>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618083.png" alt="image-20250215152207354" style="zoom:33%;" />
+
+<p>使用缓存空对象解决缓存穿透问题：</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618084.png" alt="image-20250215152442652" style="zoom: 33%;" />
+
+ 
+
+<p>除了以上两种被动解决方案（在发生缓存穿透之后的解决方案），还可以主动解决（在未发生缓存传统之前避免出现缓存传统）：</p>
+<ul>
+<li>增强id的复杂度，避免被猜测id规律，做好数据的基础格式校验<ul>
+<li>在请求到达缓存层之前，先进行基本参数检查，避免无意义的查询。</li>
+</ul>
+</li>
+<li>加强用户权限校验</li>
+<li>做好热点参数的限流</li>
+</ul>
+<hr>
+<h3 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h3><p>缓存雪崩：在同一时段内大量的缓存key同时失效或者redis服务宕机，导致大量请求到达数据库，带来巨大压力</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618085.png" alt="image-20250215154246689" style="zoom: 33%;" />
+
+<p>解决方案：</p>
+<ul>
+<li>给不同的Key的TTL添加随机值</li>
+<li>利用Redis集群提高服务的可用性</li>
+<li>给缓存业务添加降级限流策略</li>
+<li>给业务添加多级缓存</li>
+</ul>
+<hr>
+<h3 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h3><p>缓存击穿：缓存击穿问题也叫<strong>热点Key</strong>问题，就是一个<strong>高并发访问</strong>并且<strong>缓存重建业务较复杂</strong>的key突然失效了，无数的请求访问会在瞬间给数据库带来巨大的冲击。</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618086.png" alt="image-20250215160117291" style="zoom: 33%;" />
+
+<p>  解决方案：</p>
+<ul>
+<li><p>互斥锁</p>
+<ul>
+<li>效率较低：只有一个线程在重建数据，其它的所有线程等在等待</li>
+</ul>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618087.png" alt="image-20250215160254198" style="zoom: 50%;" />
+</li>
+<li><p>逻辑过期：一个线程重建，其它线程返回旧数据。不为key设置TTL，而是添加一个expire字段，如果数据过期则获取锁开启新线程执行数据重建，其它的线程都直接返回旧数据</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618089.png" alt="image-20250215160635217" style="zoom:33%;" /></li>
+</ul>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618090.png" alt="image-20250215160704109" style="zoom:33%;" />
+
+<p>基于互斥锁解决缓存击穿问题：（互斥锁可以用redis的setnx设置一个key，只有第一个设置才会生效，后续的设置因为已经存在不会生效）</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618091.png" alt="image-20250215161056488" style="zoom:33%;" />
+
+<p>基于逻辑过期解决缓存击穿问题：</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303123618092.png" alt="image-20250215162612189" style="zoom:33%;" />
+
+
+
+<blockquote>
+<p>缓存雪崩：大量key到期；缓存击穿：少量热点key到期；这两种问题的后果都是大量请求打到数据库</p>
+</blockquote>
+</div><div class="article-licensing box"><div class="licensing-title"><p>【redis】简介</p><p><a href="https://shnpd.github.io/2025/03/03/interview/redis/【redis】简介/">https://shnpd.github.io/2025/03/03/interview/redis/【redis】简介/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>ShiHaonan</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2025-03-03</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-03-16</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/redis/">redis</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/images/wxpay.jpg" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2025/03/03/interview/network/1%E3%80%81HTTP/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">1、HTTP</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2025/03/02/interview/redis/%E3%80%90redis%E3%80%91%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/"><span class="level-item">【redis】常见问题</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card" id="comments"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://shnpd.github.io/2025/03/03/interview/redis/%E3%80%90redis%E3%80%91%E7%AE%80%E4%BB%8B/';
+            this.page.identifier = '2025/03/03/interview/redis/【redis】简介/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'shns-blog' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#什么是redis"><span class="level-left"><span class="level-item">1</span><span class="level-item">什么是redis</span></span></a></li><li><a class="level is-mobile" href="#安装redis"><span class="level-left"><span class="level-item">2</span><span class="level-item">安装redis</span></span></a></li><li><a class="level is-mobile" href="#redis常见命令"><span class="level-left"><span class="level-item">3</span><span class="level-item">redis常见命令</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#数据结构介绍"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">数据结构介绍</span></span></a></li><li><a class="level is-mobile" href="#通用命令"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">通用命令</span></span></a></li><li><a class="level is-mobile" href="#String类型"><span class="level-left"><span class="level-item">3.3</span><span class="level-item">String类型</span></span></a></li><li><a class="level is-mobile" href="#key的层级格式"><span class="level-left"><span class="level-item">3.4</span><span class="level-item">key的层级格式</span></span></a></li><li><a class="level is-mobile" href="#Hash类型"><span class="level-left"><span class="level-item">3.5</span><span class="level-item">Hash类型</span></span></a></li><li><a class="level is-mobile" href="#List类型"><span class="level-left"><span class="level-item">3.6</span><span class="level-item">List类型</span></span></a></li><li><a class="level is-mobile" href="#Set类型"><span class="level-left"><span class="level-item">3.7</span><span class="level-item">Set类型</span></span></a></li><li><a class="level is-mobile" href="#SortedSet类型"><span class="level-left"><span class="level-item">3.8</span><span class="level-item">SortedSet类型</span></span></a></li></ul></li><li><a class="level is-mobile" href="#go-redis"><span class="level-left"><span class="level-item">4</span><span class="level-item">go-redis</span></span></a></li><li><a class="level is-mobile" href="#短信登陆"><span class="level-left"><span class="level-item">5</span><span class="level-item">短信登陆</span></span></a></li><li><a class="level is-mobile" href="#商户查询缓存"><span class="level-left"><span class="level-item">6</span><span class="level-item">商户查询缓存</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#添加Redis缓存"><span class="level-left"><span class="level-item">6.1</span><span class="level-item">添加Redis缓存</span></span></a></li><li><a class="level is-mobile" href="#缓存更新策略"><span class="level-left"><span class="level-item">6.2</span><span class="level-item">缓存更新策略</span></span></a></li><li><a class="level is-mobile" href="#缓存穿透"><span class="level-left"><span class="level-item">6.3</span><span class="level-item">缓存穿透</span></span></a></li><li><a class="level is-mobile" href="#缓存雪崩"><span class="level-left"><span class="level-item">6.4</span><span class="level-item">缓存雪崩</span></span></a></li><li><a class="level is-mobile" href="#缓存击穿"><span class="level-left"><span class="level-item">6.5</span><span class="level-item">缓存击穿</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/CSP%E6%A8%A1%E5%9E%8B/">【Go】CSP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Channel/">【Go】Channel</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Context/">【Go】Context</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/defer&amp;os.Exit()/">【Go】defer和os.Exit()</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/GMP%E6%A8%A1%E5%9E%8B/">【Go】GMP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Fabric/"><span class="level-start"><span class="level-item">Fabric</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/Golang/"><span class="level-start"><span class="level-item">Golang</span></span><span class="level-end"><span class="level-item tag">44</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Shell%E8%84%9A%E6%9C%AC/"><span class="level-start"><span class="level-item">Shell脚本</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/bytedance/"><span class="level-start"><span class="level-item">bytedance</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"><span class="level-start"><span class="level-item">以太坊</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%88%B7%E9%A2%98%E9%9B%86/"><span class="level-start"><span class="level-item">刷题集</span></span><span class="level-end"><span class="level-item tag">27</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="level-start"><span class="level-item">前端</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="level-start"><span class="level-item">区块链</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AD%A6%E6%9C%AF/"><span class="level-start"><span class="level-item">学术</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"><span class="level-start"><span class="level-item">密码学</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%B0%8F%E7%A8%8B%E5%BA%8F/"><span class="level-start"><span class="level-item">小程序</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/"><span class="level-start"><span class="level-item">技术总结</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/%E5%85%B6%E5%AE%83/"><span class="level-start"><span class="level-item">其它</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><span class="level-start"><span class="level-item">数据结构</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"><span class="level-start"><span class="level-item">机器学习</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9D%82%E9%A1%B9/"><span class="level-start"><span class="level-item">杂项</span></span><span class="level-end"><span class="level-item tag">31</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%AF%94%E7%89%B9%E5%B8%81/"><span class="level-start"><span class="level-item">比特币</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/"><span class="level-start"><span class="level-item">知识点整理</span></span><span class="level-end"><span class="level-item tag">19</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/mysql/"><span class="level-start"><span class="level-item">mysql</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/"><span class="level-start"><span class="level-item">redis</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">算法</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"><span class="level-start"><span class="level-item">网络安全</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li></ul></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">shn&#039;s blog</a><p class="is-size-7"><span>&copy; 2025 ShiHaonan</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">Welcome to shn's blog!</p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

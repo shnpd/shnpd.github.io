@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>网络功能虚拟化（NFV） - shn&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="shn&#039;s blog"><meta name="msapplication-TileImage" content="/images/icon_blog.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="shn&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="​​点击阅读更多查看文章内容"><meta property="og:type" content="blog"><meta property="og:title" content="网络功能虚拟化（NFV）"><meta property="og:url" content="https://shnpd.github.io/2022/06/12/%E7%BD%91%E7%BB%9C%E5%8A%9F%E8%83%BD%E8%99%9A%E6%8B%9F%E5%8C%96%EF%BC%88NFV%EF%BC%89/"><meta property="og:site_name" content="shn&#039;s blog"><meta property="og:description" content="​​点击阅读更多查看文章内容"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/16e7195ecb3f420fc4784f5cf538270b_1740930533785.png%20=600x"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/7e9d0aad4927371d11f590be05520281_1740930533785.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/8a1ae9a1eed910bc9f4b79586391569b_1740930533785.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e3a4639d8d5cbea58d6a2935d8624799_1740930533785.png"><meta property="article:published_time" content="2022-06-12T15:29:07.000Z"><meta property="article:modified_time" content="2025-03-10T08:05:21.725Z"><meta property="article:author" content="ShiHaonan"><meta property="article:tag" content="网络 运维"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/16e7195ecb3f420fc4784f5cf538270b_1740930533785.png%20=600x"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://shnpd.github.io/2022/06/12/%E7%BD%91%E7%BB%9C%E5%8A%9F%E8%83%BD%E8%99%9A%E6%8B%9F%E5%8C%96%EF%BC%88NFV%EF%BC%89/"},"headline":"网络功能虚拟化（NFV）","image":["https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/7e9d0aad4927371d11f590be05520281_1740930533785.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/8a1ae9a1eed910bc9f4b79586391569b_1740930533785.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e3a4639d8d5cbea58d6a2935d8624799_1740930533785.png"],"datePublished":"2022-06-12T15:29:07.000Z","dateModified":"2025-03-10T08:05:21.725Z","author":{"@type":"Person","name":"ShiHaonan"},"publisher":{"@type":"Organization","name":"shn's blog","logo":{"@type":"ImageObject","url":{"text":"shn's blog"}}},"description":"​​点击阅读更多查看文章内容"}</script><link rel="canonical" href="https://shnpd.github.io/2022/06/12/%E7%BD%91%E7%BB%9C%E5%8A%9F%E8%83%BD%E8%99%9A%E6%8B%9F%E5%8C%96%EF%BC%88NFV%EF%BC%89/"><link rel="icon" href="/images/icon_blog.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><meta name="msvalidate.01" content="E38AFEA650A8300110261393E7FD0A39"><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">shn&#039;s blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-06-12T15:29:07.000Z" title="6/12/2022, 11:29:07 PM">2022-06-12</time>发表</span><span class="level-item"><time dateTime="2025-03-10T08:05:21.725Z" title="3/10/2025, 4:05:21 PM">2025-03-10</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E6%9D%82%E9%A1%B9/">杂项</a></span><span class="level-item">20 分钟读完 (大约2987个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">网络功能虚拟化（NFV）</h1><div class="content"><p>​​点击阅读更多查看文章内容<span id="more"></span></p>
+<h1 id="NFV基本概述"><a href="#NFV基本概述" class="headerlink" title="NFV基本概述"></a>NFV基本概述</h1><p>转载文章：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38265137/article/details/80503533">NFV基本概述</a></p>
+<h1 id="NFV介绍"><a href="#NFV介绍" class="headerlink" title="NFV介绍"></a>NFV介绍</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>NFV，即网络功能虚拟化，Network Function Virtualization。通过使用x86等通用性硬件以及虚拟化技术，来承载很多功能的软件处理。从而降低网络昂贵的设备成本。可以通过软硬件解耦及功能抽象，使网络设备功能不再依赖于专用硬件，资源可以充分灵活共享，实现新业务的快速开发和部署，并基于实际业务需求进行自动部署、弹性伸缩、故障隔离和自愈等。</p>
+<p>NFV的总体目标被定义为利用标准的IT虚拟化技术将众多网络设备类型合并成工业标准级的大容量服务器、交换机和存储设备，并在数据中心、网络结点和终端用户处所部署。</p>
+<p>网络功能虚拟化（network functions virtualization，NFV）被定义为运行再虚拟机上且利用软件实现网络功能的虚拟化技术。</p>
+<h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>NFV的目标是取代通信网络中私有、专用和封闭的网元，实现统一通用硬件平台+业务逻辑软件的开放架构。</p>
+<p>NFV与SDN结合使用将对未来通信网络的发展带来重大的影响，同时也带来新的问题和挑战。</p>
+<h2 id="发展缘由"><a href="#发展缘由" class="headerlink" title="发展缘由"></a>发展缘由</h2><ul>
+<li>网络运营商的网络通常是由大规模并且迅速增长的多种多样的硬件设备组成。开发一个新的网络业务经常需要新类型的设备，而为这些盒子需找空间、提供电源变得越来越困难；同时还伴随着能源成本的增加、投资额的挑战，基于硬件设备的复杂度提升，也增加了对设计、集成、运营所需要的各种稀有技能的要求。</li>
+<li>更严重的问题是，基于硬件的设备很快就到了生命周期，这需要更多的“设计-集成-部署”循环，但收益甚少。糟糕的是，硬件生命周期变得越来越短而业务创新则在不断加速，所以这抑制了新增值业务的部署，并且限制了不断增长的网络为中心领域的创新。</li>
+<li>网络虚拟化通过借用IT的虚拟化技术，许多类型的网络设备类型可以合并入工业界标准中，如servers、switches和storage，可以部署在数据中心、网络节点或是用户家里。网络虚拟化适用于固定、移动网络中任何数据面的分组处理和控制面功能。</li>
+</ul>
+<h2 id="来自企业、运营商、家庭用户的需求"><a href="#来自企业、运营商、家庭用户的需求" class="headerlink" title="来自企业、运营商、家庭用户的需求"></a>来自企业、运营商、家庭用户的需求</h2><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/16e7195ecb3f420fc4784f5cf538270b_1740930533785.png%20=600x" alt="在这里插入图片描述"></p>
+<ul>
+<li>随着云服务的不断发展和需求的不断增加，运营商只需要为企业私有云和公有云提供管道传输，因此运营商有被管道化的风险。</li>
+<li>家庭用户在体验上不支持多屏应用、室外应用，业务开通周期长，费用昂贵。</li>
+<li>企业用户需要高IT投入购买大量通信设备（路由器、交换机、服务器、存储设备）。</li>
+<li>系统扩容需要更新设备，重复投资。</li>
+<li>CPE（customer premises equipment）多为企业网的网关，对接运营商的PE设备。</li>
+</ul>
+<h1 id="NFV基本概念"><a href="#NFV基本概念" class="headerlink" title="NFV基本概念"></a>NFV基本概念</h1><h2 id="什么是NFV"><a href="#什么是NFV" class="headerlink" title="什么是NFV"></a>什么是NFV</h2><p>NFV即网络功能虚拟化（Network Functions Virtualization），将许多类型的网络设备（如servers，switches和storage等）构建为一个Data Center Network，通过借用IT的虚拟化技术虚拟化形成VM（虚拟机，Virtual Machine），然后将传统的CT(Communication Technology)业务部署到VM上。</p>
+<p>在NFV出现之前设备的专业化很突出，具体设备都有其专门的功能实现，而之后设备的控制平面与具体设备进行分离，不同设备的控制平面基于虚拟机，虚拟机基于云操作系统，这样当企业需要部署新业务时只需要在开放的虚拟机平台上创建相应的虚机，然后在虚拟机上安装相应功能的软件包即可。这种方式我们就叫做网络功能虚拟化。</p>
+<h2 id="网络功能虚拟化的优点和面临的挑战"><a href="#网络功能虚拟化的优点和面临的挑战" class="headerlink" title="网络功能虚拟化的优点和面临的挑战"></a>网络功能虚拟化的优点和面临的挑战</h2><p>网络功能虚拟化的优点：</p>
+<ol>
+<li>通过设备合并、借用IT的规模化经济，减少设备成本、能源开销。</li>
+<li>缩短网络运营的而业务创新周期，提升投放市场的速度，是运营商极大的减少网络成熟周期。</li>
+<li>网络设备可以多版本、多租户共存，且单一平台为不同的应用、用户、租户提供服务，允许运营商跨服务和跨不同客户群共享资源。</li>
+<li>基于地理位置、用户群引入精准服务，同时可以根据需要对服务进行快速扩张&#x2F;收缩。</li>
+<li>更广泛、多样的生态系统使能，促进开放，将开放虚拟装置给纯软件开发者、小商户、学术界，鼓励更多的创新，引入新业务，更低的风险带来新的收入增长。</li>
+</ol>
+<p>NFV同样面临着很多技术挑战</p>
+<ol>
+<li>虚拟网络装置运行在不同的硬件厂商、不同的Hypervisor上，如何获取更高的性能。</li>
+<li>基于网络平台的硬件同时允许迁移到虚拟化的网络平台中，两者并能共存，重用运营商当前的OSS&#x2F;BSS。</li>
+<li>管理和组织诸多虚拟网络装置（尤其是管理系统），同时避免安全攻击和错误配置。</li>
+<li>保证一定级别的硬件、软件可靠性。</li>
+<li>不同运营商的虚拟装置（VA）集成。网络运营商需要能“混合和匹配”不同厂家的硬件、不同厂家的Hypervisors、不同厂家的虚拟装置（VA），而没有巨大的集成成本、避免与厂家绑定。</li>
+</ol>
+<h1 id="NFV架构"><a href="#NFV架构" class="headerlink" title="NFV架构"></a>NFV架构</h1><h2 id="NFV本质：重新定义网络设备架构"><a href="#NFV本质：重新定义网络设备架构" class="headerlink" title="NFV本质：重新定义网络设备架构"></a>NFV本质：重新定义网络设备架构</h2><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/7e9d0aad4927371d11f590be05520281_1740930533785.png" alt="在这里插入图片描述"><br>Huawei CloudEdge方案包括四个层面以及对应的亮点如下：</p>
+<ul>
+<li>软件应用层：华为提供丰富完善的电信业务应用，并且向第三方开放，加快业务创新和部署。</li>
+<li>虚拟层面Cloud OS：实现设备资源的高效利用和业务的快速部署。</li>
+<li>自动维护管理层MANO (Management And Network Orchestration)：自动的网络伸缩，简化管理。</li>
+<li>硬件设备层：高可靠、高性能、多规格的COTS Server，充分满足电信级部署的需求，并支持多厂家的COTS Server部署。</li>
+</ul>
+<p>在NFV架构中，底层为具体物理设备，如服务器，存储设备，网络设备。</p>
+<p>计算虚拟化即虚拟机，在一台服务器上创建多个虚拟系统。</p>
+<p>存储虚拟化，即多个存储设备虚拟化为一台逻辑上的存储设备。</p>
+<p>网络虚拟化，即网络设备的控制平面与底层硬件分离，将设备的控制平面安装在服务器虚拟机上。</p>
+<p>在虚拟化的设备层面上可以安装各种服务软件</p>
+<h2 id="NFV开放接口"><a href="#NFV开放接口" class="headerlink" title="NFV开放接口"></a>NFV开放接口</h2><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/8a1ae9a1eed910bc9f4b79586391569b_1740930533785.png" alt="在这里插入图片描述"></p>
+<ul>
+<li><p>NFVI：提供VNF的运行环境，包括所需的硬件及软件。硬件包括计算、网络、存储资源；软件主要包括Hypervisor、网络控制器、存储管理器等工具，NFVI将物理资源虚拟化为虚拟资源，供VNF使用。</p>
+</li>
+<li><p>VNF：包括VNF和EMS，VNF网络功能，EMS为单元管理系统，对VNF的功能进行配置和管理。一般情况下，EMS和VNF是一一对应的。</p>
+</li>
+<li><p>VIM：NFVI管理模块，通常运行于对应的基础设施站点中，主要功能包括：资源的发现、虚拟资源的管理分配、故障处理等，为VNF运行提供资源支持。</p>
+</li>
+<li><p>VNFM：VNF管理模块，主要对VNF的生命周期（实例化、配置、关闭等）进行控制，一般情况下与VNF一一对应。</p>
+</li>
+<li><p>NFVO：NS生命周期的管理模块，同时负责协调NS、组成NS的VNFs以及承载各VNF的虚拟资源的控制和管理。</p>
+</li>
+<li><p>OSS&#x2F;BSS：服务提供商的管理功能，不属于NFV框架内的功能组件，但NFVO需要提供对OSS&#x2F;BSS的接口。</p>
+</li>
+</ul>
+<h1 id="SDN与NFV的关系"><a href="#SDN与NFV的关系" class="headerlink" title="SDN与NFV的关系"></a>SDN与NFV的关系</h1><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e3a4639d8d5cbea58d6a2935d8624799_1740930533785.png" alt="在这里插入图片描述"></p>
+<ol>
+<li>NFV不依赖与SDN，但是SDN中控制和数据转发的分离可以改善NFV网络性能。</li>
+<li>SDN也可以通过使用通用硬件作为SDN的控制器和服务交换机以虚拟化形式实现。</li>
+<li>结论：以移动网络，NFV是网络演进的主要架构。在一些特定场景，将引入SDN。</li>
+</ol>
+<p>SDN与NFV对比：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>SDN</th>
+<th>NFV</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>主要主张</td>
+<td>转发与控制分离，控制面集中，网络可编程化</td>
+<td>将网络功能从原来专用的设备移到通用设备上。</td>
+</tr>
+<tr>
+<td></td>
+<td>校园网，数据中心、云</td>
+<td>运营商网络</td>
+</tr>
+<tr>
+<td></td>
+<td>商用服务器和交换机</td>
+<td>专用服务器和交换机</td>
+</tr>
+<tr>
+<td></td>
+<td>云资源调度和网络</td>
+<td>路由器、防火墙、网关、CND、广域网加速器、SLA保证等</td>
+</tr>
+<tr>
+<td>通用协议</td>
+<td>OpenFlow</td>
+<td>尚没有</td>
+</tr>
+<tr>
+<td></td>
+<td>ONF（Open Networking Forun）组织</td>
+<td>将ETSI NFV工作组</td>
+</tr>
+</tbody></table>
+<ul>
+<li>NFV是具体设备的虚拟化，将设备控制平面运行在服务器上，这样设备是开放的兼容的。</li>
+<li>SDN是一种全新的网络架构，SDN的思想是取消设备控制平面，由控制器统一计算，下发流表，SDN是全新的网络架构。</li>
+<li>NFV和SDN是高度互补关系，但并不互相依赖。网络功能可以在没有SDN的情况下进行虚拟化和部署，然而这两个理念和方案结合可以产生潜在的、更大的价值。</li>
+<li>网络功能虚拟化（NFV）的目标是可以不用SDN机制，仅通过当前的数据中心技术去实现。但从方法上有赖于SDN提议的控制和数据转发平面的分离，可以增强性能、简化与已存在设备的兼容性、基础操作和维护流程。</li>
+<li>NFV可以通过提供给SDN软件运行的基础设施的方式来支持SDN。而且，NFV和SDN在都利用用基础的服务器、交换机去达成目标，这一点上是很接近的。</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>网络功能虚拟化（NFV）</p><p><a href="https://shnpd.github.io/2022/06/12/网络功能虚拟化（NFV）/">https://shnpd.github.io/2022/06/12/网络功能虚拟化（NFV）/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>ShiHaonan</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2022-06-12</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-03-10</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E7%BD%91%E7%BB%9C-%E8%BF%90%E7%BB%B4/">网络 运维</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/images/wxpay.jpg" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2022/06/13/%E7%BD%91%E7%BB%9C%E8%99%9A%E6%8B%9F%E5%8C%96%EF%BC%88NV%EF%BC%89/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">网络虚拟化（NV）</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2022/06/12/%E8%BD%AF%E4%BB%B6%E5%AE%9A%E4%B9%89%E7%BD%91%E7%BB%9C%EF%BC%88SDN%EF%BC%89/"><span class="level-item">软件定义网络（SDN）</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card" id="comments"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://shnpd.github.io/2022/06/12/%E7%BD%91%E7%BB%9C%E5%8A%9F%E8%83%BD%E8%99%9A%E6%8B%9F%E5%8C%96%EF%BC%88NFV%EF%BC%89/';
+            this.page.identifier = '2022/06/12/网络功能虚拟化（NFV）/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'shns-blog' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#NFV基本概述"><span class="level-left"><span class="level-item">1</span><span class="level-item">NFV基本概述</span></span></a></li><li><a class="level is-mobile" href="#NFV介绍"><span class="level-left"><span class="level-item">2</span><span class="level-item">NFV介绍</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#定义"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">定义</span></span></a></li><li><a class="level is-mobile" href="#目标"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">目标</span></span></a></li><li><a class="level is-mobile" href="#发展缘由"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">发展缘由</span></span></a></li><li><a class="level is-mobile" href="#来自企业、运营商、家庭用户的需求"><span class="level-left"><span class="level-item">2.4</span><span class="level-item">来自企业、运营商、家庭用户的需求</span></span></a></li></ul></li><li><a class="level is-mobile" href="#NFV基本概念"><span class="level-left"><span class="level-item">3</span><span class="level-item">NFV基本概念</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#什么是NFV"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">什么是NFV</span></span></a></li><li><a class="level is-mobile" href="#网络功能虚拟化的优点和面临的挑战"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">网络功能虚拟化的优点和面临的挑战</span></span></a></li></ul></li><li><a class="level is-mobile" href="#NFV架构"><span class="level-left"><span class="level-item">4</span><span class="level-item">NFV架构</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#NFV本质：重新定义网络设备架构"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">NFV本质：重新定义网络设备架构</span></span></a></li><li><a class="level is-mobile" href="#NFV开放接口"><span class="level-left"><span class="level-item">4.2</span><span class="level-item">NFV开放接口</span></span></a></li></ul></li><li><a class="level is-mobile" href="#SDN与NFV的关系"><span class="level-left"><span class="level-item">5</span><span class="level-item">SDN与NFV的关系</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/CSP%E6%A8%A1%E5%9E%8B/">【Go】CSP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Channel/">【Go】Channel</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Context/">【Go】Context</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/defer&amp;os.Exit()/">【Go】defer和os.Exit()</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/GMP%E6%A8%A1%E5%9E%8B/">【Go】GMP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Fabric/"><span class="level-start"><span class="level-item">Fabric</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/Golang/"><span class="level-start"><span class="level-item">Golang</span></span><span class="level-end"><span class="level-item tag">44</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Shell%E8%84%9A%E6%9C%AC/"><span class="level-start"><span class="level-item">Shell脚本</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/bytedance/"><span class="level-start"><span class="level-item">bytedance</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"><span class="level-start"><span class="level-item">以太坊</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%88%B7%E9%A2%98%E9%9B%86/"><span class="level-start"><span class="level-item">刷题集</span></span><span class="level-end"><span class="level-item tag">27</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="level-start"><span class="level-item">前端</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="level-start"><span class="level-item">区块链</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AD%A6%E6%9C%AF/"><span class="level-start"><span class="level-item">学术</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"><span class="level-start"><span class="level-item">密码学</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%B0%8F%E7%A8%8B%E5%BA%8F/"><span class="level-start"><span class="level-item">小程序</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/"><span class="level-start"><span class="level-item">技术总结</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/%E5%85%B6%E5%AE%83/"><span class="level-start"><span class="level-item">其它</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><span class="level-start"><span class="level-item">数据结构</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"><span class="level-start"><span class="level-item">机器学习</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9D%82%E9%A1%B9/"><span class="level-start"><span class="level-item">杂项</span></span><span class="level-end"><span class="level-item tag">31</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%AF%94%E7%89%B9%E5%B8%81/"><span class="level-start"><span class="level-item">比特币</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/"><span class="level-start"><span class="level-item">知识点整理</span></span><span class="level-end"><span class="level-item tag">19</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/mysql/"><span class="level-start"><span class="level-item">mysql</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/"><span class="level-start"><span class="level-item">redis</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">算法</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"><span class="level-start"><span class="level-item">网络安全</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li></ul></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">shn&#039;s blog</a><p class="is-size-7"><span>&copy; 2025 ShiHaonan</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">Welcome to shn's blog!</p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

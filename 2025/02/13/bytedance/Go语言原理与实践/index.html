@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Go语言原理与实践 - shn&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="shn&#039;s blog"><meta name="msapplication-TileImage" content="/images/icon_blog.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="shn&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="​点击阅读更多查看文章内容"><meta property="og:type" content="blog"><meta property="og:title" content="Go语言原理与实践"><meta property="og:url" content="https://shnpd.github.io/2025/02/13/bytedance/Go%E8%AF%AD%E8%A8%80%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/"><meta property="og:site_name" content="shn&#039;s blog"><meta property="og:description" content="​点击阅读更多查看文章内容"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125023708.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125025560.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125030640.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125035990.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125053534.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125109224.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125115453.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125120957.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125135745.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125141332.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125340107.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125344841.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125348686.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125354556.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125402377.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125406868.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125414545.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125419355.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125423682.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125427825.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125435304.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125439996.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125443853.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125447449.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125452074.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125457064.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125501565.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125505108.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125509071.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125513018.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125517134.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125521298.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125525595.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125529320.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125533428.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125540909.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125545322.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125549700.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558342.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558343.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558344.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558345.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558346.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558347.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558348.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558349.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558350.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558351.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558352.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558353.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558354.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558355.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558356.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558357.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558358.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558359.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558360.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558361.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558362.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558363.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558364.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558365.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558366.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558367.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558368.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558369.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558370.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558371.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558372.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558373.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558374.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558375.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558376.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558378.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558379.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558380.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558381.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558382.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558383.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558384.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558385.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558386.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558387.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558388.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558389.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558390.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558391.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558392.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558393.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558394.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558395.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558396.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558397.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558398.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558399.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558400.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558401.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558402.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558403.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558404.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558405.png"><meta property="article:published_time" content="2025-02-12T16:00:00.000Z"><meta property="article:modified_time" content="2025-03-11T02:55:19.982Z"><meta property="article:author" content="ShiHaonan"><meta property="article:tag" content="golang"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125023708.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://shnpd.github.io/2025/02/13/bytedance/Go%E8%AF%AD%E8%A8%80%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/"},"headline":"Go语言原理与实践","image":["https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125023708.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125025560.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125030640.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125035990.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125053534.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125109224.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125115453.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125120957.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125135745.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125141332.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125340107.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125344841.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125348686.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125354556.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125402377.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125406868.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125414545.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125419355.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125423682.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125427825.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125435304.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125439996.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125443853.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125447449.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125452074.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125457064.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125501565.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125505108.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125509071.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125513018.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125517134.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125521298.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125525595.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125529320.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125533428.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125540909.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125545322.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125549700.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558342.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558343.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558344.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558345.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558346.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558347.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558348.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558349.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558350.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558351.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558352.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558353.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558354.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558355.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558356.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558357.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558358.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558359.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558360.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558361.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558362.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558363.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558364.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558365.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558366.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558367.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558368.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558369.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558370.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558371.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558372.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558373.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558374.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558375.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558376.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558378.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558379.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558380.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558381.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558382.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558383.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558384.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558385.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558386.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558387.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558388.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558389.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558390.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558391.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558392.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558393.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558394.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558395.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558396.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558397.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558398.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558399.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558400.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558401.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558402.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558403.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558404.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558405.png"],"datePublished":"2025-02-12T16:00:00.000Z","dateModified":"2025-03-11T02:55:19.982Z","author":{"@type":"Person","name":"ShiHaonan"},"publisher":{"@type":"Organization","name":"shn's blog","logo":{"@type":"ImageObject","url":{"text":"shn's blog"}}},"description":"​点击阅读更多查看文章内容"}</script><link rel="canonical" href="https://shnpd.github.io/2025/02/13/bytedance/Go%E8%AF%AD%E8%A8%80%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/"><link rel="icon" href="/images/icon_blog.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><meta name="msvalidate.01" content="E38AFEA650A8300110261393E7FD0A39"><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">shn&#039;s blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-02-12T16:00:00.000Z" title="2/13/2025, 12:00:00 AM">2025-02-13</time>发表</span><span class="level-item"><time dateTime="2025-03-11T02:55:19.982Z" title="3/11/2025, 10:55:19 AM">2025-03-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/bytedance/">bytedance</a></span><span class="level-item">10 分钟读完 (大约1489个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">Go语言原理与实践</h1><div class="content"><p>​点击阅读更多查看文章内容<span id="more"></span></p>
+<h2 id="什么是Go语言"><a href="#什么是Go语言" class="headerlink" title="什么是Go语言"></a>什么是Go语言</h2><ol>
+<li><p>高性能、高并发</p>
+<ul>
+<li><p>与C++、Java相近的性能</p>
+</li>
+<li><p>标准库内置高并发的支持</p>
+</li>
+</ul>
+</li>
+<li><p>语法简单、学习曲线平缓</p>
+</li>
+<li><p>丰富的标准库</p>
+</li>
+<li><p>完善的工具链</p>
+<ul>
+<li>编译、错误检查、包管理、代码提示</li>
+<li>单元测试框架</li>
+</ul>
+</li>
+<li><p>静态链接</p>
+<ul>
+<li>只需要拷贝编译后的可执行文件就可以部署运行，在容器中运行可以使镜像体积非常小</li>
+<li>C++需要附加.so文件才能运行、Java需要附加JRE</li>
+</ul>
+</li>
+<li><p>快速编译</p>
+</li>
+<li><p>跨平台</p>
+<ul>
+<li>Windows、Linux、MacOS、Android、IOS、路由器、树莓派</li>
+</ul>
+</li>
+<li><p>垃圾回收</p>
+</li>
+</ol>
+<p><strong>字节为什么使用GO？</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125023708.png" alt="image-20250122152652613" style="zoom:50%;" />
+
+<p><strong>学习路线</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125025560.png" alt="image-20250122215518133"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125030640.png" alt="image-20250122215543046"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125035990.png" alt="image-20250122215556627"></p>
+<h2 id="Go语言进阶与依赖管理"><a href="#Go语言进阶与依赖管理" class="headerlink" title="Go语言进阶与依赖管理"></a>Go语言进阶与依赖管理</h2><h3 id="并发编程"><a href="#并发编程" class="headerlink" title="并发编程"></a>并发编程</h3><p>并发：多线程程序在一个核的CPU上运行，通过时间片切换交替执行多个程序</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125053534.png" alt="image-20250122220119800" style="zoom:67%;" />
+
+<p>并行：利用多核实现多个线程的同时运行</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125109224.png" alt="image-20250122220124552" style="zoom:67%;" />
+
+<p><strong>协程 Goroutine</strong></p>
+<p>协程开销很小，是Go语言适合高并发场景的原因</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125115453.png" alt="image-20250122220355159" style="zoom:67%;" />
+
+<p><strong>CSP（Communicating Sequential Processes）</strong></p>
+<p>协程间通信</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125120957.png" alt="image-20250122221117328" style="zoom:67%;" />
+
+<p><strong>Channel</strong></p>
+<p>通过通信共享内存</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125135745.png" alt="image-20250122222345782" style="zoom:50%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125141332.png" alt="image-20250122222355807" style="zoom:50%;" />
+
+<p><strong>通过共享内存实现通信</strong></p>
+<p>对共享内存的访问需要加锁</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125340107.png" alt="image-20250122222746635" style="zoom:50%;" />
+
+<p><strong>WaitGroup</strong></p>
+<p>之前的例子是通过等待1s来等待协程执行完毕，这里可以通过WaitGroup使用计数器优雅的等待协程执行完毕</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125344841.png" alt="image-20250122222947065" style="zoom:50%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125348686.png" alt="image-20250122223024013" style="zoom:50%;" />
+
+<h3 id="依赖管理"><a href="#依赖管理" class="headerlink" title="依赖管理"></a>依赖管理</h3><p>Go依赖管理演进</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125354556.png" alt="image-20250122223153261" style="zoom:50%;" />
+
+<p><strong>GOPATH</strong></p>
+<p>所有项目共享同一个GOPATH</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125402377.png" alt="image-20250122223320351" style="zoom:50%;" />
+
+<p>弊端：</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125406868.png" alt="image-20250122224119733" style="zoom:50%;" />
+
+<p><strong>Go Vendor</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125414545.png" alt="image-20250122224238019" style="zoom: 50%;" />
+
+<p>弊端：</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125419355.png" alt="image-20250122224326252" style="zoom:50%;" />
+
+<p><strong>Go Module</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125423682.png" alt="image-20250122224520309" style="zoom:50%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125427825.png" alt="image-20250122224530555" style="zoom:50%;" />
+
+<p><strong>go.mod</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125435304.png" alt="image-20250122224626369" style="zoom:50%;" />
+
+<p><strong>version</strong></p>
+<p>major是大版本，不同major可能是不兼容的，minor是大版本下的下版本，同一大版本下是兼容的，patch是对bug的修复 </p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125439996.png" alt="image-20250122224943752" style="zoom:50%;" />
+
+<p>版本前缀-时间戳-哈希</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125443853.png" alt="image-20250122224952036" style="zoom:50%;" />
+
+<p><strong>indirect</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125447449.png" alt="image-20250122225007295" style="zoom:50%;" />
+
+<p><strong>incompatible</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125452074.png" alt="image-20250122225254839" style="zoom:50%;" />
+
+
+
+<p>如果两个依赖库需要不同版本的同一依赖库，而这些版本无法同时兼容，Go Vendor 无法解决此问题。</p>
+<p>Go Modules 会自动选择一个最小兼容版本，避免冲突。</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125457064.png" alt="image-20250122225526714" style="zoom:50%;" />
+
+<p><strong>依赖分发</strong></p>
+<p>不会直接去Github等依赖的源仓库拉取</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125501565.png" alt="image-20250122225659055" style="zoom: 50%;" />
+
+<p>通过Go Proxy缓存源站中的软件内容，缓存的软件版本不会改变，并且在源站删除之后依然可用</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125505108.png" alt="image-20250122225724272" style="zoom:50%;" />
+
+<p><strong>GOPROXY</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125509071.png" alt="image-20250122225848285" style="zoom:50%;" />
+
+<p><strong>工具 - go get</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125513018.png" alt="image-20250122225936094" style="zoom:50%;" />
+
+<p><strong>工具 - go mod</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125517134.png" alt="image-20250122225957337" style="zoom:50%;" />
+
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125521298.png" alt="image-20250122230535255" style="zoom:50%;" />
+
+<ul>
+<li>回归测试：一般是QA同学手动通过终端回归些固定的主流程场景</li>
+<li>集成测试：对系统功能维度做测试验证</li>
+<li>单元测试：测试开发阶段，开发者对单独的函数、模块做功能验证</li>
+</ul>
+<p>层级从上至下，测试成本逐渐减低，而测试覆盖率确逐步上升，所以单元测试的覆盖率定程度上决定这代码的质量。</p>
+<h3 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h3><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125525595.png" alt="image-20250122230651301" style="zoom:50%;" />
+
+<p>规则：</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125529320.png" alt="image-20250122230749558" style="zoom:50%;" />
+
+<p>覆盖率：</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125533428.png" alt="image-20250122232017474" style="zoom:50%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125540909.png" alt="image-20250122232127066" style="zoom:50%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125545322.png" alt="image-20250122232139962" style="zoom:50%;" />
+
+<hr>
+<p>依赖：单元测试可能需要依赖外部的文件数据库等，单元测试要求外部依赖是幂等且稳定的</p>
+<ul>
+<li>幂等：重复运行case的结果是相同的</li>
+<li>稳定：单元测试是隔离的，能在任何时间，任何环境，运行测试。</li>
+</ul>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125549700.png" alt="image-20250122232354740" style="zoom:50%;" />
+
+<p>要实现稳定和幂等就需要Mock函数</p>
+<p>例子：文件处理，将第一行字符串中的11替换成00，需要依赖本地文件，如果文件修改测试就会fail</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558342.png" alt="image-20250122232646431" style="zoom:50%;" />
+
+<p>使用开源mock测试库monkey，对method进行mock</p>
+<p>Monckey Patch 的作用域在 Runtime，在运行时通过Go的unsafe包，能够将内存中函数的地址替换为运行时函数的地址，将target的方法实现跳转到replacement</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558343.png" alt="image-20250122232713722" style="zoom:50%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558344.png" alt="image-20250122233212370" style="zoom:50%;" />
+
+<hr>
+<h3 id="基准测试"><a href="#基准测试" class="headerlink" title="基准测试"></a>基准测试</h3><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558345.png" alt="image-20250122233410720" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558346.png" alt="image-20250122233422136" style="zoom: 67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558347.png" alt="image-20250122233759927" style="zoom: 67%;" />
+
+<p>Benchmark开头，入参为testing.B，用b中的N值反复递增循环测试</p>
+<p>(对一个测试用例的默认测试时间是1秒，当测试用例函数返回时还不到1秒，那么testing.B中的N值将按1、2、5、10、 20、 ….递增，并以递增后的值重新进行用例函数测试。)</p>
+<p>Resttimer重置计时器，我们再reset之前做了init或其他的准备操作，这些操作不应该作为基准测试的范围; runparaller是多协程并发测试;执行2个基准测试，发现代码在并发情况下存在劣化，主要原因是rand为了保证全局的随机性和并发安全，持有了一把全局锁。</p>
+<p><strong>使用fastrand优化</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558348.png" alt="image-20250122233948621" style="zoom:67%;" />
+
+<h2 id="高质量编程简介及编码规范"><a href="#高质量编程简介及编码规范" class="headerlink" title="高质量编程简介及编码规范"></a>高质量编程简介及编码规范</h2><h3 id="编码规范"><a href="#编码规范" class="headerlink" title="编码规范"></a>编码规范</h3><p><strong>代码格式</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558349.png" alt="image-20250123102742429" style="zoom:50%;" />
+
+<p><strong>注释</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558350.png" alt="image-20250123102814012" style="zoom:50%;" />
+
+<p>Open()的注释解释了函数的作用，IsTableFull()的注释实际上没有提供一些额外的信息</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558351.png" alt="image-20250123102827129" style="zoom: 67%;" />
+
+<p>第二个for循环的注释没有什么作用</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558352.png" alt="image-20250123103044036" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558353.png" alt="image-20250123103137624" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558354.png" alt="image-20250123103149807" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558355.png" alt="image-20250123103325507" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558356.png" alt="image-20250123103332349" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558357.png" alt="image-20250123103346998" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558358.png" alt="image-20250123103354175" style="zoom:67%;" />
+
+<p><strong>命名规范</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558359.png" alt="image-20250123103515372" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558360.png" alt="image-20250123103530943" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558361.png" alt="image-20250123103556044" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558362.png" alt="image-20250123103741298" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558363.png" alt="image-20250123103833562" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558364.png" alt="image-20250123103848758" style="zoom:67%;" />
+
+<p><strong>控制流程</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558365.png" alt="image-20250123103931638" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558366.png" alt="image-20250123103954166" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558367.png" alt="image-20250123104115753" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558368.png" alt="image-20250123104145030" style="zoom:67%;" />
+
+<p><strong>错误和异常处理</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558369.png" alt="image-20250123104227159" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558370.png" alt="image-20250123104317872" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558371.png" alt="image-20250123104409602" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558372.png" alt="image-20250123104423988" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558373.png" alt="image-20250123104523677" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558374.png" alt="image-20250123104619633" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558375.png" alt="image-20250123104641510" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558376.png" alt="image-20250123104648252" style="zoom:67%;" />
+
+<h3 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h3><p><strong>性能优化建议</strong></p>
+<p>benchmark</p>
+<p>函数命名必须以Benchmark开头，后面跟的单词必须以大写字母开头</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558378.png" alt="image-20250123110855049" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558379.png" alt="image-20250123111354113" style="zoom:67%;" />
+
+<p><strong>Slice</strong></p>
+<p>预分配内存</p>
+<p>data :&#x3D; make([]int, 0, size)：长度为0，容量为size</p>
+<p>data :&#x3D; make([]int, size)：长度，容量都为size</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558380.png" alt="image-20250123112206318" style="zoom:50%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558381.png" alt="image-20250123112420595" style="zoom: 50%;" />
+
+<p>大内存未释放</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	data := <span class="built_in">make</span>([]<span class="type">int</span>, <span class="number">100</span>)</span><br><span class="line">	data2 := data[:<span class="number">2</span>]</span><br><span class="line">	fmt.Println(<span class="built_in">cap</span>(data2))</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 100</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	data := <span class="built_in">make</span>([]<span class="type">int</span>, <span class="number">100</span>)</span><br><span class="line">	<span class="comment">// 必须先为data2分配内存才能copy，否则会panic</span></span><br><span class="line">	data2 := <span class="built_in">make</span>([]<span class="type">int</span>, <span class="number">2</span>)</span><br><span class="line">	<span class="built_in">copy</span>(data2, data[:<span class="number">2</span>])</span><br><span class="line">	fmt.Println(<span class="built_in">cap</span>(data2))</span><br><span class="line">	<span class="comment">// 2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558382.png" alt="image-20250123112634329" style="zoom: 50%;" />
+
+<p><strong>Map</strong></p>
+<p>预分配内存</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558383.png" alt="image-20250123113331272" style="zoom:50%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558384.png" alt="image-20250123113338257" style="zoom:67%;" />
+
+<p><strong>字符串处理</strong></p>
+<p>使用strings.Builder</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558385.png" alt="image-20250123113443683" style="zoom: 50%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558386.png" alt="image-20250123113914497" style="zoom:50%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558387.png" alt="image-20250123113935731" style="zoom:50%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558388.png" alt="image-20250123113954450" style="zoom: 50%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558389.png" alt="image-20250123114807705" style="zoom:50%;" />
+
+<p><strong>空结构体</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558390.png" alt="image-20250123114952316" style="zoom:50%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558391.png" alt="image-20250123115001008" style="zoom:50%;" />
+
+<p><strong>atomic包</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558392.png" alt="image-20250123115028623" style="zoom:50%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558393.png" alt="image-20250123115040568" style="zoom: 67%;" />
+
+<p><strong>小结</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558394.png" alt="image-20250123115049414" style="zoom: 67%;" />
+
+<h3 id="性能优化分析工具"><a href="#性能优化分析工具" class="headerlink" title="性能优化分析工具"></a>性能优化分析工具</h3><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558395.png" alt="image-20250123125459514" style="zoom: 67%;" />
+
+<p><strong>性能分析工具pprof</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558396.png" alt="image-20250123125547173" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558397.png" alt="image-20250123125609275" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558398.png" alt="image-20250123231636479" style="zoom:67%;" />
+
+<p>启动main函数，访问 <a target="_blank" rel="noopener" href="http://localhost:6060/debug/pprof/">http://localhost:6060/debug/pprof/</a> 在浏览器查看指标</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558399.png" alt="image-20250123232255802" style="zoom:67%;" />
+
+<p>采集10s的CPU数据 <code> go tool pprof &quot;http://localhost:6060/debug/pprof/profile?seconds=10&quot;</code></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558400.png" alt="image-20250123232752702" style="zoom:67%;" />
+
+<p>输入top查看占用资源最多的函数</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558401.png" alt="image-20250123232836032" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558402.png" alt="image-20250123232854933" style="zoom:67%;" />
+
+<p>Eat函数占用资源最多，使用<code>list Eat</code>查看函数</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558403.png" alt="image-20250123233112882" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558404.png" alt="image-20250123233204932" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303125558405.png" alt="image-20250123234000475" style="zoom:67%;" />
+</div><div class="article-licensing box"><div class="licensing-title"><p>Go语言原理与实践</p><p><a href="https://shnpd.github.io/2025/02/13/bytedance/Go语言原理与实践/">https://shnpd.github.io/2025/02/13/bytedance/Go语言原理与实践/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>ShiHaonan</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2025-02-13</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-03-11</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/golang/">golang</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/images/wxpay.jpg" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2025/02/13/bytedance/%E5%AD%98%E5%82%A8%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%BA%93/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">存储与数据库</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2025/02/13/bytedance/%E5%BC%80%E5%8F%91%E4%B8%8E%E8%BF%AD%E4%BB%A3/"><span class="level-item">开发与迭代</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card" id="comments"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://shnpd.github.io/2025/02/13/bytedance/Go%E8%AF%AD%E8%A8%80%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/';
+            this.page.identifier = '2025/02/13/bytedance/Go语言原理与实践/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'shns-blog' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#什么是Go语言"><span class="level-left"><span class="level-item">1</span><span class="level-item">什么是Go语言</span></span></a></li><li><a class="level is-mobile" href="#Go语言进阶与依赖管理"><span class="level-left"><span class="level-item">2</span><span class="level-item">Go语言进阶与依赖管理</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#并发编程"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">并发编程</span></span></a></li><li><a class="level is-mobile" href="#依赖管理"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">依赖管理</span></span></a></li></ul></li><li><a class="level is-mobile" href="#测试"><span class="level-left"><span class="level-item">3</span><span class="level-item">测试</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#单元测试"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">单元测试</span></span></a></li><li><a class="level is-mobile" href="#基准测试"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">基准测试</span></span></a></li></ul></li><li><a class="level is-mobile" href="#高质量编程简介及编码规范"><span class="level-left"><span class="level-item">4</span><span class="level-item">高质量编程简介及编码规范</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#编码规范"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">编码规范</span></span></a></li><li><a class="level is-mobile" href="#性能优化"><span class="level-left"><span class="level-item">4.2</span><span class="level-item">性能优化</span></span></a></li><li><a class="level is-mobile" href="#性能优化分析工具"><span class="level-left"><span class="level-item">4.3</span><span class="level-item">性能优化分析工具</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/CSP%E6%A8%A1%E5%9E%8B/">【Go】CSP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Channel/">【Go】Channel</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Context/">【Go】Context</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/defer&amp;os.Exit()/">【Go】defer和os.Exit()</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/GMP%E6%A8%A1%E5%9E%8B/">【Go】GMP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Fabric/"><span class="level-start"><span class="level-item">Fabric</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/Golang/"><span class="level-start"><span class="level-item">Golang</span></span><span class="level-end"><span class="level-item tag">44</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Shell%E8%84%9A%E6%9C%AC/"><span class="level-start"><span class="level-item">Shell脚本</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/bytedance/"><span class="level-start"><span class="level-item">bytedance</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"><span class="level-start"><span class="level-item">以太坊</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%88%B7%E9%A2%98%E9%9B%86/"><span class="level-start"><span class="level-item">刷题集</span></span><span class="level-end"><span class="level-item tag">27</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="level-start"><span class="level-item">前端</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="level-start"><span class="level-item">区块链</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AD%A6%E6%9C%AF/"><span class="level-start"><span class="level-item">学术</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"><span class="level-start"><span class="level-item">密码学</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%B0%8F%E7%A8%8B%E5%BA%8F/"><span class="level-start"><span class="level-item">小程序</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/"><span class="level-start"><span class="level-item">技术总结</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/%E5%85%B6%E5%AE%83/"><span class="level-start"><span class="level-item">其它</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><span class="level-start"><span class="level-item">数据结构</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"><span class="level-start"><span class="level-item">机器学习</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9D%82%E9%A1%B9/"><span class="level-start"><span class="level-item">杂项</span></span><span class="level-end"><span class="level-item tag">31</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%AF%94%E7%89%B9%E5%B8%81/"><span class="level-start"><span class="level-item">比特币</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/"><span class="level-start"><span class="level-item">知识点整理</span></span><span class="level-end"><span class="level-item tag">19</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/mysql/"><span class="level-start"><span class="level-item">mysql</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/"><span class="level-start"><span class="level-item">redis</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">算法</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"><span class="level-start"><span class="level-item">网络安全</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li></ul></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">shn&#039;s blog</a><p class="is-size-7"><span>&copy; 2025 ShiHaonan</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">Welcome to shn's blog!</p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

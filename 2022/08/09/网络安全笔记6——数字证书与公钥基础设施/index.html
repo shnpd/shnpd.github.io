@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>网络安全笔记6——数字证书与公钥基础设施 - shn&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="shn&#039;s blog"><meta name="msapplication-TileImage" content="/images/icon_blog.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="shn&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="​​点击阅读更多查看文章内容"><meta property="og:type" content="blog"><meta property="og:title" content="网络安全笔记6——数字证书与公钥基础设施"><meta property="og:url" content="https://shnpd.github.io/2022/08/09/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B06%E2%80%94%E2%80%94%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6%E4%B8%8E%E5%85%AC%E9%92%A5%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/"><meta property="og:site_name" content="shn&#039;s blog"><meta property="og:description" content="​​点击阅读更多查看文章内容"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/dee7d964283df5a212b611b189bed46f_1740930356512.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/2e5e24fc5347cf3182958c580a008ea4_1740930356512.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/c836f31cf0869ff6a77d59e08f493c09_1740930366857.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e7961283dfdb1f6926d90645cb63fa0d_1740930366857.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/ee23b9c4b4dcd6337ce321940167d196_1740930366857.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/eeb1cc07937f25035a330ef326075e8b_1740930366857.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/37a211e6407e37b38f1c8651fffdbb1f_1740930366857.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b0de726f2c2def84c2060f5b96a2add5_1740930375960.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/91bbbf3b968abb518ab3a9133532afca_1740930375960.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/0f2a42f2a67a04f6121578facd34e9f1_1740930375960.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/6ccc311a52923b637a30b73a6f9f30ca_1740930375960.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/f8018f1f654186c18f3c6f6ab011c48f_1740930375960.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/c18671e8f7b1ee2bc057024cdc3ec27f_1740930384234.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/5be119126bc9676c76891b0613f345ac_1740930384234.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/8aef6cab548df05d49aea28fc0bc82ac_1740930384234.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/945a53b9e0094d6ea356e3d99cbe7db7_1740930384234.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/eef6c54db4dd98ee55a2fa8887f52094_1740930384234.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/39b52164065faf4023a0cf3a0d34161b_1740930392236.png"><meta property="article:published_time" content="2022-08-09T09:32:10.000Z"><meta property="article:modified_time" content="2025-03-10T08:05:21.698Z"><meta property="article:author" content="ShiHaonan"><meta property="article:tag" content="web安全 安全"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/dee7d964283df5a212b611b189bed46f_1740930356512.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://shnpd.github.io/2022/08/09/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B06%E2%80%94%E2%80%94%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6%E4%B8%8E%E5%85%AC%E9%92%A5%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/"},"headline":"网络安全笔记6——数字证书与公钥基础设施","image":["https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/dee7d964283df5a212b611b189bed46f_1740930356512.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/2e5e24fc5347cf3182958c580a008ea4_1740930356512.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/c836f31cf0869ff6a77d59e08f493c09_1740930366857.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e7961283dfdb1f6926d90645cb63fa0d_1740930366857.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/ee23b9c4b4dcd6337ce321940167d196_1740930366857.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/eeb1cc07937f25035a330ef326075e8b_1740930366857.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/37a211e6407e37b38f1c8651fffdbb1f_1740930366857.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b0de726f2c2def84c2060f5b96a2add5_1740930375960.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/91bbbf3b968abb518ab3a9133532afca_1740930375960.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/0f2a42f2a67a04f6121578facd34e9f1_1740930375960.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/6ccc311a52923b637a30b73a6f9f30ca_1740930375960.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/f8018f1f654186c18f3c6f6ab011c48f_1740930375960.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/c18671e8f7b1ee2bc057024cdc3ec27f_1740930384234.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/5be119126bc9676c76891b0613f345ac_1740930384234.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/8aef6cab548df05d49aea28fc0bc82ac_1740930384234.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/945a53b9e0094d6ea356e3d99cbe7db7_1740930384234.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/eef6c54db4dd98ee55a2fa8887f52094_1740930384234.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/39b52164065faf4023a0cf3a0d34161b_1740930392236.png"],"datePublished":"2022-08-09T09:32:10.000Z","dateModified":"2025-03-10T08:05:21.698Z","author":{"@type":"Person","name":"ShiHaonan"},"publisher":{"@type":"Organization","name":"shn's blog","logo":{"@type":"ImageObject","url":{"text":"shn's blog"}}},"description":"​​点击阅读更多查看文章内容"}</script><link rel="canonical" href="https://shnpd.github.io/2022/08/09/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B06%E2%80%94%E2%80%94%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6%E4%B8%8E%E5%85%AC%E9%92%A5%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/"><link rel="icon" href="/images/icon_blog.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><meta name="msvalidate.01" content="E38AFEA650A8300110261393E7FD0A39"><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">shn&#039;s blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-08-09T09:32:10.000Z" title="8/9/2022, 5:32:10 PM">2022-08-09</time>发表</span><span class="level-item"><time dateTime="2025-03-10T08:05:21.698Z" title="3/10/2025, 4:05:21 PM">2025-03-10</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a></span><span class="level-item">18 分钟读完 (大约2687个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">网络安全笔记6——数字证书与公钥基础设施</h1><div class="content"><p>​​点击阅读更多查看文章内容<span id="more"></span></p>
+<h1 id="网络安全笔记6——数字证书与公钥基础设施"><a href="#网络安全笔记6——数字证书与公钥基础设施" class="headerlink" title="网络安全笔记6——数字证书与公钥基础设施"></a>网络安全笔记6——数字证书与公钥基础设施</h1><blockquote>
+<p>参考课程：<a target="_blank" rel="noopener" href="https://www.icourse163.org/course/BUAA-1466021165">中国大学MOOC《网络安全》——北京航空航天大学</a></p>
+</blockquote>
+<p>@[toc]</p>
+<h1 id="公钥基础设施（PKI）"><a href="#公钥基础设施（PKI）" class="headerlink" title="公钥基础设施（PKI）"></a>公钥基础设施（PKI）</h1><p><strong>关于PKI与数字证书的简单理解也可以阅读我的另一篇博客——<a target="_blank" rel="noopener" href="https://blog.csdn.net/shn111/article/details/124583409">PKI详解</a></strong></p>
+<blockquote>
+<p>PKI:公钥基础设施(Public Key Infrastructure)它基于公钥密码理论，可为信息系统提供安全服务，是一一种普适性的安全基础设施。</p>
+</blockquote>
+<p><strong>目的：</strong><br>解决网上身份认证、电子信息的完整性和不可抵赖性等安全问题，为网络应用提供可靠安全服务。</p>
+<p><strong>任务：</strong><br>在电子商务和电子政务中，可以为网络用户提供可信的数字身份认证。</p>
+<p><strong>组成：</strong></p>
+<ul>
+<li>证书机构CA</li>
+<li>注册机构RA</li>
+<li>证书发布库</li>
+<li>密钥备份与恢复</li>
+<li>证书撤销</li>
+<li>PKI应用接口</li>
+</ul>
+<h2 id="证书机构CA-Certificate-Authority"><a href="#证书机构CA-Certificate-Authority" class="headerlink" title="证书机构CA (Certificate Authority)"></a>证书机构CA (Certificate Authority)</h2><blockquote>
+<p>CA为电子商务环境中各个实体颁发数字证书，以证明各实体身份的真实性，并负责在交易中检验和管理证书；它是电子商务和网上银行交易的权威性、可信赖性及公正性的第三方机构。。</p>
+</blockquote>
+<p><strong>CA系统功能：</strong></p>
+<ul>
+<li>证书生成</li>
+<li>证书颁发</li>
+<li>证书撤销</li>
+<li>证书更新</li>
+<li>证书归档</li>
+<li>CA自身审计</li>
+<li>日志审计</li>
+<li>密钥恢复</li>
+</ul>
+<p><strong>证书机构CA的功能：</strong></p>
+<ol>
+<li>CA负责签发和管理数字证书。</li>
+<li>提供网络身份认证、负责证书签发及证书的管理。<br>跟踪证书状态<br>在证书需要撤销时发布证书撤销通知</li>
+<li>维护证书档案和证书相关的审计。</li>
+</ol>
+<h2 id="注册机构RA（Registration-Authority）"><a href="#注册机构RA（Registration-Authority）" class="headerlink" title="注册机构RA（Registration Authority）"></a>注册机构RA（Registration Authority）</h2><blockquote>
+<p>注册机构(RA) 是数字证书注册审批机构，是认证中心的延伸。RA按照政策与管理规范对用户的资格进行审查，并执行“是否同意给该申请者发放证书、撤销证书”等操作。</p>
+</blockquote>
+<p><strong>RA系统功能</strong></p>
+<ul>
+<li>填写用户注册信息</li>
+<li>提交用户注册信息</li>
+<li>用户资料审核</li>
+<li>发送生成证书申请</li>
+<li>发送证书</li>
+<li>登记黑名单</li>
+<li>证书撤销列表管理</li>
+<li>日志审计</li>
+<li>自身安全保证</li>
+</ul>
+<h2 id="证书发布库"><a href="#证书发布库" class="headerlink" title="证书发布库"></a>证书发布库</h2><ul>
+<li>用于集中存放CA颁发证书和证书撤销列表。</li>
+<li>支持分布式存放，以提高查询效率。</li>
+<li>LDAP协议是创建高效大规模PKI认证的关键技术。</li>
+</ul>
+<h2 id="密钥备份和恢复"><a href="#密钥备份和恢复" class="headerlink" title="密钥备份和恢复"></a>密钥备份和恢复</h2><ul>
+<li>密钥的备份<br>仅备份和恢复<strong>CA的公钥&#x2F;私钥对</strong>，而不备份用户的<strong>签名密钥</strong>。</li>
+<li>密钥的恢复<br>若用户声明公钥&#x2F;私钥对是用于数据加密的，则CA即可<strong>对该用户的私钥进行备份</strong>。当用户丢失密钥后，可通过可信任的密钥恢复中心完成密钥恢复。</li>
+</ul>
+<h2 id="证书撤销"><a href="#证书撤销" class="headerlink" title="证书撤销"></a>证书撤销</h2><p>证书撤销的两种实现方法</p>
+<ul>
+<li>周期性发布机制：证书撤销列表CRL（Certificate Revocation List）</li>
+<li>在线证书查询机制：在线证书状态协议OCSP（Online Certificate Status Protocol）</li>
+</ul>
+<h2 id="PKI应用"><a href="#PKI应用" class="headerlink" title="PKI应用"></a>PKI应用</h2><ul>
+<li>认证服务</li>
+<li>数据完整性服务</li>
+<li>数据保密性服务</li>
+<li>不可否认服务</li>
+<li>公证服务</li>
+</ul>
+<h1 id="数字证书"><a href="#数字证书" class="headerlink" title="数字证书"></a>数字证书</h1><blockquote>
+<p>数字证书的概念:将用户身份<strong>ID</strong>与其所持有的公钥<strong>PK</strong>绑定，再由CA对该用户身份及对应公钥的组合**{ID|PK}<strong>进行数字签名得到</strong>S<strong>，然后将</strong>{签名S|身份ID||公钥PK}**加以存储，即数字证书。</p>
+</blockquote>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/dee7d964283df5a212b611b189bed46f_1740930356512.png" alt="在这里插入图片描述"></p>
+<h2 id="生成"><a href="#生成" class="headerlink" title="生成"></a>生成</h2><p><strong>最终用户与RA和CA的关系：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/2e5e24fc5347cf3182958c580a008ea4_1740930356512.png" alt="在这里插入图片描述"></p>
+<p>注意：注册机构RA主要帮助证书机构CA与最终用户交互，<strong>注册机构RA不能签发证书,证书只能由证书机构CA签发。</strong></p>
+<p><strong>注册机构RA提供的服务：</strong><br>接受与验证最终用户的注册信息<br>为最终用户生成密钥<br>接收与授权证书撤销请求</p>
+<p><strong>证书机构CA提供的服务：</strong><br>负责为用户生成数字证书<br>负责为用户颁发数字证书</p>
+<hr>
+<p><strong>生成步骤：</strong></p>
+<ol>
+<li>密钥生成</li>
+<li>用户注册</li>
+<li>验证信息</li>
+<li>证书生成</li>
+</ol>
+<p><strong>第一步：密钥生成的两种基本方式</strong></p>
+<ol>
+<li>用户自己生成公钥&#x2F;私钥对<br>（很少使用）<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/c836f31cf0869ff6a77d59e08f493c09_1740930366857.png" alt="在这里插入图片描述"></li>
+<li>RA为用户生成公钥&#x2F;私钥对<br>（常用）<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e7961283dfdb1f6926d90645cb63fa0d_1740930366857.png" alt="在这里插入图片描述"></li>
+</ol>
+<p><strong>第二步：注册</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/ee23b9c4b4dcd6337ce321940167d196_1740930366857.png" alt="在这里插入图片描述"></p>
+<p><strong>第三步：验证信息</strong></p>
+<ol>
+<li>RA验证用户材料,明确是否接受用户注册。<br>若用户是组织，则检验营业记录、历史文件和信用证明；<br>若用户是个人，则需要简单证明，如邮政地址、电子邮件地址等。</li>
+<li>检验用户私钥的拥有证明POP(Proof Of Possession)。<br>RA要求用户采用私钥对证书签名请求进行数字签名；<br>RA生成随机数挑战信息，用该用户公钥加密，并将加密后的挑战值发送给用户。若用户能用其私钥解密，则验证通过。<br>（用户自己生成公私钥对的情况）</li>
+</ol>
+<p><strong>第四步：证书生成</strong></p>
+<ol>
+<li>RA将用户申请数据信息传递给证书机构CA。</li>
+<li>证书机构验证后生成数字证书。</li>
+<li>证书机构将证书发给用户。</li>
+<li>在CA维护的证书目录中保留一份证书记录。</li>
+</ol>
+<p>RA将数字证书采用<strong>用户公钥</strong>加密后，发送给用户。<br>用户需要用与公钥匹配的私钥解密方可取得明文证书。<br>（如果公私钥对是由RA生成的，通常情况下采用离线分发的形式如光盘、U盘等介质发送给用户）</p>
+<h2 id="签名与验证"><a href="#签名与验证" class="headerlink" title="签名与验证"></a>签名与验证</h2><p><strong>签发</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/eeb1cc07937f25035a330ef326075e8b_1740930366857.png" alt="在这里插入图片描述"></p>
+<p><strong>验证</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/37a211e6407e37b38f1c8651fffdbb1f_1740930366857.png" alt="在这里插入图片描述"></p>
+<h2 id="层级结构"><a href="#层级结构" class="headerlink" title="层级结构"></a>层级结构</h2><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b0de726f2c2def84c2060f5b96a2add5_1740930375960.png" alt="在这里插入图片描述"></p>
+<p><strong>同一根CA中不同CA所辖用户</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/91bbbf3b968abb518ab3a9133532afca_1740930375960.png" alt="在这里插入图片描述"></p>
+<p><strong>Alice验证Bob证书链的过程</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/0f2a42f2a67a04f6121578facd34e9f1_1740930375960.png" alt="在这里插入图片描述"></p>
+<p><strong>不同根CA交叉验证</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/6ccc311a52923b637a30b73a6f9f30ca_1740930375960.png" alt="在这里插入图片描述"></p>
+<h2 id="撤销"><a href="#撤销" class="headerlink" title="撤销"></a>撤销</h2><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/f8018f1f654186c18f3c6f6ab011c48f_1740930375960.png" alt="在这里插入图片描述"></p>
+<p><strong>脱机证书撤销状态检查</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/c18671e8f7b1ee2bc057024cdc3ec27f_1740930384234.png" alt="在这里插入图片描述"></p>
+<p><strong>联机证书撤销状态检查</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/5be119126bc9676c76891b0613f345ac_1740930384234.png" alt="在这里插入图片描述"></p>
+<h2 id="漫游证书"><a href="#漫游证书" class="headerlink" title="漫游证书"></a>漫游证书</h2><blockquote>
+<p>证书应用的普及自然产生了证书的便携性需要，而到目前，能提供证书和其对应私钥移动性的实际解决方案只有两种：第一种是智能卡技术。在该技术中，公钥／私钥对存放在卡上，但这种方法存在缺陷，如易丢失和损坏，并且依赖读卡器（虽然带USB接口的智能钥匙不依赖读卡器，但成本太高）；第二种选择是将证书和私钥复制到一张软盘备用，但软盘不仅容易丢失和损坏，而且安全性也较差。<br>一个新的解决方案就是使用漫游证书，它通过第三方软件提供，只需在任何系统中正确地配置，该软件（或者插件）就可以允许用户访问自己的公钥&#x2F;私钥对。它的基本原理很简单，即将用户的证书和私钥放在一个安全的中央服务器上，当用户登录到一个本地系统时，从服务器安全地检索出公钥&#x2F;私钥对，并将其放在本地系统的内存中以备后用，当用户完成工作并从本地系统注销后，该软件自动删除存放在本地系统中的用户证书和私钥。</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/8aef6cab548df05d49aea28fc0bc82ac_1740930384234.png" alt="在这里插入图片描述"><br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/945a53b9e0094d6ea356e3d99cbe7db7_1740930384234.png" alt="在这里插入图片描述"><br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/eef6c54db4dd98ee55a2fa8887f52094_1740930384234.png" alt="在这里插入图片描述"></p>
+<h1 id="授权管理设施（PMI）"><a href="#授权管理设施（PMI）" class="headerlink" title="授权管理设施（PMI）"></a>授权管理设施（PMI）</h1><blockquote>
+<p>定义:权限管理基础设施或授权管理基础设施(PMI)，是<strong>属性证书</strong>、<strong>属性权威机构</strong>、<strong>属性证书框架</strong>等部件的集合体，用来实现属性证书的产生、管理、存储、分发和撤销等功能。</p>
+</blockquote>
+<ul>
+<li>属性机构（AA）：用来生成并签发属性证书(AC) 的权威机构。</li>
+<li>属性证书（AC）：若要将一个实体绑定某个权限，可由属性证书AC来提供，AC中包含了AA对该实体属性的数字签名。</li>
+<li>X.509属性证书框架：该框架提供了一个构建权限管理基础设施(PMI)的基础架构，可支持基于权限的访问控制等应用。</li>
+</ul>
+<p><strong>PKI与PMI的关系</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/39b52164065faf4023a0cf3a0d34161b_1740930392236.png" alt="在这里插入图片描述"></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>网络安全笔记6——数字证书与公钥基础设施</p><p><a href="https://shnpd.github.io/2022/08/09/网络安全笔记6——数字证书与公钥基础设施/">https://shnpd.github.io/2022/08/09/网络安全笔记6——数字证书与公钥基础设施/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>ShiHaonan</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2022-08-09</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-03-10</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/web%E5%AE%89%E5%85%A8-%E5%AE%89%E5%85%A8/">web安全 安全</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/images/wxpay.jpg" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2022/08/11/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B07%E2%80%94%E2%80%94%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">网络安全笔记7——防火墙技术</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2022/08/07/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B05%E2%80%94%E2%80%94%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/"><span class="level-item">网络安全笔记5——数字签名</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card" id="comments"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://shnpd.github.io/2022/08/09/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B06%E2%80%94%E2%80%94%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6%E4%B8%8E%E5%85%AC%E9%92%A5%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/';
+            this.page.identifier = '2022/08/09/网络安全笔记6——数字证书与公钥基础设施/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'shns-blog' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#网络安全笔记6——数字证书与公钥基础设施"><span class="level-left"><span class="level-item">1</span><span class="level-item">网络安全笔记6——数字证书与公钥基础设施</span></span></a></li><li><a class="level is-mobile" href="#公钥基础设施（PKI）"><span class="level-left"><span class="level-item">2</span><span class="level-item">公钥基础设施（PKI）</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#证书机构CA-Certificate-Authority"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">证书机构CA (Certificate Authority)</span></span></a></li><li><a class="level is-mobile" href="#注册机构RA（Registration-Authority）"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">注册机构RA（Registration Authority）</span></span></a></li><li><a class="level is-mobile" href="#证书发布库"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">证书发布库</span></span></a></li><li><a class="level is-mobile" href="#密钥备份和恢复"><span class="level-left"><span class="level-item">2.4</span><span class="level-item">密钥备份和恢复</span></span></a></li><li><a class="level is-mobile" href="#证书撤销"><span class="level-left"><span class="level-item">2.5</span><span class="level-item">证书撤销</span></span></a></li><li><a class="level is-mobile" href="#PKI应用"><span class="level-left"><span class="level-item">2.6</span><span class="level-item">PKI应用</span></span></a></li></ul></li><li><a class="level is-mobile" href="#数字证书"><span class="level-left"><span class="level-item">3</span><span class="level-item">数字证书</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#结构"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">结构</span></span></a></li><li><a class="level is-mobile" href="#生成"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">生成</span></span></a></li><li><a class="level is-mobile" href="#签名与验证"><span class="level-left"><span class="level-item">3.3</span><span class="level-item">签名与验证</span></span></a></li><li><a class="level is-mobile" href="#层级结构"><span class="level-left"><span class="level-item">3.4</span><span class="level-item">层级结构</span></span></a></li><li><a class="level is-mobile" href="#撤销"><span class="level-left"><span class="level-item">3.5</span><span class="level-item">撤销</span></span></a></li><li><a class="level is-mobile" href="#漫游证书"><span class="level-left"><span class="level-item">3.6</span><span class="level-item">漫游证书</span></span></a></li></ul></li><li><a class="level is-mobile" href="#授权管理设施（PMI）"><span class="level-left"><span class="level-item">4</span><span class="level-item">授权管理设施（PMI）</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/CSP%E6%A8%A1%E5%9E%8B/">【Go】CSP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Channel/">【Go】Channel</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Context/">【Go】Context</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/defer&amp;os.Exit()/">【Go】defer和os.Exit()</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/GMP%E6%A8%A1%E5%9E%8B/">【Go】GMP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Fabric/"><span class="level-start"><span class="level-item">Fabric</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/Golang/"><span class="level-start"><span class="level-item">Golang</span></span><span class="level-end"><span class="level-item tag">44</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Shell%E8%84%9A%E6%9C%AC/"><span class="level-start"><span class="level-item">Shell脚本</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/bytedance/"><span class="level-start"><span class="level-item">bytedance</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"><span class="level-start"><span class="level-item">以太坊</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%88%B7%E9%A2%98%E9%9B%86/"><span class="level-start"><span class="level-item">刷题集</span></span><span class="level-end"><span class="level-item tag">27</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="level-start"><span class="level-item">前端</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="level-start"><span class="level-item">区块链</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AD%A6%E6%9C%AF/"><span class="level-start"><span class="level-item">学术</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"><span class="level-start"><span class="level-item">密码学</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%B0%8F%E7%A8%8B%E5%BA%8F/"><span class="level-start"><span class="level-item">小程序</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/"><span class="level-start"><span class="level-item">技术总结</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/%E5%85%B6%E5%AE%83/"><span class="level-start"><span class="level-item">其它</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><span class="level-start"><span class="level-item">数据结构</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"><span class="level-start"><span class="level-item">机器学习</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9D%82%E9%A1%B9/"><span class="level-start"><span class="level-item">杂项</span></span><span class="level-end"><span class="level-item tag">31</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%AF%94%E7%89%B9%E5%B8%81/"><span class="level-start"><span class="level-item">比特币</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/"><span class="level-start"><span class="level-item">知识点整理</span></span><span class="level-end"><span class="level-item tag">19</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/mysql/"><span class="level-start"><span class="level-item">mysql</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/"><span class="level-start"><span class="level-item">redis</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">算法</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"><span class="level-start"><span class="level-item">网络安全</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li></ul></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">shn&#039;s blog</a><p class="is-size-7"><span>&copy; 2025 ShiHaonan</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">Welcome to shn's blog!</p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

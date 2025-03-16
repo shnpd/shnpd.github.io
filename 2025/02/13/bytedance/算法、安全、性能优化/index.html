@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>算法、安全、性能优化 - shn&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="shn&#039;s blog"><meta name="msapplication-TileImage" content="/images/icon_blog.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="shn&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="​点击阅读更多查看文章内容"><meta property="og:type" content="blog"><meta property="og:title" content="算法、安全、性能优化"><meta property="og:url" content="https://shnpd.github.io/2025/02/13/bytedance/%E7%AE%97%E6%B3%95%E3%80%81%E5%AE%89%E5%85%A8%E3%80%81%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"><meta property="og:site_name" content="shn&#039;s blog"><meta property="og:description" content="​点击阅读更多查看文章内容"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124453155.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124457661.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124504252.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124511040.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124516748.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124523315.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124535459.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548342.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548343.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548345.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548346.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548347.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548348.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548349.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548350.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548351.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548352.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548353.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548354.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548355.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548356.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548357.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548358.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548359.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548360.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548361.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548362.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548363.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548364.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548365.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548366.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548367.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548368.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548369.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548370.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548371.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548372.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548373.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548375.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548376.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548377.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548378.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548379.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548380.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548381.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548382.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548383.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548384.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548385.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548386.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548387.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548388.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548389.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548390.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548391.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548392.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548393.png"><meta property="article:published_time" content="2025-02-12T16:00:00.000Z"><meta property="article:modified_time" content="2025-03-11T02:55:19.925Z"><meta property="article:author" content="ShiHaonan"><meta property="article:tag" content="性能优化"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124453155.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://shnpd.github.io/2025/02/13/bytedance/%E7%AE%97%E6%B3%95%E3%80%81%E5%AE%89%E5%85%A8%E3%80%81%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"},"headline":"算法、安全、性能优化","image":["https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124453155.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124457661.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124504252.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124511040.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124516748.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124523315.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124535459.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548342.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548343.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548345.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548346.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548347.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548348.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548349.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548350.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548351.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548352.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548353.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548354.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548355.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548356.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548357.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548358.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548359.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548360.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548361.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548362.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548363.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548364.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548365.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548366.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548367.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548368.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548369.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548370.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548371.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548372.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548373.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548375.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548376.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548377.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548378.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548379.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548380.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548381.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548382.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548383.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548384.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548385.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548386.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548387.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548388.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548389.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548390.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548391.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548392.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548393.png"],"datePublished":"2025-02-12T16:00:00.000Z","dateModified":"2025-03-11T02:55:19.925Z","author":{"@type":"Person","name":"ShiHaonan"},"publisher":{"@type":"Organization","name":"shn's blog","logo":{"@type":"ImageObject","url":{"text":"shn's blog"}}},"description":"​点击阅读更多查看文章内容"}</script><link rel="canonical" href="https://shnpd.github.io/2025/02/13/bytedance/%E7%AE%97%E6%B3%95%E3%80%81%E5%AE%89%E5%85%A8%E3%80%81%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"><link rel="icon" href="/images/icon_blog.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><meta name="msvalidate.01" content="E38AFEA650A8300110261393E7FD0A39"><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">shn&#039;s blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-02-12T16:00:00.000Z" title="2/13/2025, 12:00:00 AM">2025-02-13</time>发表</span><span class="level-item"><time dateTime="2025-03-11T02:55:19.925Z" title="3/11/2025, 10:55:19 AM">2025-03-11</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/bytedance/">bytedance</a></span><span class="level-item">3 分钟读完 (大约414个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">算法、安全、性能优化</h1><div class="content"><p>​点击阅读更多查看文章内容<span id="more"></span></p>
+<h2 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h2><h3 id="插入排序、快速排序、堆排序"><a href="#插入排序、快速排序、堆排序" class="headerlink" title="插入排序、快速排序、堆排序"></a>插入排序、快速排序、堆排序</h3><p>理论时间复杂度</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124453155.png" alt="image-20250124175200799" style="zoom:67%;" />
+
+<p>实际场景的性能测试</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124457661.png" alt="image-20250124175049260" style="zoom:67%;" />
+
+<p>完全随机</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124504252.png" alt="image-20250124175105963" style="zoom:67%;" />
+
+<p>元素有序</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124511040.png" alt="image-20250124175117939" style="zoom:67%;" />
+
+<p>结论</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124516748.png" alt="image-20250124175131560" style="zoom:67%;" />
+
+<h3 id="pdqsort"><a href="#pdqsort" class="headerlink" title="pdqsort"></a>pdqsort</h3><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124523315.png" alt="image-20250124175555593" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124535459.png" alt="image-20250124175833504" style="zoom:67%;" />
+
+<p><strong>Version1</strong></p>
+<p>首先使用快排，快排分成两部分之后如果子数组长度小于24则针对该子数组不再使用快排转而使用插入排序，如果limit为0则使用堆排序。limit是根据数组初始长度计算的值，当快排表现不佳时会将limit减1，当limit最终为0时就不再使用快排。</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548342.png" alt="image-20250124180006061" style="zoom:67%;" />
+
+<p><strong>Version2</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548343.png" alt="image-20250124180901763" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548345.png" alt="image-20250124181239731" style="zoom:67%;" />
+
+<p>采样多个元素选择中位数</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548346.png" alt="image-20250124181259414" style="zoom:67%;" />
+
+<p>partialInsertionSort，在插入一定次数后仍未有序，就放弃使用插入排序</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548347.png" alt="image-20250124181522604" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548348.png" alt="image-20250124181904119" style="zoom: 67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548349.png" alt="image-20250124181926499" style="zoom:67%;" />
+
+<p><strong>最终版本</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548350.png" alt="image-20250124182110270" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548351.png" alt="image-20250124182312261" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548352.png" alt="image-20250124182341976" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548353.png" alt="image-20250124182419264" style="zoom:67%;" />
+
+<h2 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h2><h3 id="网站常见安全漏洞"><a href="#网站常见安全漏洞" class="headerlink" title="网站常见安全漏洞"></a>网站常见安全漏洞</h3><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548354.png" alt="image-20250124224400759" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548355.png" alt="image-20250124224409771" style="zoom:67%;" />
+
+<h3 id="服务端漏洞"><a href="#服务端漏洞" class="headerlink" title="服务端漏洞"></a>服务端漏洞</h3><p><strong>第三方组件漏洞</strong></p>
+<p>log4j、fastjson</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548356.png" alt="image-20250124224941166" style="zoom:67%;" />
+
+<hr>
+<p><strong>SQL注入</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548357.png" alt="image-20250124225804625" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548358.png" alt="image-20250124225817898" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548359.png" alt="image-20250124225827069" style="zoom:67%;" />
+
+<p>不要把用户传入的数据当作代码</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548360.png" alt="image-20250124225842288" style="zoom:67%;" />
+
+<hr>
+<p><strong>命令执行</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548361.png" alt="image-20250124230019708" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548362.png" alt="image-20250124230038232" style="zoom:67%;" />
+
+<hr>
+<p><strong>越权漏洞</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548363.png" alt="image-20250124230449943" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548364.png" alt="image-20250124230505667" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548365.png" alt="image-20250124230514343" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548366.png" alt="image-20250124230524546" style="zoom:67%;" />
+
+<hr>
+<p><strong>SSRF</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548367.png" alt="image-20250124230932361" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548368.png" alt="image-20250124230948450" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548369.png" alt="image-20250124230958032" style="zoom:67%;" />
+
+<p>本身发起请求的就是内网的机器，所以可以访问到本机的admin页面</p>
+<hr>
+<p><strong>文件上传漏洞</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548370.png" alt="image-20250124231207050" style="zoom:67%;" />
+
+<p>上传一个php脚本，php是解释型语言，可以直接执行</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548371.png" alt="image-20250124231223606" style="zoom:67%;" />
+
+<p>基于企业的CDN存储自己的文件生成url，可以快速访问</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548372.png" alt="image-20250124231319454" style="zoom:67%;" />
+
+<p>站库分离：如果上传php文件不会存储到网站，而是存储到其它的服务器上，不具备执行php的能力，就不会有问题。</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548373.png" alt="image-20250124231400870" style="zoom:67%;" />
+
+<h3 id="客户端漏洞"><a href="#客户端漏洞" class="headerlink" title="客户端漏洞"></a>客户端漏洞</h3><p><strong>开放重定向</strong></p>
+<p>对重定向地址做一个白名单</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548375.png" alt="image-20250125100604154" style="zoom:67%;" />
+
+<p><strong>XSS</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548376.png" alt="image-20250125100629814" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548377.png" alt="image-20250125100809319" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548378.png" alt="image-20250125101003373" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548379.png" alt="image-20250125101016139" style="zoom:67%;" />
+
+<p><strong>CSRF</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548380.png" alt="image-20250125101225536" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548381.png" alt="image-20250125101406114" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548382.png" alt="image-20250125101535877" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548383.png" alt="image-20250125101548750" style="zoom:67%;" />
+
+<p><strong>点击劫持</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548384.png" alt="image-20250125101707158" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548385.png" alt="image-20250125101745903" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548386.png" alt="image-20250125101824382" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548387.png" alt="image-20250125101851614" style="zoom:67%;" />
+
+<p><strong>CORS跨域配置错误</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548388.png" alt="image-20250125101937265" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548389.png" alt="image-20250125102017815" style="zoom:67%;" />
+
+<p><strong>WebSocket</strong></p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548390.png" alt="image-20250125102104395" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548391.png" alt="image-20250125102209890" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548392.png" alt="image-20250125102224178" style="zoom:67%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/20250303124548393.png" alt="image-20250125102257982" style="zoom:67%;" /></div><div class="article-licensing box"><div class="licensing-title"><p>算法、安全、性能优化</p><p><a href="https://shnpd.github.io/2025/02/13/bytedance/算法、安全、性能优化/">https://shnpd.github.io/2025/02/13/bytedance/算法、安全、性能优化/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>ShiHaonan</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2025-02-13</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-03-11</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/images/wxpay.jpg" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2025/02/13/bytedance/%E5%BC%80%E5%8F%91%E4%B8%8E%E8%BF%AD%E4%BB%A3/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">开发与迭代</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2025/02/13/bytedance/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/"><span class="level-item">消息队列</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card" id="comments"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://shnpd.github.io/2025/02/13/bytedance/%E7%AE%97%E6%B3%95%E3%80%81%E5%AE%89%E5%85%A8%E3%80%81%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/';
+            this.page.identifier = '2025/02/13/bytedance/算法、安全、性能优化/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'shns-blog' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#排序"><span class="level-left"><span class="level-item">1</span><span class="level-item">排序</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#插入排序、快速排序、堆排序"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">插入排序、快速排序、堆排序</span></span></a></li><li><a class="level is-mobile" href="#pdqsort"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">pdqsort</span></span></a></li></ul></li><li><a class="level is-mobile" href="#安全"><span class="level-left"><span class="level-item">2</span><span class="level-item">安全</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#网站常见安全漏洞"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">网站常见安全漏洞</span></span></a></li><li><a class="level is-mobile" href="#服务端漏洞"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">服务端漏洞</span></span></a></li><li><a class="level is-mobile" href="#客户端漏洞"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">客户端漏洞</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/CSP%E6%A8%A1%E5%9E%8B/">【Go】CSP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Channel/">【Go】Channel</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Context/">【Go】Context</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/defer&amp;os.Exit()/">【Go】defer和os.Exit()</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/GMP%E6%A8%A1%E5%9E%8B/">【Go】GMP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Fabric/"><span class="level-start"><span class="level-item">Fabric</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/Golang/"><span class="level-start"><span class="level-item">Golang</span></span><span class="level-end"><span class="level-item tag">44</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Shell%E8%84%9A%E6%9C%AC/"><span class="level-start"><span class="level-item">Shell脚本</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/bytedance/"><span class="level-start"><span class="level-item">bytedance</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"><span class="level-start"><span class="level-item">以太坊</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%88%B7%E9%A2%98%E9%9B%86/"><span class="level-start"><span class="level-item">刷题集</span></span><span class="level-end"><span class="level-item tag">27</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="level-start"><span class="level-item">前端</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="level-start"><span class="level-item">区块链</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AD%A6%E6%9C%AF/"><span class="level-start"><span class="level-item">学术</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"><span class="level-start"><span class="level-item">密码学</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%B0%8F%E7%A8%8B%E5%BA%8F/"><span class="level-start"><span class="level-item">小程序</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/"><span class="level-start"><span class="level-item">技术总结</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/%E5%85%B6%E5%AE%83/"><span class="level-start"><span class="level-item">其它</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><span class="level-start"><span class="level-item">数据结构</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"><span class="level-start"><span class="level-item">机器学习</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9D%82%E9%A1%B9/"><span class="level-start"><span class="level-item">杂项</span></span><span class="level-end"><span class="level-item tag">31</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%AF%94%E7%89%B9%E5%B8%81/"><span class="level-start"><span class="level-item">比特币</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/"><span class="level-start"><span class="level-item">知识点整理</span></span><span class="level-end"><span class="level-item tag">19</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/mysql/"><span class="level-start"><span class="level-item">mysql</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/"><span class="level-start"><span class="level-item">redis</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">算法</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"><span class="level-start"><span class="level-item">网络安全</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li></ul></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">shn&#039;s blog</a><p class="is-size-7"><span>&copy; 2025 ShiHaonan</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">Welcome to shn's blog!</p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

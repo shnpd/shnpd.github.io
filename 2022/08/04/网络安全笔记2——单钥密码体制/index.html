@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>网络安全笔记2——单钥密码体制 - shn&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="shn&#039;s blog"><meta name="msapplication-TileImage" content="/images/icon_blog.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="shn&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="​​点击阅读更多查看文章内容"><meta property="og:type" content="blog"><meta property="og:title" content="网络安全笔记2——单钥密码体制"><meta property="og:url" content="https://shnpd.github.io/2022/08/04/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E5%8D%95%E9%92%A5%E5%AF%86%E7%A0%81%E4%BD%93%E5%88%B6/"><meta property="og:site_name" content="shn&#039;s blog"><meta property="og:description" content="​​点击阅读更多查看文章内容"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/d79fcc6cc15395fed2cfaf0043b9b78f_1740930450137.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a4bbef9bd2d305686b1e2e8f56c6d211_1740930450137.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a6d8f8aa0e58114c8b15f4bd99416978_1740930450137.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/1d159f96f22d9348a0369194717b4223_1740930450137.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/2e74196ff4541e656dc3907ad24f725b_1740930459471.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/50024094e86e2af19cbb6ec14d5da3fd_1740930459471.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e30e65f74da11833c64dae1538c6f13a_1740930459471.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/0d79bafdc2b75b0220925d8875a0f84a_1740930459471.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/f3e6ef9e45ff4091c50de4c53d3dd704_1740930459471.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/47ca53657fc9960ff6bea43e3e57f377_1740930469181.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/43d90cfe3d5a99b81573247f3120dc83_1740930469181.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/16a80eba064f816198250126199220b0_1740930469181.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a0483c964f02e46af2aeb07b1f6fa7c2_1740930469181.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/6166ee832bffd80ee8b071cd62ecacff_1740930469181.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/f9c42dafa032935f627137dffbc7024f_1740930477702.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e21f78858e2c5988935e1dce4aec6ca6_1740930477702.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/ad5ffda19ff924b27d1959e40a8fcb02_1740930477702.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e6d63ac67da75a3f2b271cfc2bfc39db_1740930477702.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b859a3c0bdaf23a58fa8ca9e0137e9dd_1740930477702.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/caa1e896f41f4fb21a509a44221f2ce7_1740930485607.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/872428338ef1e4b3c4223de7ba424dd8_1740930485607.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/bbac57fe76804771e26329472bb83db4_1740930485607.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/240cc0a5bd0e3a46f345098b99afaa65_1740930485607.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/074d2e15593de5904ab47faefd499dc9_1740930485607.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b7751f02d181fd5c66a3c2ccdce109b0_1740930492993.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/f497272c7d3a8c43c3888d84304810da_1740930492993.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a9b2ad2ad2a45788042b3e4563a788ed_1740930492993.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/76a9d091ac9bb0b97700662a7c1a6b36_1740930492993.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/48b21dab423d017fafdd4a9609b3b4fc_1740930492993.png"><meta property="article:published_time" content="2022-08-04T01:15:32.000Z"><meta property="article:modified_time" content="2025-03-10T08:05:21.725Z"><meta property="article:author" content="ShiHaonan"><meta property="article:tag" content="web安全 安全 网络"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/d79fcc6cc15395fed2cfaf0043b9b78f_1740930450137.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://shnpd.github.io/2022/08/04/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E5%8D%95%E9%92%A5%E5%AF%86%E7%A0%81%E4%BD%93%E5%88%B6/"},"headline":"网络安全笔记2——单钥密码体制","image":["https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/d79fcc6cc15395fed2cfaf0043b9b78f_1740930450137.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a4bbef9bd2d305686b1e2e8f56c6d211_1740930450137.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a6d8f8aa0e58114c8b15f4bd99416978_1740930450137.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/1d159f96f22d9348a0369194717b4223_1740930450137.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/2e74196ff4541e656dc3907ad24f725b_1740930459471.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/50024094e86e2af19cbb6ec14d5da3fd_1740930459471.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e30e65f74da11833c64dae1538c6f13a_1740930459471.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/0d79bafdc2b75b0220925d8875a0f84a_1740930459471.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/f3e6ef9e45ff4091c50de4c53d3dd704_1740930459471.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/47ca53657fc9960ff6bea43e3e57f377_1740930469181.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/43d90cfe3d5a99b81573247f3120dc83_1740930469181.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/16a80eba064f816198250126199220b0_1740930469181.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a0483c964f02e46af2aeb07b1f6fa7c2_1740930469181.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/6166ee832bffd80ee8b071cd62ecacff_1740930469181.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/f9c42dafa032935f627137dffbc7024f_1740930477702.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e21f78858e2c5988935e1dce4aec6ca6_1740930477702.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/ad5ffda19ff924b27d1959e40a8fcb02_1740930477702.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e6d63ac67da75a3f2b271cfc2bfc39db_1740930477702.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b859a3c0bdaf23a58fa8ca9e0137e9dd_1740930477702.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/caa1e896f41f4fb21a509a44221f2ce7_1740930485607.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/872428338ef1e4b3c4223de7ba424dd8_1740930485607.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/bbac57fe76804771e26329472bb83db4_1740930485607.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/240cc0a5bd0e3a46f345098b99afaa65_1740930485607.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/074d2e15593de5904ab47faefd499dc9_1740930485607.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b7751f02d181fd5c66a3c2ccdce109b0_1740930492993.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/f497272c7d3a8c43c3888d84304810da_1740930492993.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a9b2ad2ad2a45788042b3e4563a788ed_1740930492993.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/76a9d091ac9bb0b97700662a7c1a6b36_1740930492993.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/48b21dab423d017fafdd4a9609b3b4fc_1740930492993.png"],"datePublished":"2022-08-04T01:15:32.000Z","dateModified":"2025-03-10T08:05:21.725Z","author":{"@type":"Person","name":"ShiHaonan"},"publisher":{"@type":"Organization","name":"shn's blog","logo":{"@type":"ImageObject","url":{"text":"shn's blog"}}},"description":"​​点击阅读更多查看文章内容"}</script><link rel="canonical" href="https://shnpd.github.io/2022/08/04/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E5%8D%95%E9%92%A5%E5%AF%86%E7%A0%81%E4%BD%93%E5%88%B6/"><link rel="icon" href="/images/icon_blog.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><meta name="msvalidate.01" content="E38AFEA650A8300110261393E7FD0A39"><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">shn&#039;s blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-08-04T01:15:32.000Z" title="8/4/2022, 9:15:32 AM">2022-08-04</time>发表</span><span class="level-item"><time dateTime="2025-03-10T08:05:21.725Z" title="3/10/2025, 4:05:21 PM">2025-03-10</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a></span><span class="level-item">35 分钟读完 (大约5302个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">网络安全笔记2——单钥密码体制</h1><div class="content"><p>​​点击阅读更多查看文章内容<span id="more"></span></p>
+<h1 id="网络安全笔记2——单钥密码体制"><a href="#网络安全笔记2——单钥密码体制" class="headerlink" title="网络安全笔记2——单钥密码体制"></a>网络安全笔记2——单钥密码体制</h1><blockquote>
+<p>参考课程：<a target="_blank" rel="noopener" href="https://www.icourse163.org/course/BUAA-1466021165">中国大学MOOC《网络安全》——北京航空航天大学</a></p>
+</blockquote>
+<p>@[toc]</p>
+<p><strong>密码体制的语法定义</strong></p>
+<ul>
+<li>明文消息空间M：可能的明文字母串集合</li>
+<li>密文消息空间C：可能的密文字母串集合</li>
+<li>加密密钥空间K：可能的加密密钥集合</li>
+<li>解密密钥空间K^’^：可能的解密密钥集合</li>
+<li>有效的密钥生成算法ζ：N → K × K^’^</li>
+<li>加密算法E：M × K → C</li>
+<li>解密算法D：C × K^’^ → M</li>
+<li>密钥生成算法：∀整数1^l^，ζ(1^l^)输出长为l的密钥对：(k<del>e</del>,k<del>d</del>) ∈ K × K^’^</li>
+<li>加密&#x2F;解密过程：∀m ∈ M，c ∈ C<br>c &#x3D; E<del>ke</del>(m)<br>m &#x3D; D<del>kd</del>(c) &#x3D; D<del>kd</del>(E<del>ke</del>(m))</li>
+</ul>
+<p><strong>密钥体制的分类</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/d79fcc6cc15395fed2cfaf0043b9b78f_1740930450137.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>若k<del>e</del>&#x3D;k<del>d</del>，则加密算法称为<strong>单钥加密体制</strong>（对称加密体制或私钥加密体制）</li>
+<li>若k<del>e</del>≠k<del>d</del>，则加密算法称为<strong>双钥加密体制</strong>（非对称加密体制或公钥加密体制）</li>
+</ul>
+<p><strong>单钥密码按照加解密运算的特点分类</strong></p>
+<ul>
+<li>流密码（Stream Cipher）：数据逐比特加密，即数据流与密钥流逐比特进行异或（XOR）运算；</li>
+<li>分组密码（Block Cipher）：对数据分组进行处理。</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a4bbef9bd2d305686b1e2e8f56c6d211_1740930450137.png" alt="在这里插入图片描述"></p>
+<hr>
+<h1 id="古典密码"><a href="#古典密码" class="headerlink" title="古典密码"></a>古典密码</h1><p><strong>古典密码学有两大基本方法</strong></p>
+<ul>
+<li>置换密码：明文字母保持不变，但顺序被打乱。</li>
+<li>代换密码：明文字母被替换，但顺序保持不变。<br>代换密码主要包括：单表代换（一个明文字母对应的密文字母是确定的）；多表代换（一个明文字母可以表示为多个密文字母）；弗纳姆密码：将每消息比特和相应的密钥比特进行比特异或运算</li>
+</ul>
+<h2 id="代换密码"><a href="#代换密码" class="headerlink" title="代换密码"></a>代换密码</h2><p><strong>单表代换</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a6d8f8aa0e58114c8b15f4bd99416978_1740930450137.png" alt="在这里插入图片描述"></p>
+<p><strong>凯撒密码（单表代换）</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/1d159f96f22d9348a0369194717b4223_1740930450137.png" alt="在这里插入图片描述"></p>
+<p><strong>维吉尼亚密码（多表代换）</strong></p>
+<ul>
+<li>引入密钥的概念：根据密钥来决定用哪一行的密表来进行代换。</li>
+<li>使用词组作为密钥：词组中每一个字母都作为索引来确定采用某个代换表，加密时需要循环使用代换表完成明文字母到密文字母的代换，最后所得到的密文字母序列即为密文。</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/2e74196ff4541e656dc3907ad24f725b_1740930459471.png" alt="在这里插入图片描述"></p>
+<p><strong>弗纳姆密码（代换密码）</strong></p>
+<p>弗纳姆密码（Vernam Cipher）的基本原理是：将明文与密钥进行模2加法运算。如果M&#x3D;C&#x3D;K&#x3D;{0,1}^*^，则弗纳姆密码就是代换密码的特例；如果密钥串只使用一次，那么弗纳姆密码就是一次一密密码。<br>弗纳姆密码也可以看成序列密码（流密码）的雏形。</p>
+<h2 id="置换密码"><a href="#置换密码" class="headerlink" title="置换密码"></a>置换密码</h2><p>置换密码又称换位密码，是通过重新排列明文中元素的位置而不改变元素本身来实现加密的体制，它广泛应用于现代分组密码的构造。</p>
+<p>置换就是简单的换位，每次置换都可以用一个置换矩阵来表示，且都有一个与之对应的逆置换矩阵。<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/50024094e86e2af19cbb6ec14d5da3fd_1740930459471.png" alt="在这里插入图片描述"></p>
+<h1 id="流密码"><a href="#流密码" class="headerlink" title="流密码"></a>流密码</h1><p><strong>原理</strong></p>
+<ul>
+<li>明文m&#x3D;m<del>1</del>,m<del>2</del>,… …m<del>l</del></li>
+<li>伪随机序列k&#x3D;k<del>1</del>,k<del>2</del>,… …k<del>l</del></li>
+<li>密文c<del>i</del> &#x3D; E<sub>k<sub>i</sub></sub>(m<del>i</del>)</li>
+<li>解密过程与加密过程<strong>相同且互逆</strong></li>
+<li>流密码的安全性完全依赖于<strong>伪随机数的强度</strong><br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e30e65f74da11833c64dae1538c6f13a_1740930459471.png" alt="在这里插入图片描述"></li>
+</ul>
+<p><strong>有限状态自动机</strong></p>
+<ul>
+<li>若密钥流是一个完全随机的非周期序列，则我们可以用它来实现一次一密体制。</li>
+<li>但实用中的流密码大多采用有限存储单元和确定性算法，可用有限状态自动机（Finite State Automation）来描述。</li>
+<li>因此，由有限状态机产生的序列是伪随机序列。<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/0d79bafdc2b75b0220925d8875a0f84a_1740930459471.png" alt="在这里插入图片描述"></li>
+</ul>
+<p><strong>流密码的分类</strong></p>
+<p><strong>同步流密码</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/f3e6ef9e45ff4091c50de4c53d3dd704_1740930459471.png" alt="在这里插入图片描述"></p>
+<p><strong>自同步流密码</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/47ca53657fc9960ff6bea43e3e57f377_1740930469181.png" alt="在这里插入图片描述"></p>
+<p><strong>祖冲之密码</strong></p>
+<blockquote>
+<p>2011年，我国商用密码算法——祖冲之密码算法（ZUC）被批准成为新一代宽带无线移动通信系统（LTE）国际标准，即4G的国际标准</p>
+</blockquote>
+<p>我国向3GPP提交的算法标准包含如下内容：</p>
+<ul>
+<li>祖冲之密码算法（ZUC）：用于产生密钥序列</li>
+<li>128-EEA3：基于ZUC的机密性算法</li>
+<li>123-EIA3：基于ZUC的完整性保护算法</li>
+</ul>
+<h1 id="分组密码"><a href="#分组密码" class="headerlink" title="分组密码"></a>分组密码</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>分组密码（Block Cipher）是将明文消息编码表示后的数字序列x<sub>1</sub>,x<sub>2</sub>,…,x<sub>i</sub>，划分成长为m的组x &#x3D; (x<sub>0</sub>,x<sub>1</sub>,…,x<sub>m-1</sub>)，各组(长为m的矢量)分别在密钥k &#x3D; (k<sub>0</sub>,k<sub>1</sub>,…,k<sub>t-1</sub>)控制下变换成输出长度为n的数字序列y &#x3D; (y<sub>0</sub>,y<sub>1</sub>,…,y<sub>n-1</sub>)(长为n的矢量)，其加密函数E:V<sub>m</sub> × K → V<sub>n</sub>，V<sub>m</sub>和V<sub>n</sub>是m、n维矢量空间，K为密钥空间。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/43d90cfe3d5a99b81573247f3120dc83_1740930469181.png" alt="在这里插入图片描述"></p>
+<p><strong>设计要求</strong></p>
+<ol>
+<li>分组长度足够大（≥128~256比特，都是64的倍数，<strong>计算机总线长度为64位</strong>，便于计算）</li>
+<li>密钥量要足够大（≥128~192~256比特）</li>
+<li>算法足够复杂（包括子密钥产生算法）</li>
+<li>加密、解密算法简单，易软、硬件实现</li>
+<li>数据无扩展（只在引入同态置换和随机化加密时仍有扩展）</li>
+<li>差错传播尽可能得小</li>
+</ol>
+<h2 id="Shannon的密码设计思想"><a href="#Shannon的密码设计思想" class="headerlink" title="Shannon的密码设计思想"></a>Shannon的密码设计思想</h2><ul>
+<li>扩散（diffusion）<br>将每位明文及密钥数字的影响尽可能迅速地散布到较多个输出的密文数字中，以便<strong>隐蔽明文数字的统计特性</strong>。产生扩散的最简单方法是通过“<strong>置换（Permutation）</strong>”（比如：重新排列字符）</li>
+<li>混淆（confusion）<br>其<strong>目的在于使作用于明文的密钥和密文之间的关系复杂化</strong>，使明文和密文之间，密文和密钥之间的统计相关特性极小化，从而使统计分析攻击不能奏效。通常的方法是“<strong>代换（Substitution）</strong>”</li>
+</ul>
+<h2 id="数据加密标准（DES）"><a href="#数据加密标准（DES）" class="headerlink" title="数据加密标准（DES）"></a>数据加密标准（DES）</h2><p>DES：Data Encryption Standard<br>DES数据加密标准是美国于1977年在全球范围内公开的第一个现代<strong>单钥</strong>加密算法，DES是一种<strong>分组密码</strong>，其输入的明文长度为64bit，密钥长度为56bit，输出的密文长度为64bit。</p>
+<h3 id="运算步骤"><a href="#运算步骤" class="headerlink" title="运算步骤"></a>运算步骤</h3><ol>
+<li>对输入分组进行固定的“初始置换”IP，可以将这个初始置换写为(L<sub>0</sub>,R<sub>0</sub>) ← IP(Input Block)，注意：这里L<sub>0</sub>和R<sub>0</sub>称为左、右半分组，各为32比特。IP是固定的、公开的函数。</li>
+<li>迭代运算，即将下面的运算迭代16轮：L<sub>i</sub> ← R<sub>i-1</sub>；R<sub>i</sub> ← L<sub>i-1</sub> ⊕ f(R<sub>i-1</sub>,k<sub>i</sub>)</li>
+<li>将16轮迭代后得到的结果(L<sub>16</sub>,R<sub>16</sub>)输入到IP的逆置换IP<sup>-1</sup>中：Output Block ← IP<sup>-1</sup>(R<sub>16</sub>,L<sub>16</sub>)<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/16a80eba064f816198250126199220b0_1740930469181.png" alt="在这里插入图片描述"></li>
+</ol>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ul>
+<li>DES算法的加密和解密均采用上述3个步骤。</li>
+<li>初始置换过程实际上为香农信息论中的“扩散(Diffusion)”；迭代运算过程就是香农信息论中的“混淆(Confusion)”。</li>
+<li>如果加密时使用的轮密钥次序为k<sub>1</sub>,k<sub>2</sub>,…,k<sub>16</sub>，那么解密时使用的轮密钥次序为k<sub>16</sub>,k<sub>15</sub>,…,k<sub>1</sub>。</li>
+<li>DES采用Feistel网络结构。Feistel密码结构是一种对称结构，满足对合性。采用此结构的密码，其好处是加解密可以使用同一个芯片。</li>
+</ul>
+<h3 id="DES算法详细图解"><a href="#DES算法详细图解" class="headerlink" title="DES算法详细图解"></a><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40672635/article/details/105384881">DES算法详细图解</a></h3><h3 id="S盒和P盒"><a href="#S盒和P盒" class="headerlink" title="S盒和P盒"></a>S盒和P盒</h3><ul>
+<li>S盒的作用是混淆（Confusion），主要增加明文和密文之间的复杂度（包括非线性度等）。DES的安全性直接取决于S盒的安全性。</li>
+<li>P盒的作用是扩散（Diffusion），目的是让明文和密钥的影响迅速扩散到整个密文中。即一位的明文或密钥的改变会影响到密文的多个比特。</li>
+<li>S盒和P盒的作用体现了Shannon的扩散和混淆的密码设计思想。</li>
+</ul>
+<h3 id="DES的安全性"><a href="#DES的安全性" class="headerlink" title="DES的安全性"></a>DES的安全性</h3><p>1997年1月28日，美国RSA公司悬赏10000美元破译DES。美国程序员RockeVerser用140天破译成功。从此宣布了DES时代的终结。<br>2008年SciEngines公司的Rivyera将破解DES的时间缩减到1天以内，并一直保持着暴力破解DES的记录。<br>于是，有人提出了TripleDES算法。<br><strong>DES、TripleDES算法(3DES)已经不再使用，需要提出新的、更安全的数据加密标准。</strong></p>
+<h2 id="高级加密标准（AES）"><a href="#高级加密标准（AES）" class="headerlink" title="高级加密标准（AES）"></a>高级加密标准（AES）</h2><p>AES: Advanced Encryption Standard<br>AES是美国联邦政府采用的一种用来替代DES的加密标准，其于2001年发布并在2002年成为有效的加密标准，已经被多方分析且广为使用。<br>Rijndael是分组长度和密钥长度均可变的分组密码，其密钥长度和分组长度可以独立指定为128&#x2F;192&#x2F;256bit（都是64的倍数）。<br>AES的密钥长度为128&#x2F;192&#x2F;256bit, 但分组长度固定为128bit。</p>
+<h3 id="算法简介"><a href="#算法简介" class="headerlink" title="算法简介"></a>算法简介</h3><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a0483c964f02e46af2aeb07b1f6fa7c2_1740930469181.png" alt="在这里插入图片描述"></p>
+<h3 id="AES加密算法详解（图文解释）"><a href="#AES加密算法详解（图文解释）" class="headerlink" title="AES加密算法详解（图文解释）"></a><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44565944/article/details/108679381">AES加密算法详解（图文解释）</a></h3><h3 id="AES对应用密码学的积极影响"><a href="#AES对应用密码学的积极影响" class="headerlink" title="AES对应用密码学的积极影响"></a>AES对应用密码学的积极影响</h3><ul>
+<li>AES具有加长可变的密钥128&#x2F;192&#x2F;256b及数据分组长度128b，为各种应用要求提供了大范围可选的安全强度。</li>
+<li>128&#x2F;192&#x2F;256b密钥对应的加密轮数为10&#x2F;12&#x2F;14。</li>
+<li>避免了多重加密（例如3DES）的使用，减少了实际应用中的密钥数量，可以简化安全协议和系统的设计。</li>
+<li>AES的广泛使用将导致同样强度的新型杂凑函数的出现。</li>
+</ul>
+<h2 id="SM4密码算法"><a href="#SM4密码算法" class="headerlink" title="SM4密码算法"></a>SM4密码算法</h2><blockquote>
+<p>2006年，我国国家密码管理局公布了无线局域网产品使用的SM4 (原名SMS4)密码算法,这是我国第一次公布自己的商用密码算法，旨在加密与保护静态储存和传输信道中的数据。</p>
+</blockquote>
+<p><strong>特点</strong></p>
+<ul>
+<li>分组密码算法，分组长度和密钥长度128bit, 32轮迭代</li>
+<li>以字节为单位对数据进行处理</li>
+<li>解密算法与加密算法结构相同，轮密钥的使用顺序相反</li>
+</ul>
+<h3 id="基本运算"><a href="#基本运算" class="headerlink" title="基本运算"></a>基本运算</h3><ul>
+<li>模2加和循环移位计算<br>32bit异或计算(⊕)和32bit循环左移(&lt;&lt;&lt;)</li>
+<li>置换运算: S盒(Sbox)<br>8bit输入、8bit输出的置换运算，起<strong>混淆</strong>作用</li>
+<li>非线性变换τ<br>以字为单位的非线性变换，由4个并行的S盒构成</li>
+<li>线性变换L<br>以字为单位的线性变换，起<strong>扩散</strong>作用</li>
+<li>合成变换T<br>由τ和L复合而成，起<strong>扩散和混淆</strong>作用</li>
+<li>轮函数F<br>非线性迭代结构，以字为单位进行加密运算</li>
+</ul>
+<h3 id="加密算法"><a href="#加密算法" class="headerlink" title="加密算法"></a>加密算法</h3><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/6166ee832bffd80ee8b071cd62ecacff_1740930469181.png" alt="在这里插入图片描述"></p>
+<h3 id="解密算法"><a href="#解密算法" class="headerlink" title="解密算法"></a>解密算法</h3><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/f9c42dafa032935f627137dffbc7024f_1740930477702.png" alt="在这里插入图片描述"></p>
+<h3 id="SM4的安全性"><a href="#SM4的安全性" class="headerlink" title="SM4的安全性"></a>SM4的安全性</h3><p>SM4广泛应用于无线局域网产品。从算法设计上看，SM4在计算过程中增加了非线性变换，理论上能大大加强算法的安全性。<br>近年来，国内外密码学者对SM4进行了充分的分析与实验，致力于SM4的低复杂度实现、混合加密技术的商用化、SM4抗攻击能力的增强等方面，这些研究成果对改进SM4密码和设计新密码都是有帮助的。<br><strong>至今， 我国国家密码管理局仍然支持使用SM4密码</strong></p>
+<h2 id="分组密码的工作模式分类"><a href="#分组密码的工作模式分类" class="headerlink" title="分组密码的工作模式分类"></a>分组密码的工作模式分类</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43946212/article/details/108116251">参考：分组密码的模式——ECB、CBC、CFB、OFB、CTR
+</a></p>
+<blockquote>
+<p>分组密码算法只能加密固定长度的分组，但需要加密的明文长度可能会超过分组密码的分组长度，这就需要对分组密码算法进行迭代，以便将一段很长的明文全部加密。迭代的方法就被称为分组密码的<strong>工作模式</strong>。<br>分组密码的模式主要有以下5种：</p>
+<ul>
+<li>电码本模式（ECB：Electronic CodeBook mode）</li>
+<li>密码分组链接模式（CBC：Cipher Block Chaining mode）</li>
+<li>密码反馈模式（CFB：Cipher FeedBack mode）</li>
+<li>输出反馈模式（OFB：Output FeedBack mode）</li>
+<li>计数器模式（CTR：CounTeR mode）</li>
+</ul>
+</blockquote>
+<h3 id="电码本模式（ECB）"><a href="#电码本模式（ECB）" class="headerlink" title="电码本模式（ECB）"></a>电码本模式（ECB）</h3><p>对连续排列的消息进行加密(或解密)的最直接方式就是对它们逐段加密(或解密)。在这种情况下，消息分段恰好是消息分组。由于这种模式类似于在电报密码本中查找指定的码字，因此称为电码本模式(ECB， Electric Code Book)</p>
+<ul>
+<li>ECB加密: C<sub>i</sub> ← E(P<sub>i</sub>)，i&#x3D;1,2,…,m</li>
+<li>ECB解密: P<sub>i</sub> ← D(C<sub>i</sub>)，i&#x3D;1,2,…,m</li>
+</ul>
+<p><strong>注意</strong>: <strong>ECB模式是确定性的加密模式</strong>，也就是说，如果在相同的密钥作用下，将P<sub>1</sub>,P<sub>2</sub>,…P<sub>m</sub>加密2次，那么输出的密文分组也是相同的。如果明文消息是可猜测的，那么攻击者就会用试凑法猜测出明文。</p>
+<p><strong>因此， 在大多数应用中， 建议不要使用ECB模式。</strong></p>
+<ul>
+<li>加密<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e21f78858e2c5988935e1dce4aec6ca6_1740930477702.png" alt="在这里插入图片描述"></li>
+<li>解密<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/ad5ffda19ff924b27d1959e40a8fcb02_1740930477702.png" alt="在这里插入图片描述"></li>
+</ul>
+<h3 id="密码分组链接模式（CBC）"><a href="#密码分组链接模式（CBC）" class="headerlink" title="密码分组链接模式（CBC）"></a>密码分组链接模式（CBC）</h3><p>密码分组链接(CBC, Cipher Block Chaining)运行模式是分组密码算法。使用CBC模式，输出是密码分组的一个序列，这些密码分组链接在一起使得每个密码分组不仅依赖于所对应的原文分组，而且依赖于所有以前的数据分组。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e6d63ac67da75a3f2b271cfc2bfc39db_1740930477702.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>加密<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b859a3c0bdaf23a58fa8ca9e0137e9dd_1740930477702.png" alt="在这里插入图片描述"></li>
+<li>解密<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/caa1e896f41f4fb21a509a44221f2ce7_1740930485607.png" alt="在这里插入图片描述"></li>
+</ul>
+<p><strong>初始化向量</strong><br>当加密第一个明文分组时，由于不存在“前一个密文分组”，因此需要事先准备一个长度为一个分组的比特序列来代替“前一个密文分组”，这个比特序列称为初始化向量，通常缩写为IV。</p>
+<ul>
+<li>一般来说，每次加密时都会随机产生一个不同的比特序列来作为初始化向量。</li>
+<li>由于IV的随机性，密文分组C<sub>i</sub>都将被随机化，因此CBC的密文输出是随机化的。</li>
+<li>发送给接收者的密文消息应该包括IV。因此对于m个明文分组，CBC将输出m+1个密文分组。</li>
+</ul>
+<p><strong>分组损坏和比特缺失的影响</strong></p>
+<ul>
+<li>假设CBC模式加密的密文分组中有一个<strong>分组损坏</strong>了，例如由于硬盘故障导致密文分组的值发生了改变等，这种情况下，只要密文分组的长度没有发生变化，则解密时最多只会有2个分组收到数据损坏的影响。</li>
+<li>假设CBC模式加密的密文分组中有一些<strong>比特缺失</strong>了，例如由于通信错误导致没有收到某些比特等，那么此时即使缺失1比特，也会导致密文分组的长度发生变化，此后的分组发生错位，这样一来，缺失比特的位置之后的密文分组也就全部无法解密。</li>
+</ul>
+<h3 id="密码反馈模式（CFB）"><a href="#密码反馈模式（CFB）" class="headerlink" title="密码反馈模式（CFB）"></a>密码反馈模式（CFB）</h3><p>密码反馈模式(CFB，Cipher Feedback Mode)的特点是:将CFB模式输出的密码分组反馈至移位寄存器，作为分组密码算法的输入，经分组加密算法加密后形成密钥流分组，再与输入明文分组相异或。</p>
+<ul>
+<li>加密<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/872428338ef1e4b3c4223de7ba424dd8_1740930485607.png" alt="在这里插入图片描述"></li>
+<li>解密<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/bbac57fe76804771e26329472bb83db4_1740930485607.png" alt="在这里插入图片描述"></li>
+</ul>
+<h3 id="输出反馈模式（OFB）"><a href="#输出反馈模式（OFB）" class="headerlink" title="输出反馈模式（OFB）"></a>输出反馈模式（OFB）</h3><p>输出反馈模式(OFB，Output Feedback Mode)的特点是:将分组密码的输出分组反馈回去，这些反馈分组经分组加密后输出一个密钥流分组，再将密钥流分组与明文分组相异或。</p>
+<ul>
+<li>加密<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/240cc0a5bd0e3a46f345098b99afaa65_1740930485607.png" alt="在这里插入图片描述"></li>
+<li>解密<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/074d2e15593de5904ab47faefd499dc9_1740930485607.png" alt="在这里插入图片描述"></li>
+</ul>
+<p>OFB模式和CFB模式的区别仅仅在于密码算法的输入。<br>CFB模式中，密码算法的输入是前一个密文分组，也就是将密文分组反馈到密码算法中，因此被称为“密文反馈模式”；<br>OFB模式中，密码算法的输入是密码算法的前一个输出，也就是将输出反馈给密码算法，因此被称为“输出反馈模式”。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b7751f02d181fd5c66a3c2ccdce109b0_1740930492993.png" alt="在这里插入图片描述"></p>
+<h3 id="计数器模式（CTR）"><a href="#计数器模式（CTR）" class="headerlink" title="计数器模式（CTR）"></a>计数器模式（CTR）</h3><p>计数器模式(CTR, Counter) 的特征是:将计数器从初始值开始计数，所得到的值馈送给分组密码算法。随着计数的增加，分组密码算法输出连续的密钥流分组，再将密钥流与明文分组相异或。</p>
+<ul>
+<li>加密<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/f497272c7d3a8c43c3888d84304810da_1740930492993.png" alt="在这里插入图片描述"></li>
+<li>解密<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a9b2ad2ad2a45788042b3e4563a788ed_1740930492993.png" alt="在这里插入图片描述"></li>
+</ul>
+<p>计数器的生成方法，前8个字节为nonce，这个值在每次加密时必须时不同的。后8个字节为分组序号，这个部分逐次累加。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/76a9d091ac9bb0b97700662a7c1a6b36_1740930492993.png" alt="在这里插入图片描述"><br><strong>OFB模式与CTR模式的对比</strong></p>
+<ul>
+<li>两者都是流密码。</li>
+<li>OFB模式是将加密的输出反馈到输入，CTR模式是将计数器的值用作输入。<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/48b21dab423d017fafdd4a9609b3b4fc_1740930492993.png" alt="在这里插入图片描述"></li>
+</ul>
+<h2 id="分组密码总结"><a href="#分组密码总结" class="headerlink" title="分组密码总结"></a>分组密码总结</h2><table>
+<thead>
+<tr>
+<th>分组密码算法</th>
+<th>分组长度</th>
+<th>密钥长度</th>
+<th>加密轮数</th>
+<th>安全性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DES</td>
+<td>64 bits</td>
+<td>56 bits</td>
+<td>16</td>
+<td>密钥太短且分组长度不适应64-bits总线</td>
+</tr>
+<tr>
+<td>AES</td>
+<td>128 bits</td>
+<td>128&#x2F;192&#x2F;256 bits</td>
+<td>10&#x2F;12&#x2F;14</td>
+<td>安全</td>
+</tr>
+<tr>
+<td>SM4</td>
+<td>128 bits</td>
+<td>128 bits</td>
+<td>32</td>
+<td>安全</td>
+</tr>
+</tbody></table>
+</div><div class="article-licensing box"><div class="licensing-title"><p>网络安全笔记2——单钥密码体制</p><p><a href="https://shnpd.github.io/2022/08/04/网络安全笔记2——单钥密码体制/">https://shnpd.github.io/2022/08/04/网络安全笔记2——单钥密码体制/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>ShiHaonan</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2022-08-04</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-03-10</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/web%E5%AE%89%E5%85%A8-%E5%AE%89%E5%85%A8-%E7%BD%91%E7%BB%9C/">web安全 安全 网络</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/images/wxpay.jpg" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2022/08/04/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E5%8F%8C%E9%92%A5%E5%AF%86%E7%A0%81%E4%BD%93%E5%88%B6/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">网络安全笔记3——双钥密码体制</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2022/08/01/%E6%89%A9%E5%B1%95%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E6%B1%82%E9%80%86%E5%85%83%E5%AE%9E%E4%BE%8B/"><span class="level-item">扩展欧几里得求逆元实例</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card" id="comments"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://shnpd.github.io/2022/08/04/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B02%E2%80%94%E2%80%94%E5%8D%95%E9%92%A5%E5%AF%86%E7%A0%81%E4%BD%93%E5%88%B6/';
+            this.page.identifier = '2022/08/04/网络安全笔记2——单钥密码体制/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'shns-blog' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#网络安全笔记2——单钥密码体制"><span class="level-left"><span class="level-item">1</span><span class="level-item">网络安全笔记2——单钥密码体制</span></span></a></li><li><a class="level is-mobile" href="#古典密码"><span class="level-left"><span class="level-item">2</span><span class="level-item">古典密码</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#代换密码"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">代换密码</span></span></a></li><li><a class="level is-mobile" href="#置换密码"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">置换密码</span></span></a></li></ul></li><li><a class="level is-mobile" href="#流密码"><span class="level-left"><span class="level-item">3</span><span class="level-item">流密码</span></span></a></li><li><a class="level is-mobile" href="#分组密码"><span class="level-left"><span class="level-item">4</span><span class="level-item">分组密码</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#概念"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">概念</span></span></a></li><li><a class="level is-mobile" href="#Shannon的密码设计思想"><span class="level-left"><span class="level-item">4.2</span><span class="level-item">Shannon的密码设计思想</span></span></a></li><li><a class="level is-mobile" href="#数据加密标准（DES）"><span class="level-left"><span class="level-item">4.3</span><span class="level-item">数据加密标准（DES）</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#运算步骤"><span class="level-left"><span class="level-item">4.3.1</span><span class="level-item">运算步骤</span></span></a></li><li><a class="level is-mobile" href="#注意事项"><span class="level-left"><span class="level-item">4.3.2</span><span class="level-item">注意事项</span></span></a></li><li><a class="level is-mobile" href="#DES算法详细图解"><span class="level-left"><span class="level-item">4.3.3</span><span class="level-item">DES算法详细图解</span></span></a></li><li><a class="level is-mobile" href="#S盒和P盒"><span class="level-left"><span class="level-item">4.3.4</span><span class="level-item">S盒和P盒</span></span></a></li><li><a class="level is-mobile" href="#DES的安全性"><span class="level-left"><span class="level-item">4.3.5</span><span class="level-item">DES的安全性</span></span></a></li></ul></li><li><a class="level is-mobile" href="#高级加密标准（AES）"><span class="level-left"><span class="level-item">4.4</span><span class="level-item">高级加密标准（AES）</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#算法简介"><span class="level-left"><span class="level-item">4.4.1</span><span class="level-item">算法简介</span></span></a></li><li><a class="level is-mobile" href="#AES加密算法详解（图文解释）"><span class="level-left"><span class="level-item">4.4.2</span><span class="level-item">AES加密算法详解（图文解释）</span></span></a></li><li><a class="level is-mobile" href="#AES对应用密码学的积极影响"><span class="level-left"><span class="level-item">4.4.3</span><span class="level-item">AES对应用密码学的积极影响</span></span></a></li></ul></li><li><a class="level is-mobile" href="#SM4密码算法"><span class="level-left"><span class="level-item">4.5</span><span class="level-item">SM4密码算法</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#基本运算"><span class="level-left"><span class="level-item">4.5.1</span><span class="level-item">基本运算</span></span></a></li><li><a class="level is-mobile" href="#加密算法"><span class="level-left"><span class="level-item">4.5.2</span><span class="level-item">加密算法</span></span></a></li><li><a class="level is-mobile" href="#解密算法"><span class="level-left"><span class="level-item">4.5.3</span><span class="level-item">解密算法</span></span></a></li><li><a class="level is-mobile" href="#SM4的安全性"><span class="level-left"><span class="level-item">4.5.4</span><span class="level-item">SM4的安全性</span></span></a></li></ul></li><li><a class="level is-mobile" href="#分组密码的工作模式分类"><span class="level-left"><span class="level-item">4.6</span><span class="level-item">分组密码的工作模式分类</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#电码本模式（ECB）"><span class="level-left"><span class="level-item">4.6.1</span><span class="level-item">电码本模式（ECB）</span></span></a></li><li><a class="level is-mobile" href="#密码分组链接模式（CBC）"><span class="level-left"><span class="level-item">4.6.2</span><span class="level-item">密码分组链接模式（CBC）</span></span></a></li><li><a class="level is-mobile" href="#密码反馈模式（CFB）"><span class="level-left"><span class="level-item">4.6.3</span><span class="level-item">密码反馈模式（CFB）</span></span></a></li><li><a class="level is-mobile" href="#输出反馈模式（OFB）"><span class="level-left"><span class="level-item">4.6.4</span><span class="level-item">输出反馈模式（OFB）</span></span></a></li><li><a class="level is-mobile" href="#计数器模式（CTR）"><span class="level-left"><span class="level-item">4.6.5</span><span class="level-item">计数器模式（CTR）</span></span></a></li></ul></li><li><a class="level is-mobile" href="#分组密码总结"><span class="level-left"><span class="level-item">4.7</span><span class="level-item">分组密码总结</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/CSP%E6%A8%A1%E5%9E%8B/">【Go】CSP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Channel/">【Go】Channel</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Context/">【Go】Context</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/defer&amp;os.Exit()/">【Go】defer和os.Exit()</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/GMP%E6%A8%A1%E5%9E%8B/">【Go】GMP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Fabric/"><span class="level-start"><span class="level-item">Fabric</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/Golang/"><span class="level-start"><span class="level-item">Golang</span></span><span class="level-end"><span class="level-item tag">44</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Shell%E8%84%9A%E6%9C%AC/"><span class="level-start"><span class="level-item">Shell脚本</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/bytedance/"><span class="level-start"><span class="level-item">bytedance</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"><span class="level-start"><span class="level-item">以太坊</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%88%B7%E9%A2%98%E9%9B%86/"><span class="level-start"><span class="level-item">刷题集</span></span><span class="level-end"><span class="level-item tag">27</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="level-start"><span class="level-item">前端</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="level-start"><span class="level-item">区块链</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AD%A6%E6%9C%AF/"><span class="level-start"><span class="level-item">学术</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"><span class="level-start"><span class="level-item">密码学</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%B0%8F%E7%A8%8B%E5%BA%8F/"><span class="level-start"><span class="level-item">小程序</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/"><span class="level-start"><span class="level-item">技术总结</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/%E5%85%B6%E5%AE%83/"><span class="level-start"><span class="level-item">其它</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><span class="level-start"><span class="level-item">数据结构</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"><span class="level-start"><span class="level-item">机器学习</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9D%82%E9%A1%B9/"><span class="level-start"><span class="level-item">杂项</span></span><span class="level-end"><span class="level-item tag">31</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%AF%94%E7%89%B9%E5%B8%81/"><span class="level-start"><span class="level-item">比特币</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/"><span class="level-start"><span class="level-item">知识点整理</span></span><span class="level-end"><span class="level-item tag">19</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/mysql/"><span class="level-start"><span class="level-item">mysql</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/"><span class="level-start"><span class="level-item">redis</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">算法</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"><span class="level-start"><span class="level-item">网络安全</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li></ul></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">shn&#039;s blog</a><p class="is-size-7"><span>&copy; 2025 ShiHaonan</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">Welcome to shn's blog!</p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

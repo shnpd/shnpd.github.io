@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>网络安全笔记8——虚拟专网技术 - shn&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="shn&#039;s blog"><meta name="msapplication-TileImage" content="/images/icon_blog.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="shn&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="​​点击阅读更多查看文章内容"><meta property="og:type" content="blog"><meta property="og:title" content="网络安全笔记8——虚拟专网技术"><meta property="og:url" content="https://shnpd.github.io/2022/08/12/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B08%E2%80%94%E2%80%94%E8%99%9A%E6%8B%9F%E4%B8%93%E7%BD%91%E6%8A%80%E6%9C%AF/"><meta property="og:site_name" content="shn&#039;s blog"><meta property="og:description" content="​​点击阅读更多查看文章内容"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/6443e099e78d1369884cee437c3c9385_1740930316278.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e65b47c3e83f13961a6433408de4353b_1740930316278.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/3f30c442195bcd5dd46d2f7750196403_1740930316278.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/1c89cb72fd51b06c61080678b1f5d996_1740930316278.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/788a4e9a16f3711568c23f53a91e4ebf_1740930316278.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/5e09f153ee75e703517f3594b724c926_1740930322586.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/93d8e7b8586566e78cd056cf780668e2_1740930322586.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/ac662117b364a44d3484e4600e067a22_1740930322586.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/bb38c4faeb63d2212c0233b7e974b7a7_1740930322586.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/cb37afe6ab6eb2d9c612ae3401796c9b_1740930322586.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/291ce0bcdd72dace61a117d9587cc32b_1740930330762.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/79e7bb7a9dff43b610205cf25505f189_1740930330762.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/19d9d45dcc6d16e17d3418684ce9c26a_1740930330762.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b3f07fced398d389c367039f28996525_1740930330762.png"><meta property="article:published_time" content="2022-08-12T10:12:40.000Z"><meta property="article:modified_time" content="2025-03-10T08:05:21.694Z"><meta property="article:author" content="ShiHaonan"><meta property="article:tag" content="web安全 网络 安全"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/6443e099e78d1369884cee437c3c9385_1740930316278.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://shnpd.github.io/2022/08/12/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B08%E2%80%94%E2%80%94%E8%99%9A%E6%8B%9F%E4%B8%93%E7%BD%91%E6%8A%80%E6%9C%AF/"},"headline":"网络安全笔记8——虚拟专网技术","image":["https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/6443e099e78d1369884cee437c3c9385_1740930316278.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e65b47c3e83f13961a6433408de4353b_1740930316278.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/3f30c442195bcd5dd46d2f7750196403_1740930316278.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/1c89cb72fd51b06c61080678b1f5d996_1740930316278.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/788a4e9a16f3711568c23f53a91e4ebf_1740930316278.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/5e09f153ee75e703517f3594b724c926_1740930322586.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/93d8e7b8586566e78cd056cf780668e2_1740930322586.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/ac662117b364a44d3484e4600e067a22_1740930322586.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/bb38c4faeb63d2212c0233b7e974b7a7_1740930322586.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/cb37afe6ab6eb2d9c612ae3401796c9b_1740930322586.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/291ce0bcdd72dace61a117d9587cc32b_1740930330762.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/79e7bb7a9dff43b610205cf25505f189_1740930330762.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/19d9d45dcc6d16e17d3418684ce9c26a_1740930330762.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b3f07fced398d389c367039f28996525_1740930330762.png"],"datePublished":"2022-08-12T10:12:40.000Z","dateModified":"2025-03-10T08:05:21.694Z","author":{"@type":"Person","name":"ShiHaonan"},"publisher":{"@type":"Organization","name":"shn's blog","logo":{"@type":"ImageObject","url":{"text":"shn's blog"}}},"description":"​​点击阅读更多查看文章内容"}</script><link rel="canonical" href="https://shnpd.github.io/2022/08/12/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B08%E2%80%94%E2%80%94%E8%99%9A%E6%8B%9F%E4%B8%93%E7%BD%91%E6%8A%80%E6%9C%AF/"><link rel="icon" href="/images/icon_blog.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><meta name="msvalidate.01" content="E38AFEA650A8300110261393E7FD0A39"><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">shn&#039;s blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-08-12T10:12:40.000Z" title="8/12/2022, 6:12:40 PM">2022-08-12</time>发表</span><span class="level-item"><time dateTime="2025-03-10T08:05:21.694Z" title="3/10/2025, 4:05:21 PM">2025-03-10</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a></span><span class="level-item">28 分钟读完 (大约4186个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">网络安全笔记8——虚拟专网技术</h1><div class="content"><p>​​点击阅读更多查看文章内容<span id="more"></span></p>
+<h1 id="网络安全笔记8——VPN技术"><a href="#网络安全笔记8——VPN技术" class="headerlink" title="网络安全笔记8——VPN技术"></a>网络安全笔记8——VPN技术</h1><blockquote>
+<p>参考课程：<a target="_blank" rel="noopener" href="https://www.icourse163.org/course/BUAA-1466021165">中国大学MOOC《网络安全》——北京航空航天大学</a></p>
+</blockquote>
+<blockquote>
+<p>本文偏向于有关协议的概述，关于VPN的详细介绍（实现技术、作用等）可以阅读我的另一篇文章——<a target="_blank" rel="noopener" href="https://blog.csdn.net/shn111/article/details/126322101">虚拟专用网络详解</a></p>
+</blockquote>
+<p>@[toc]</p>
+<h1 id="VPN概述"><a href="#VPN概述" class="headerlink" title="VPN概述"></a>VPN概述</h1><p>VPN：(虚拟专网， Virtual Private Network）是指将物理上分布在不同地点的网络通过公用网络连接而构成逻辑上的虚拟子网。</p>
+<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ol>
+<li>可节省投资成本</li>
+<li>保障传输数据安全</li>
+<li>安全可管可控</li>
+<li>使用灵活方便</li>
+<li>可实现远程访问</li>
+<li>服务质量有保证</li>
+</ol>
+<h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><ul>
+<li><p>网关-网关VPN<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/6443e099e78d1369884cee437c3c9385_1740930316278.png" alt="在这里插入图片描述"></p>
+</li>
+<li><p>远程访问VPN<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e65b47c3e83f13961a6433408de4353b_1740930316278.png" alt="在这里插入图片描述"></p>
+</li>
+</ul>
+<p><strong>按照应用分类</strong></p>
+<ul>
+<li><p>内联网VPN（Intranet VPN）<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/3f30c442195bcd5dd46d2f7750196403_1740930316278.png" alt="在这里插入图片描述"></p>
+</li>
+<li><p>外联网VPN（Extranet VPN）<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/1c89cb72fd51b06c61080678b1f5d996_1740930316278.png" alt="在这里插入图片描述"></p>
+</li>
+<li><p>远程访问VPN<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/788a4e9a16f3711568c23f53a91e4ebf_1740930316278.png" alt="在这里插入图片描述"></p>
+</li>
+</ul>
+<p><strong>按隧道协议分类</strong></p>
+<ul>
+<li>IPSEC VPN</li>
+<li>SSL&#x2F;TLS VPN</li>
+<li>PPTP VPN</li>
+<li>L2TP VPN</li>
+<li>MPLS VPN</li>
+</ul>
+<h2 id="关键技术"><a href="#关键技术" class="headerlink" title="关键技术"></a>关键技术</h2><ol>
+<li>隧道技术</li>
+<li>加&#x2F;解密技术</li>
+<li>密钥管理技术</li>
+<li>身份认证技术</li>
+<li>访问控制</li>
+</ol>
+<h1 id="隧道协议"><a href="#隧道协议" class="headerlink" title="隧道协议"></a>隧道协议</h1><h2 id="二层隧道协议"><a href="#二层隧道协议" class="headerlink" title="二层隧道协议"></a>二层隧道协议</h2><p><strong>PPTP</strong><br>由微软、Asend、 3COM等公司支持的点对点隧道协议(Point to Point Tunneling Protocol)。</p>
+<p><strong>L2F</strong><br>由Cisco、Nortel等公司支持的第2层转发协议(Layer 2 Forwarding)。</p>
+<p><strong>L2TP</strong><br>由IETF起草，微软、Cisco、 3COM等公司共同制定的第2层隧道协议(Layer2 Tunneling Protocol)。</p>
+<h3 id="PPTP"><a href="#PPTP" class="headerlink" title="PPTP"></a>PPTP</h3><p>PPTP具有两种工作模式:被动模式和主动模式。</p>
+<p>PPTP是一种让远程用户拨号连接到本地ISP、通过互联网<strong>安全远程访问</strong>公司网络。</p>
+<p>远程用户采用PPTP经由互联网访问企业的网络和应用，<strong>不需要</strong>直接拨号至企业网络。</p>
+<p>PPTP是为中小企业提供的VPN解决方案，但在具体实现上存在<strong>安全隐患</strong>。</p>
+<h3 id="L2F"><a href="#L2F" class="headerlink" title="L2F"></a>L2F</h3><p>由思科系统公司开发，用于创建在互联网上的虚拟专用网络连接的隧道协议。</p>
+<p>完全独立于用户的链路层协议。L2F远程用户能够通过任何拨号方式接入公共IP网络。</p>
+<p>L2F隧道的建立和配置对用户是完全透明的。L2F协议本身并<strong>不提供加密或保密</strong>。</p>
+<h3 id="L2TP"><a href="#L2TP" class="headerlink" title="L2TP"></a>L2TP</h3><p>PPTP和L2F的缺点</p>
+<ul>
+<li>PPTP协议是为中小企业提供的VPN解决方案，安全性差。</li>
+<li>L2F没有把标准加密算法定义在内，已经过时。</li>
+</ul>
+<p>L2TP结合了PPTP和L2F协议的优点，适合组建<strong>远程接入</strong>方式的VPN，已成为事实上的工业标准。</p>
+<h2 id="三层隧道协议"><a href="#三层隧道协议" class="headerlink" title="三层隧道协议"></a>三层隧道协议</h2><p><strong>IPSec</strong><br>IPSec是专为IP设计提供<strong>安全服务</strong>的一种协议，IPSec主要由AH (认证头)、 ESP (封装安全载荷)、IKE (Internet密钥交换) 3个协议组成。</p>
+<p><strong>GRE</strong><br>GRE隧道允许用户使用IP包封装IP、IPX、 AppleTalk包，并支持全部路由协议。GRE只提供数据包封装<strong>没有采用加密</strong>功能防止网络侦听和攻击。</p>
+<p><strong>MPLS</strong><br>MPLS用<strong>标签</strong>机制将选路和转发分开，用标签规定一个分组通过网络的路径，适于对服务质量、服务等级及网络资源利用率、网络可靠性有较高要求的VPN业务（也没有加密机制）。</p>
+<h1 id="IPSec-VPN"><a href="#IPSec-VPN" class="headerlink" title="IPSec VPN"></a>IPSec VPN</h1><p>IPSec总结在 RFC 6071 中，是一组基于网络层的，应用密码学的安全通信协议族。IPSec不是具体指哪个协议，而是一个开放的协议簇。IPSec可在 IP 网络上创建加密隧道。它的加密和身份验证机制可防止窃听和数据修改，这解释了虚拟专用网络( VPN ) 一词。</p>
+<p>IPSec协议由<strong>AH</strong>和<strong>ESP</strong>提供了两种工作模式。<br>这两个协议可以组合起来使用，也可以单独使用。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/5e09f153ee75e703517f3594b724c926_1740930322586.png" alt="在这里插入图片描述"></p>
+<p>AH、ESP或AH+ESP既可以在<strong>隧道模式</strong>中使用，又可以在<strong>传输模式</strong>中使用。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/93d8e7b8586566e78cd056cf780668e2_1740930322586.png" alt="在这里插入图片描述"></p>
+<h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><ol>
+<li>无论是加密还是认证，IPSec都有两种工作模式：<strong>传输模式</strong>和<strong>隧道模式</strong></li>
+<li>IPSec网关通过查询安全策略数据库(<strong>SPD</strong>) 决定对接收到的IP数据包进行转发、丢弃或IPSec处理</li>
+<li>IPSec网关可以对IP数据包只进行加密或认证，也可以对数据包同时实施加密和认证</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/ac662117b364a44d3484e4600e067a22_1740930322586.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>采用<strong>传输模式</strong>时<br>IPSec只对IP数据包的<strong>净荷</strong>进行加密或认证；<br>封装数据包继续使用原IP头部，只对部分域进行修改;<br>IPSec协议头部插入到原IP头部和传送层头部之间。<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/bb38c4faeb63d2212c0233b7e974b7a7_1740930322586.png" alt="在这里插入图片描述"></li>
+<li>采用<strong>隧道模式</strong>时<br>IPSec对整个IP数据包进行加密或认证；<br>产生一个新的IP头，原IP头被放在新IP头和原IP数据包之间。<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/cb37afe6ab6eb2d9c612ae3401796c9b_1740930322586.png" alt="在这里插入图片描述"></li>
+</ul>
+<h2 id="主要协议"><a href="#主要协议" class="headerlink" title="主要协议"></a>主要协议</h2><blockquote>
+<p>IPSec中主要由AH、ESP和IKE三个协议来实现认证、加密和密钥交换</p>
+</blockquote>
+<p><strong>AH（Authentication Header）</strong></p>
+<ul>
+<li>AH有两种实现方式：传输模式和隧道模式</li>
+<li>AH只涉及<strong>认证</strong>，不涉及加密</li>
+</ul>
+<p><strong>ESP (Encapsulating Security Payload)</strong></p>
+<ul>
+<li>ESP也有两种工作模式:传输模式和隧道模式</li>
+<li>ESP主要用于对IP数据包进行<strong>加密</strong>，也对认证提供某种程度的支持</li>
+</ul>
+<p><strong>IKE (Internet Key Exchange)</strong></p>
+<ul>
+<li>IKE用于动态建立安全关联(SA, Security Association)</li>
+<li>IKE协议分两个阶段：<ul>
+<li>第一阶段:建立IKE安全关联，即在通信双方之间协商密钥</li>
+<li>第二阶段:利用这个既定的安全关联为IPSec建立安全通道</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>安全关联</strong></p>
+<ol>
+<li>IPSec的中心概念之一是“<strong>安全关联</strong>”（SA）</li>
+<li>每个SA的标识由三部分组成：<strong>安全性参数索引</strong>(SPI) 、<strong>IP目的地址</strong>和<strong>安全协议标识</strong></li>
+<li>SA有两种模式，即<strong>传输模式</strong>和<strong>隧道模式</strong></li>
+<li>也可以将不同的SA组合起来使用，以提供<strong>多层次</strong>的安全性或封装能力</li>
+</ol>
+</blockquote>
+<h2 id="构成"><a href="#构成" class="headerlink" title="构成"></a>构成</h2><ol>
+<li>管理模块</li>
+<li>密钥分配和生成模块</li>
+<li>身份认证模块</li>
+<li>数据加&#x2F;解密模块</li>
+<li>数据分组封装&#x2F;分解模块</li>
+<li>加密函数库</li>
+</ol>
+<h1 id="SSL-TLS-VPN"><a href="#SSL-TLS-VPN" class="headerlink" title="SSL&#x2F;TLS VPN"></a>SSL&#x2F;TLS VPN</h1><p>SSL&#x2F;TLS VPN也称做<strong>传输层安全协议</strong>(TLS) VPN，TLS是SSL的升级版。</p>
+<p>TLS协议主要用于<strong>HTTPS</strong>协议中，TLS也可以作为构造VPN的技术。</p>
+<p>TLS VPN最大优点是用户不需要安装和配置客户端软件。</p>
+<p>由于TLS协议允许使用数字签名和证书，所以它可以提供强大的<strong>认证</strong>功能。</p>
+<h2 id="连接建立"><a href="#连接建立" class="headerlink" title="连接建立"></a>连接建立</h2><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/291ce0bcdd72dace61a117d9587cc32b_1740930330762.png" alt="在这里插入图片描述"></p>
+<p><strong>与许多C&#x2F;S方式一样：</strong></p>
+<ul>
+<li>客户端向服务器发送”Client hello”信息打开连接</li>
+<li>服务器用”Server hello”回答</li>
+<li>要求客户端提供数字证书</li>
+<li>完成证书验证，执行密钥交换协议</li>
+</ul>
+<p><strong>密钥交换协议的任务：</strong></p>
+<ul>
+<li>产生一个主密钥</li>
+<li>由主密钥产生两个会话密钥：A→B的密钥和B→A的密钥</li>
+<li>由主密钥产生两个消息认证码密钥</li>
+</ul>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><blockquote>
+<p>TLS VPN需要在企业网络防火墙的后面放置一个<strong>TLS代理服务器</strong></p>
+</blockquote>
+<p>用户与服务器之间的安全通信建立过程:</p>
+<ol>
+<li>用户首先要在浏览器上输入一个URL；</li>
+<li>该连接请求将被TLS代理服务器取得；</li>
+<li>TLS代理服务器对用户进行身份验证；</li>
+<li>TLS代理服务器提供用户与各种不同应用服务器之间的连接。</li>
+</ol>
+<h2 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h2><p>TLS VPN主要依靠三种协议支持——握手协议、TLS记录协议、告警协议</p>
+<p><strong>握手协议</strong></p>
+<ol>
+<li>TLS客户机连接至TLS服务器，要求服务器验证客户机的身份;</li>
+<li>TLS服务器通过发送它的数字证书证明其身份;</li>
+<li>服务器发出一个请求，对客户端的证书进行验证;</li>
+<li>协商用于消息加密的加密算法和用于完整性检验的杂凑函数;</li>
+<li>客户机生成一个随机数，用服务器的公钥对其加密后发送给TLS服务器;</li>
+<li>TLS服务器通过发送另- -随机数据做出响应;</li>
+<li>对以上两个随机数进行杂凑函数运算,从而生成会话密钥。</li>
+</ol>
+<p><strong>TLS记录协议</strong></p>
+<ol>
+<li>协议建立在TCP&#x2F;IP协议上;</li>
+<li>在实际数据传输开始前通信双方进行身份认证、协商加密算法和交换加密密钥等。</li>
+</ol>
+<p> <strong>告警协议</strong></p>
+<ol>
+<li>告警协议用于提示何时TLS协议发生了错误，或者两个主机之间的会话何时终止;</li>
+<li>只有在TLS协议失效时告警协议才会被激活。</li>
+</ol>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><p><strong>优点</strong></p>
+<ul>
+<li>无须安装客户端软件</li>
+<li>适用于大多数设备</li>
+<li>适用于大多数操作系统</li>
+<li>支持网络驱动器访问</li>
+<li>不需要对网络做改变</li>
+<li>较强的资源控制能力</li>
+<li>费用低且有良好安全性</li>
+<li>可绕过防火墙进行访问</li>
+<li>已内嵌在浏览器中</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li>认证方式单一</li>
+<li>应用的局限性很大</li>
+<li>只对应用通道加密</li>
+<li>不能对应用层消息签名</li>
+<li>缺少LAN to LAN连接方案</li>
+<li>加密级别不如IPSec VPN高</li>
+<li>不能保护UDP通道安全</li>
+<li>是应用层加密，性能较差</li>
+<li>不能实施访问控制</li>
+<li>需CA支持，证书管理复杂</li>
+</ul>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><ul>
+<li>在客户与TLS VPN的通信中，人们通常采用TLS Proxy技术来提高VPN服务器的通信性能和安全身份验证能力</li>
+<li>主要用于访问内部网中的一-些基于Web的应用：<br>电子邮件<br>内部网页浏览<br>其他基于Web的查询工作</li>
+</ul>
+<h2 id="TLS-VPN与IPSec-VPN的比较"><a href="#TLS-VPN与IPSec-VPN的比较" class="headerlink" title="TLS VPN与IPSec VPN的比较"></a>TLS VPN与IPSec VPN的比较</h2><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/79e7bb7a9dff43b610205cf25505f189_1740930330762.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>TLS VPN有很多优点，但并不能取代IPSec VPN。</li>
+<li>IPSec VPN主要提供<strong>LAN-to-LAN</strong>的隧道安全连接。</li>
+<li>在为企业高级用户提供<strong>远程访问</strong>及为企业提供<strong>LAN-to-LAN隧道连接</strong>方面，IPSec具有无可比拟的优势。</li>
+<li>IPSec VPN厂商开始研究让IPSec VPN <strong>兼容TLS VPN</strong>，以增强可用性。届时，IPSec VPN的扩展性将大大加强。</li>
+</ul>
+<h1 id="PPTP-VPN"><a href="#PPTP-VPN" class="headerlink" title="PPTP VPN"></a>PPTP VPN</h1><p>点对点隧道协议(PPTP) 是第一个建立VPN的协议</p>
+<p>使用灵活，容易部署，而且能得到大多数运营商的解决方案的支持</p>
+<p>该协议最初于1998年提出，但由于存在严重的安全问题，随后进行了大量修改，即便如此，声誉仍受到损害</p>
+<ol>
+<li>PPTP VPN最早是Win NT 4.0支持的隧道协议标准，是PPP的扩展。</li>
+<li>PPTP的主要功能是开通VPN隧道，仍采用<strong>PPP拨号</strong>建立网络连接。</li>
+<li>PPTP只是将用户的PPP帧采用<strong>GRE</strong>封装成IP数据包，在Internet 上传输。</li>
+<li>PPTP本身没有定义新的加密机制，它只是继承了PPP的认证和加密机制。</li>
+<li>PPTP支持<strong>Client-to-LAN</strong>型VPN隧道方案，用于移动办公和远程访问服务器。</li>
+<li>PPTP也支持企业网络之间建立<strong>LAN-to-LAN</strong>的VPN隧道连接。</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/19d9d45dcc6d16e17d3418684ce9c26a_1740930330762.png" alt="在这里插入图片描述"></p>
+<h2 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h2><p>PPTP由RFC2637定义，是一种应用比较广泛的VPN</p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b3f07fced398d389c367039f28996525_1740930330762.png" alt="在这里插入图片描述"></p>
+<ol>
+<li>PPTP基于<strong>C&#x2F;S结构</strong>，将认证和连接设置功能分离。</li>
+<li>PPTP将传统网络访问服务器的功能分解成<strong>PAC</strong>和<strong>PNS</strong>来分别执行。</li>
+<li>PPTP利用NAS的功能分解机制的支持，从而在Internet上实现VPN。</li>
+<li>建立PPTP连接时，首先需要建立的是<strong>客户端与本地ISP的PPP连接</strong>。</li>
+</ol>
+<h2 id="优缺点-1"><a href="#优缺点-1" class="headerlink" title="优缺点"></a>优缺点</h2><p><strong>优点</strong></p>
+<ul>
+<li>不依赖于TCP&#x2F;IP协议族，可以与Novell的IPX或Microsoft的NetBEUI协议一起使用。</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li>由于现今的大多数网络都基于TCP&#x2F;IP，所以应用具有一定的局限性。</li>
+<li>由于PPTP中没有定义加密功能，所以PPTP VPN的安全性是所有类型的VPN中最低的。</li>
+</ul>
+<h1 id="MPLS-VPN"><a href="#MPLS-VPN" class="headerlink" title="MPLS VPN"></a>MPLS VPN</h1><p>MPLS VPN是一种基于<strong>多协议标记交换技术</strong>的IP VPN</p>
+<p>在网络路由和交换设备上应用MPLS技术可以<strong>简化核心路由器的路由选择方式</strong></p>
+<p>MPLS利用传统路由中的标记交换技术来实现<strong>IP虚拟专网</strong></p>
+<p>MPLS VPN可用来构造宽带的<strong>Internet</strong>和<strong>Extranet</strong></p>
+<h2 id="特点-1"><a href="#特点-1" class="headerlink" title="特点"></a>特点</h2><ol>
+<li>MPLS是基于<strong>标记</strong>的IP路由选择方法。</li>
+<li>MPLS技术利用<strong>显式</strong>路由选择,可灵活选择优质路径来传输数据。</li>
+<li>MPLS协议实现了<strong>从第三层路由到第二层交换的转换</strong>。</li>
+<li>IP数据包进入网络时，边界路由器给它分配一个<strong>标记</strong>。</li>
+<li>对于到达同一目的地的IP数据包，可根据其 <strong>TOS（三层数据包的服务标志）</strong> 值的要求建立不同转发路径，以确保传输质量。</li>
+</ol>
+<h2 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h2><p>MPLS由Cisco的标记交换技术演变而来，已成为IETF的标准协议，与传统的网络层技术相比，它引入了以下一些新概念：</p>
+<ul>
+<li>流</li>
+<li>标记</li>
+<li>标记交换</li>
+<li>MPLS节点</li>
+<li>标记交换路径</li>
+<li>MPLS域</li>
+<li>MPLS边界节点</li>
+<li>标记交换路由器</li>
+<li>标记分发协议</li>
+</ul>
+<p><strong>步骤</strong></p>
+<ol>
+<li>网络自动生成路由表</li>
+<li>将连续的网络层数据包看做<strong>流</strong>，<strong>MPLS边界节点</strong>可以首先通过传统的网络层数据转发方式接收这些数据包，有选择的在数据包中加入一个<strong>标记</strong>，并把它们转发出去</li>
+<li>当加入标记的链路层数据包在<strong>MPLS域</strong>中转发时，就<strong>不再需要经过网络层的路由选择</strong>，而由标记交换路径上的<strong>MPLS节点</strong>在链路层通过标记交换进行转发</li>
+<li>将加入标记的链路层数据包发送离开此MPLS域</li>
+</ol>
+<p><strong>MPLS用最简化的技术来完成第三层路由向第二层交换的转换</strong></p>
+<h2 id="优缺点-2"><a href="#优缺点-2" class="headerlink" title="优缺点"></a>优缺点</h2><p><strong>优点</strong></p>
+<ul>
+<li>成本较低</li>
+<li>提高了资源利用率</li>
+<li>提高了网络速度</li>
+<li>提高了灵活性可扩展性</li>
+<li>业务综合能力强</li>
+<li>MPLS的QoS保证</li>
+<li>适用于城域网网络环境</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li>由于ATM技术本身目前备受争议，所以MPLS VPN的存在价值大打折扣;</li>
+<li>MPLS VPN与L2F VPN、PPTP VPN一样，本身没有采用加密机制，因此MPLS VPN实际上<strong>安全性比较低</strong>。</li>
+</ul>
+<p><strong>总之，IPSec VPN和SSL VPN是目前使用最普遍、安全性最高的协议，其安全性优于其他类型的VPN。</strong></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>网络安全笔记8——虚拟专网技术</p><p><a href="https://shnpd.github.io/2022/08/12/网络安全笔记8——虚拟专网技术/">https://shnpd.github.io/2022/08/12/网络安全笔记8——虚拟专网技术/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>ShiHaonan</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2022-08-12</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-03-10</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/web%E5%AE%89%E5%85%A8-%E7%BD%91%E7%BB%9C-%E5%AE%89%E5%85%A8/">web安全 网络 安全</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/images/wxpay.jpg" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2022/08/13/%E8%99%9A%E6%8B%9F%E4%B8%93%E7%94%A8%E7%BD%91%E7%BB%9C%E8%AF%A6%E8%A7%A3/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">虚拟专用网络详解</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2022/08/11/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B07%E2%80%94%E2%80%94%E9%98%B2%E7%81%AB%E5%A2%99%E6%8A%80%E6%9C%AF/"><span class="level-item">网络安全笔记7——防火墙技术</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card" id="comments"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://shnpd.github.io/2022/08/12/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B08%E2%80%94%E2%80%94%E8%99%9A%E6%8B%9F%E4%B8%93%E7%BD%91%E6%8A%80%E6%9C%AF/';
+            this.page.identifier = '2022/08/12/网络安全笔记8——虚拟专网技术/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'shns-blog' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#网络安全笔记8——VPN技术"><span class="level-left"><span class="level-item">1</span><span class="level-item">网络安全笔记8——VPN技术</span></span></a></li><li><a class="level is-mobile" href="#VPN概述"><span class="level-left"><span class="level-item">2</span><span class="level-item">VPN概述</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#特点"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">特点</span></span></a></li><li><a class="level is-mobile" href="#分类"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">分类</span></span></a></li><li><a class="level is-mobile" href="#关键技术"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">关键技术</span></span></a></li></ul></li><li><a class="level is-mobile" href="#隧道协议"><span class="level-left"><span class="level-item">3</span><span class="level-item">隧道协议</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#二层隧道协议"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">二层隧道协议</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#PPTP"><span class="level-left"><span class="level-item">3.1.1</span><span class="level-item">PPTP</span></span></a></li><li><a class="level is-mobile" href="#L2F"><span class="level-left"><span class="level-item">3.1.2</span><span class="level-item">L2F</span></span></a></li><li><a class="level is-mobile" href="#L2TP"><span class="level-left"><span class="level-item">3.1.3</span><span class="level-item">L2TP</span></span></a></li></ul></li><li><a class="level is-mobile" href="#三层隧道协议"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">三层隧道协议</span></span></a></li></ul></li><li><a class="level is-mobile" href="#IPSec-VPN"><span class="level-left"><span class="level-item">4</span><span class="level-item">IPSec VPN</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#工作原理"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">工作原理</span></span></a></li><li><a class="level is-mobile" href="#主要协议"><span class="level-left"><span class="level-item">4.2</span><span class="level-item">主要协议</span></span></a></li><li><a class="level is-mobile" href="#构成"><span class="level-left"><span class="level-item">4.3</span><span class="level-item">构成</span></span></a></li></ul></li><li><a class="level is-mobile" href="#SSL-TLS-VPN"><span class="level-left"><span class="level-item">5</span><span class="level-item">SSL/TLS VPN</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#连接建立"><span class="level-left"><span class="level-item">5.1</span><span class="level-item">连接建立</span></span></a></li><li><a class="level is-mobile" href="#原理"><span class="level-left"><span class="level-item">5.2</span><span class="level-item">原理</span></span></a></li><li><a class="level is-mobile" href="#协议"><span class="level-left"><span class="level-item">5.3</span><span class="level-item">协议</span></span></a></li><li><a class="level is-mobile" href="#优缺点"><span class="level-left"><span class="level-item">5.4</span><span class="level-item">优缺点</span></span></a></li><li><a class="level is-mobile" href="#应用"><span class="level-left"><span class="level-item">5.5</span><span class="level-item">应用</span></span></a></li><li><a class="level is-mobile" href="#TLS-VPN与IPSec-VPN的比较"><span class="level-left"><span class="level-item">5.6</span><span class="level-item">TLS VPN与IPSec VPN的比较</span></span></a></li></ul></li><li><a class="level is-mobile" href="#PPTP-VPN"><span class="level-left"><span class="level-item">6</span><span class="level-item">PPTP VPN</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#原理-1"><span class="level-left"><span class="level-item">6.1</span><span class="level-item">原理</span></span></a></li><li><a class="level is-mobile" href="#优缺点-1"><span class="level-left"><span class="level-item">6.2</span><span class="level-item">优缺点</span></span></a></li></ul></li><li><a class="level is-mobile" href="#MPLS-VPN"><span class="level-left"><span class="level-item">7</span><span class="level-item">MPLS VPN</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#特点-1"><span class="level-left"><span class="level-item">7.1</span><span class="level-item">特点</span></span></a></li><li><a class="level is-mobile" href="#原理-2"><span class="level-left"><span class="level-item">7.2</span><span class="level-item">原理</span></span></a></li><li><a class="level is-mobile" href="#优缺点-2"><span class="level-left"><span class="level-item">7.3</span><span class="level-item">优缺点</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/CSP%E6%A8%A1%E5%9E%8B/">【Go】CSP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Channel/">【Go】Channel</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Context/">【Go】Context</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/defer&amp;os.Exit()/">【Go】defer和os.Exit()</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/GMP%E6%A8%A1%E5%9E%8B/">【Go】GMP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Fabric/"><span class="level-start"><span class="level-item">Fabric</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/Golang/"><span class="level-start"><span class="level-item">Golang</span></span><span class="level-end"><span class="level-item tag">44</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Shell%E8%84%9A%E6%9C%AC/"><span class="level-start"><span class="level-item">Shell脚本</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/bytedance/"><span class="level-start"><span class="level-item">bytedance</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"><span class="level-start"><span class="level-item">以太坊</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%88%B7%E9%A2%98%E9%9B%86/"><span class="level-start"><span class="level-item">刷题集</span></span><span class="level-end"><span class="level-item tag">27</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="level-start"><span class="level-item">前端</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="level-start"><span class="level-item">区块链</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AD%A6%E6%9C%AF/"><span class="level-start"><span class="level-item">学术</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"><span class="level-start"><span class="level-item">密码学</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%B0%8F%E7%A8%8B%E5%BA%8F/"><span class="level-start"><span class="level-item">小程序</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/"><span class="level-start"><span class="level-item">技术总结</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/%E5%85%B6%E5%AE%83/"><span class="level-start"><span class="level-item">其它</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><span class="level-start"><span class="level-item">数据结构</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"><span class="level-start"><span class="level-item">机器学习</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9D%82%E9%A1%B9/"><span class="level-start"><span class="level-item">杂项</span></span><span class="level-end"><span class="level-item tag">31</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%AF%94%E7%89%B9%E5%B8%81/"><span class="level-start"><span class="level-item">比特币</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/"><span class="level-start"><span class="level-item">知识点整理</span></span><span class="level-end"><span class="level-item tag">19</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/mysql/"><span class="level-start"><span class="level-item">mysql</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/"><span class="level-start"><span class="level-item">redis</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">算法</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"><span class="level-start"><span class="level-item">网络安全</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li></ul></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">shn&#039;s blog</a><p class="is-size-7"><span>&copy; 2025 ShiHaonan</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">Welcome to shn's blog!</p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

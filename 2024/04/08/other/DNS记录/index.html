@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>DNS记录 - shn&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="shn&#039;s blog"><meta name="msapplication-TileImage" content="/images/icon_blog.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="shn&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="DNS记录DNS 记录（又名区域文件）是位于 DNS 服务器中的指令，提供一个域的相关信息，包括哪些 IP 地址与该域关联，以及如何处理对该域的请求。"><meta property="og:type" content="blog"><meta property="og:title" content="DNS记录"><meta property="og:url" content="https://shnpd.github.io/2024/04/08/other/DNS%E8%AE%B0%E5%BD%95/"><meta property="og:site_name" content="shn&#039;s blog"><meta property="og:description" content="DNS记录DNS 记录（又名区域文件）是位于 DNS 服务器中的指令，提供一个域的相关信息，包括哪些 IP 地址与该域关联，以及如何处理对该域的请求。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/20240408160401.png"><meta property="article:published_time" content="2024-04-08T05:36:43.000Z"><meta property="article:modified_time" content="2025-03-10T08:05:21.729Z"><meta property="article:author" content="ShiHaonan"><meta property="article:tag" content="DNS"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/20240408160401.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://shnpd.github.io/2024/04/08/other/DNS%E8%AE%B0%E5%BD%95/"},"headline":"DNS记录","image":["https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/20240408160401.png"],"datePublished":"2024-04-08T05:36:43.000Z","dateModified":"2025-03-10T08:05:21.729Z","author":{"@type":"Person","name":"ShiHaonan"},"publisher":{"@type":"Organization","name":"shn's blog","logo":{"@type":"ImageObject","url":{"text":"shn's blog"}}},"description":"DNS记录DNS 记录（又名区域文件）是位于 DNS 服务器中的指令，提供一个域的相关信息，包括哪些 IP 地址与该域关联，以及如何处理对该域的请求。"}</script><link rel="canonical" href="https://shnpd.github.io/2024/04/08/other/DNS%E8%AE%B0%E5%BD%95/"><link rel="icon" href="/images/icon_blog.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><meta name="msvalidate.01" content="E38AFEA650A8300110261393E7FD0A39"><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">shn&#039;s blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-04-08T05:36:43.000Z" title="4/8/2024, 1:36:43 PM">2024-04-08</time>发表</span><span class="level-item"><time dateTime="2025-03-10T08:05:21.729Z" title="3/10/2025, 4:05:21 PM">2025-03-10</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E6%9D%82%E9%A1%B9/">杂项</a></span><span class="level-item">30 分钟读完 (大约4449个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">DNS记录</h1><div class="content"><h2 id="DNS记录"><a href="#DNS记录" class="headerlink" title="DNS记录"></a>DNS记录</h2><p>DNS 记录（又名区域文件）是位于 DNS 服务器中的指令，提供一个域的相关信息，包括哪些 IP 地址与该域关联，以及如何处理对该域的请求。<span id="more"></span>这些记录由一系列以所谓的 DNS 语法编写的文本文件组成。DNS 语法是用作命令的字符串，这些命令告诉 DNS 服务器执行什么操作。此外，所有 DNS 记录都有一个 “TTL”，其代表生存时间，指示 DNS 服务器多久刷新一次该记录。</p>
+<!-- more -->
+
+<h3 id="A记录"><a href="#A记录" class="headerlink" title="A记录"></a>A记录</h3><blockquote>
+<p>保存域的IP地址的记录</p>
+</blockquote>
+<p>“A”代表“地址”，这是最基础的 DNS 记录类型：它用来指定给定域名的 IP 地址。</p>
+<p>A 记录只保存 IPv4 地址。如果一个网站拥有 IPv6 地址，它将改用“AAAA”记录。</p>
+<p>A记录示例</p>
+<table>
+<thead>
+<tr>
+<th>example.com</th>
+<th>record type</th>
+<th>value</th>
+<th>TTL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@</td>
+<td>A</td>
+<td>192.0.2.1</td>
+<td>14400</td>
+</tr>
+</tbody></table>
+<p>其中@表示example.com域名本身没有任何前缀</p>
+<p>绝大多数网站只有一个 A 记录，但也可以有多个。一些高知名度网站可能有数个不同的 A 记录，将请求流量分配到多个 IP 地址中的一个，实现负载均衡</p>
+<h3 id="AAAA记录"><a href="#AAAA记录" class="headerlink" title="AAAA记录"></a>AAAA记录</h3><blockquote>
+<p>包含域的 IPv6 地址的记录（与 A 记录相反，A 记录列出的是 IPv4 地址）</p>
+</blockquote>
+<p>DNS AAAA 记录将域名与 IPv6 地址进行匹配。DNS AAAA 记录与 DNS A 记录完全一样，只是它们存储域的 IPv6 地址，而非 IPv4 地址。</p>
+<p>AAAA记录示例：</p>
+<table>
+<thead>
+<tr>
+<th>example.com</th>
+<th>record type</th>
+<th>value</th>
+<th>TTL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@</td>
+<td>AAAA</td>
+<td>2001:0db8:85a3:0000:0000:8a2e:0370:7334</td>
+<td>14400</td>
+</tr>
+</tbody></table>
+<h3 id="CNAME记录"><a href="#CNAME记录" class="headerlink" title="CNAME记录"></a>CNAME记录</h3><blockquote>
+<p>将一个域或子域转发到另一个域，不提供 IP 地址。</p>
+</blockquote>
+<p>一个”canonical name”（CNAME）记录从一个别名域指向一个”规范名称”域，当一个域或子域是另一个域的别名时，CNAME记录被用来代替A记录(一个域名不能同时设置A记录和CNAME记录)。所有CNAME记录都必须指向一个域名，而不是指向一个IP地址。想象一下，在一个寻宝游戏中，每条线索都指向另一条线索，而最后的线索则指向宝藏。 一个有CNAME记录的域名就像一条线索，可以把你指向另一条线索（另一个有CNAME记录的域名）或宝藏（一个有A记录的域名）</p>
+<p>例如，假设 blog.example.com 的 CNAME 记录的值为“example.com”（没有“blog”）。这意味着当 DNS 服务器点击 blog.example.com 的 DNS 记录时，它实际上会触发另一个对 example.com 的 DNS 查找，并通过其 A 记录返回 example.com 的 IP 地址。在这种情况下，我们会说 example.com 是 blog.example.com 的规范名称（或真实名称）。</p>
+<p>一个常见的误解是 CNAME 记录必须始终解析为其指向的域所在的网站，但事实并非如此。CNAME 记录仅将客户端指向与根域相同的 IP 地址。客户端访问该 IP 地址后，Web 服务器仍将相应地处理 URL。例如，blog.example.com 可能有一个 CNAME 指向 example.com，从而将客户端定向到 example.com 的 IP 地址。但是，当客户端实际连接到该 IP 地址时，Web 服务器将查看 URL，发现它是 blog.example.com，并且提供博客页面而不是主页。</p>
+<p>CNAME记录示例：</p>
+<table>
+<thead>
+<tr>
+<th>blog.example.com</th>
+<th>record type</th>
+<th>value</th>
+<th>TTL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@</td>
+<td>CNAME</td>
+<td>is an alias of example.com</td>
+<td>32600</td>
+</tr>
+</tbody></table>
+<p><strong>一个CNAME记录可以指向另一个CNAME记录吗?</strong><br>将 CNAME 记录指向另一个 CNAME 记录十分低效，因为它需要在加载域之前进行多次 DNS 查找——这会降低用户体验，不过这个过程是可以实现的。例如，blog.example.com 可以有一个 CNAME 记录指向 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 CNAME 记录，然后后者指向 example.com 的 A 记录。<br>blog.example.com 的 CNAME：</p>
+<table>
+<thead>
+<tr>
+<th>blog.example.com</th>
+<th>record type</th>
+<th>value</th>
+<th>TTL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@</td>
+<td>CNAME</td>
+<td>is an alias of <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a></td>
+<td>32600</td>
+</tr>
+</tbody></table>
+<p>它指向 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 的 CNAME：</p>
+<table>
+<thead>
+<tr>
+<th><a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a></th>
+<th>record type</th>
+<th>value</th>
+<th>TTL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@</td>
+<td>CNAME</td>
+<td>is an alias of example.com</td>
+<td>32600</td>
+</tr>
+</tbody></table>
+<p><strong>CNAME记录的限制</strong><br>MX 和 NS 记录不能指向 CNAME 记录，它们必须指向 A 记录（对于 IPv4）或 AAAA 记录（对于 IPv6）（即该记录指向的域名设置的记录不能为CNAME）。MX 记录是邮件交换记录，将电子邮件指向一个邮件服务器。NS 记录是“名称服务器”记录，表明哪个 DNS 服务器是该域的权威。</p>
+<h3 id="MX记录"><a href="#MX记录" class="headerlink" title="MX记录"></a>MX记录</h3><blockquote>
+<p>将邮件定向到电子邮件服务器。</p>
+</blockquote>
+<p>DNS“邮件交换”(MX) 记录将电子邮件定向到邮件服务器。MX 记录指示如何根据简单邮件传输协议（SMTP，所有电子邮件的标准协议）路由电子邮件。与 CNAME 记录类似，MX 记录必须始终指向另一个域。</p>
+<p>MX 记录示例：</p>
+<table>
+<thead>
+<tr>
+<th>example.com</th>
+<th>record type</th>
+<th>优先级</th>
+<th>value</th>
+<th>TTL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@</td>
+<td>MX</td>
+<td>10</td>
+<td>mailhost1.example.com</td>
+<td>45000</td>
+</tr>
+<tr>
+<td>@</td>
+<td>MX</td>
+<td>20</td>
+<td>mailhost2.example.com</td>
+<td>45000</td>
+</tr>
+</tbody></table>
+<p>这些 MX 记录的域前面的“优先级”数字表示优先权，较低的“优先级”值是首选。服务器将始终先尝试mailhost1，因为 10 小于 20。当消息发送失败时，服务器将默认使用 mailhost2。</p>
+<p><strong>查询MX记录的过程</strong><br>邮件传输代理 (MTA) 软件负责查询 MX 记录。当用户发送电子邮件时，MTA 会发送一个 DNS 查询，以确定电子邮件收件人的邮件服务器。MTA 与这些邮件服务器建立 SMTP 连接，从优先级高的域开始（在上面的第一个示例中，即为 mailhost1）。</p>
+<p>MX 记录必须直接指向服务器的 A 记录或 AAAA 记录。定义 MX 记录运作原理的 <a target="_blank" rel="noopener" href="https://datatracker.ietf.org/doc/html/rfc2181">RFC</a> 文档禁止 MX 记录指向 CNAME</p>
+<h3 id="TXT-记录"><a href="#TXT-记录" class="headerlink" title="TXT 记录"></a>TXT 记录</h3><blockquote>
+<p>可让管理员在记录中存储文本注释。这些记录通常用于电子邮件安全。</p>
+</blockquote>
+<p>DNS“文本”(TXT) 记录允许域管理员将文本输入到域名系统 (DNS) 中。TXT 记录最初的目的是用作存放人类可读笔记的地方。但是，现在也可以将一些机器可读的数据放入 TXT 记录中。一个域可以有许多 TXT 记录。</p>
+<p>TXT 记录示例：</p>
+<table>
+<thead>
+<tr>
+<th>example.com</th>
+<th>record type</th>
+<th>value</th>
+<th>TTL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@</td>
+<td>TXT</td>
+<td>This is an awesome domain! Definitely not spammy.</td>
+<td>32600</td>
+</tr>
+</tbody></table>
+<p>如今，DNS TXT 记录的两个最重要用途是防止垃圾邮件和域名所有权验证，尽管 TXT 记录最初并非为这些用途而设计。</p>
+<p><strong>TXT 记录如何帮助防止垃圾邮件？</strong></p>
+<p>垃圾邮件发送者经常试图伪造或假冒他们发送电子邮件的域。TXT 记录是几种不同的电子邮件验证方法的关键组成部分，它可帮助电子邮件服务器确定邮件是否来自可信的来源。</p>
+<p>常见的电子邮件身份验证方法包括域密钥识别邮件 (DKIM)、发送方策略框架 (SPF) 以及基于域的邮件身份验证、报告和一致性 (DMARC)。通过配置这些记录，域运营商可以使垃圾邮件发送者更难伪造他们的域，并且可以跟踪此类尝试。</p>
+<p>SPF 记录：SPF TXT 记录列出了所有被授权从一个域发送电子邮件的服务器。</p>
+<p>DKIM 记录：DKIM 的工作原理是使用一个公钥-私钥对，对每封电子邮件进行数字签名。这有助于验证电子邮件确实来自它所声称的域。公钥被存放在与域关联的 TXT 记录中。（了解有关公钥加密的更多信息）。</p>
+<p>DMARC 记录：DMARC TXT 记录引用域的 SPF 和 DKIM 政策。它应该存储在标题 _marc.example.com 下，“example.com”用实际域名代替。记录的“值”是域的 DMARC 政策</p>
+<p><strong>TXT 记录如何帮助验证域所有权？</strong></p>
+<p>虽然域所有权验证最初不是 TXT 记录的一个功能，但这种方法已经被一些网站管理员工具和云提供商采用。</p>
+<p>管理员可以通过上传包含特定信息的新 TXT 记录，或编辑当前的 TXT 记录，来证明他们控制着该域。工具或云提供商可以检查 TXT 记录，并看到它已按要求进行了更改。这有点像用户通过打开并点击发送到该电子邮件的链接来确认其电子邮件地址，证明他们拥有该地址</p>
+<h3 id="NS记录"><a href="#NS记录" class="headerlink" title="NS记录"></a>NS记录</h3><blockquote>
+<p>存储 DNS 条目的域名服务器。</p>
+</blockquote>
+<p>NS 代表“域名服务器”，域名服务器记录指示哪个 DNS 服务器对该域具有权威性（即，哪个服务器包含实际 DNS 记录）。基本上，NS 记录告诉互联网可从哪里找到域的 IP 地址。一个域通常会有多个 NS 记录，这些记录可指示该域的主要和辅助域名服务器。倘若没有正确配置的 NS 记录，用户将无法加载网站或应用程序。</p>
+<p>NS 记录示例：</p>
+<table>
+<thead>
+<tr>
+<th>example.com</th>
+<th>record type</th>
+<th>value</th>
+<th>TTL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@</td>
+<td>NS</td>
+<td>ns1.exampleserver.com</td>
+<td>21600</td>
+</tr>
+</tbody></table>
+<p>请注意，NS 记录永远不能指向规范名称（CNAME）记录。</p>
+<p><strong>什么是域名服务器</strong></p>
+<p>域名服务器是一种 DNS 服务器，上面存储了域的所有 DNS 记录，包括 A 记录、MX 记录或 CNAME 记录。</p>
+<p>几乎所有域都依靠多个域名服务器来提高可靠性：如果一个域名服务器出现故障或不可用，DNS 查询可以转到另一个域名服务器。通常有一个主要域名服务器和几个次要域名服务器，后者包含只读的区域文件副本，这意味着它们不能被修改。它们不是从本地文件中获取信息，而是在称为“区域传输”的通信过程中从主服务器接收相关信息。</p>
+<p>使用多个域名服务器时（大多数情况下），NS 记录应列出不止一个服务器。</p>
+<h3 id="SOA记录"><a href="#SOA记录" class="headerlink" title="SOA记录"></a>SOA记录</h3><blockquote>
+<p>存储域的管理信息。</p>
+</blockquote>
+<p>DNS ‘start of authority’ (SOA) 记录存储了关于域名和区域的重要信息，如管理员的电子邮件地址、域名上次更新的时间，以及服务器在刷新之间应等待的时长。</p>
+<p>所有 DNS 区域都需要一个 SOA 记录，以符合 IETF 标准。SOA 记录对区域传输也很重要。</p>
+<p>SOA 记录示例：</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>example.com</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>record type</td>
+<td>SOA</td>
+</tr>
+<tr>
+<td>MNAME</td>
+<td>ns.primaryserver.com</td>
+</tr>
+<tr>
+<td>RNAME</td>
+<td>admin.example.com</td>
+</tr>
+<tr>
+<td>SERIAL</td>
+<td>1111111111</td>
+</tr>
+<tr>
+<td>REFRESH</td>
+<td>86400</td>
+</tr>
+<tr>
+<td>RETRY</td>
+<td>7200</td>
+</tr>
+<tr>
+<td>EXPIRE</td>
+<td>4000000</td>
+</tr>
+<tr>
+<td>TTL</td>
+<td>11200</td>
+</tr>
+</tbody></table>
+<ul>
+<li>RNAME：管理员的电子邮件地址，这可能会造成混淆，因为它缺少“@”符号；但在 SOA 记录中，admin.example.com 等效于 <a href="mailto:&#x61;&#x64;&#109;&#105;&#110;&#64;&#x65;&#120;&#x61;&#x6d;&#112;&#108;&#101;&#46;&#x63;&#x6f;&#109;">&#x61;&#x64;&#109;&#105;&#110;&#64;&#x65;&#120;&#x61;&#x6d;&#112;&#108;&#101;&#46;&#x63;&#x6f;&#109;</a>。</li>
+<li>SERIAL：区域序列号，表示SOA记录的版本号，当区域文件中的序列号发生更改时，这会提醒辅助名称服务器，它们应当通过区域传输更新其区域文件的副本。</li>
+<li>MNAME：这是区域的主要名称服务器的名称。维护该区域 DNS 记录副本的辅助服务器会从该主要服务器接收对该区域的更新</li>
+<li>REFRESH：辅助服务器在向主要服务器询问 SOA 记录以查看其是否已更新之前应等待的时间长度（秒）。</li>
+<li>RETRY：服务器再次向无响应的主要名称服务器请求更新前应等待的时间长度。</li>
+<li>EXPIRE：如果辅助服务器在该时间段内没有得到主要服务器的响应，则应该停止响应对该区域的查询。</li>
+</ul>
+<p><strong>什么是DNS区域？</strong><br>DNS 被分成许多不同的区域。这些区域可区分在 DNS 命名空间中以不同方式管理的区域。DNS 区域是 DNS 命名空间的一部分，由特定组织或管理员加以管理。DNS 区域是一个管理空间，其可实现对权威性域名服务器等 DNS 组件的更精细控制，DNS 区域可包含多个子域，并且多个区域可存在于同一服务器上。<br>例如，想象一下 cloudflare.com 域及其以下三个子域：support.cloudflare.com、community.cloudflare.com 和 blog.cloudflare.com。假设blog是一个强健的独立站点，该站点需要单独管理，但是support和community与cloudflare.com 更紧密地关联，并且可在与主域相同的区域中加以管理。在这种情况下，cloudflare.com 以及support站点和community站点都将在一个区域中，而blog.cloudflare.com将存在于其自己的区域中。<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/20240408160401.png"  width="50%"></p>
+<p><strong>什么是区域传输？</strong><br>DNS 区域传输是将 DNS 记录数据从一个主要名称服务器发送到一个辅助名称服务器的过程。SOA 记录将首先被传输。序列号将告知辅助服务器其版本是否需要更新。区域传输通过 TCP 协议进行。</p>
+<h3 id="PTR记录"><a href="#PTR记录" class="headerlink" title="PTR记录"></a>PTR记录</h3><blockquote>
+<p>DNS 指针记录（简称 PTR）提供与 IP 地址关联的域名。DNS PTR 记录与“A”记录完全相反，它提供与域名关联的 IP 地址</p>
+</blockquote>
+<h2 id="相关术语"><a href="#相关术语" class="headerlink" title="相关术语"></a>相关术语</h2><h3 id="胶水记录"><a href="#胶水记录" class="headerlink" title="胶水记录"></a>胶水记录</h3><p><a target="_blank" rel="noopener" href="https://laona.dev/post/glue-record/">胶水记录介绍</a><br><a target="_blank" rel="noopener" href="http://www.ricearth.com/article/5019046192866861">死循环问题</a><br>胶水记录（Glue Record）是DNS（域名系统）中的一个重要概念，尤其是在自建DNS环境中。其英文名为Glue Record，中文也有不同的称呼，比如一些运营商可能称之为“自定义DNS Host”或“注册DNS服务器”。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"># dig @202.12.27.33 jd.com</span><br><span class="line"></span><br><span class="line">; &lt;&lt;&gt;&gt; DiG 9.9.4-RedHat-9.9.4-61.el7 &lt;&lt;&gt;&gt; @202.12.27.33 jd.com</span><br><span class="line">; (1 server found)</span><br><span class="line">;; global options: +cmd</span><br><span class="line">;; Got answer:</span><br><span class="line">;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 29264</span><br><span class="line">;; flags: qr rd; QUERY: 1, ANSWER: 0, AUTHORITY: 13, ADDITIONAL: 27</span><br><span class="line">;; WARNING: recursion requested but not available</span><br><span class="line"></span><br><span class="line">;; OPT PSEUDOSECTION:</span><br><span class="line">; EDNS: version: 0, flags:; udp: 4096</span><br><span class="line">;; QUESTION SECTION:</span><br><span class="line">;jd.com.                                IN      A</span><br><span class="line"></span><br><span class="line">;; AUTHORITY SECTION:</span><br><span class="line">com.                    172800  IN      NS      d.gtld-servers.net.</span><br><span class="line">com.                    172800  IN      NS      f.gtld-servers.net.</span><br><span class="line">com.                    172800  IN      NS      e.gtld-servers.net.</span><br><span class="line">com.                    172800  IN      NS      g.gtld-servers.net.</span><br><span class="line">com.                    172800  IN      NS      k.gtld-servers.net.</span><br><span class="line">com.                    172800  IN      NS      a.gtld-servers.net.</span><br><span class="line">com.                    172800  IN      NS      c.gtld-servers.net.</span><br><span class="line">com.                    172800  IN      NS      j.gtld-servers.net.</span><br><span class="line">com.                    172800  IN      NS      l.gtld-servers.net.</span><br><span class="line">com.                    172800  IN      NS      b.gtld-servers.net.</span><br><span class="line">com.                    172800  IN      NS      m.gtld-servers.net.</span><br><span class="line">com.                    172800  IN      NS      i.gtld-servers.net.</span><br><span class="line">com.                    172800  IN      NS      h.gtld-servers.net.</span><br><span class="line"></span><br><span class="line">;; ADDITIONAL SECTION:</span><br><span class="line">a.gtld-servers.net.     172800  IN      A       192.5.6.30</span><br><span class="line">b.gtld-servers.net.     172800  IN      A       192.33.14.30</span><br><span class="line">c.gtld-servers.net.     172800  IN      A       192.26.92.30</span><br><span class="line">d.gtld-servers.net.     172800  IN      A       192.31.80.30</span><br><span class="line">e.gtld-servers.net.     172800  IN      A       192.12.94.30</span><br><span class="line">f.gtld-servers.net.     172800  IN      A       192.35.51.30</span><br><span class="line">g.gtld-servers.net.     172800  IN      A       192.42.93.30</span><br><span class="line">h.gtld-servers.net.     172800  IN      A       192.54.112.30</span><br><span class="line">i.gtld-servers.net.     172800  IN      A       192.43.172.30</span><br><span class="line">j.gtld-servers.net.     172800  IN      A       192.48.79.30</span><br><span class="line">k.gtld-servers.net.     172800  IN      A       192.52.178.30</span><br><span class="line">l.gtld-servers.net.     172800  IN      A       192.41.162.30</span><br><span class="line">m.gtld-servers.net.     172800  IN      A       192.55.83.30</span><br><span class="line">a.gtld-servers.net.     172800  IN      AAAA    2001:503:a83e::2:30</span><br><span class="line">b.gtld-servers.net.     172800  IN      AAAA    2001:503:231d::2:30</span><br><span class="line">c.gtld-servers.net.     172800  IN      AAAA    2001:503:83eb::30</span><br><span class="line">d.gtld-servers.net.     172800  IN      AAAA    2001:500:856e::30</span><br><span class="line">e.gtld-servers.net.     172800  IN      AAAA    2001:502:1ca1::30</span><br><span class="line">f.gtld-servers.net.     172800  IN      AAAA    2001:503:d414::30</span><br><span class="line">g.gtld-servers.net.     172800  IN      AAAA    2001:503:eea3::30</span><br><span class="line">h.gtld-servers.net.     172800  IN      AAAA    2001:502:8cc::30</span><br><span class="line">i.gtld-servers.net.     172800  IN      AAAA    2001:503:39c1::30</span><br><span class="line">j.gtld-servers.net.     172800  IN      AAAA    2001:502:7094::30</span><br><span class="line">k.gtld-servers.net.     172800  IN      AAAA    2001:503:d2d::30</span><br><span class="line">l.gtld-servers.net.     172800  IN      AAAA    2001:500:d937::30</span><br><span class="line">m.gtld-servers.net.     172800  IN      AAAA    2001:501:b1f9::30</span><br><span class="line"></span><br><span class="line">;; Query time: 211 msec</span><br><span class="line">;; SERVER: 202.12.27.33#53(202.12.27.33)</span><br><span class="line">;; WHEN: Thu Aug 01 18:13:03 CST 2019</span><br><span class="line">;; MSG SIZE  rcvd: 831</span><br></pre></td></tr></table></figure>
+<p>这是根服务器返回的.com服务器的信息，其中ADDITIONAL SECTION就是胶水记录</p>
+<p>普通DNS记录保存在权威服务器上，胶水记录保存在域名注册局的DNS服务器上</p>
+<p>胶水记录可以看作是和DNS查询结果一起顺便返回的一组域名和IP地址的映射</p>
+<p>作用：</p>
+<ul>
+<li>减少递归查询次数，加快DNS递归查询，在向根域名和顶级域名服务器查询时他们通常返回的是下一级要查询的服务器的域名，此时胶水记录会同时附带要查询的域名的IP地址，如果没有胶水记录则会重新启动一次新的查询去查询该域名，因此胶水记录可以减少递归查询次数，加快 DNS 递归查询。</li>
+<li>如果域名的NS服务器是子域名那么解析过程可能会陷入死循环。以一个简单的例子来说明：假设我们有一个域名b.com，并希望指定b.com的NS地址是a.b.com（无法直接指定ip地址）。在这种情况下，我们就必须指定a.b.com的A记录，否则在解析a.b.com时，系统又会去解析b.com，导致循环而无法得出结果。这就需要我们添加一条胶水记录去解析a.b.com</li>
+</ul>
+<h3 id="缓存投毒"><a href="#缓存投毒" class="headerlink" title="缓存投毒"></a>缓存投毒</h3><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/92899876">一次出人意料而名留青史的DNS投毒攻击</a><br>攻击者通过精心构造DNS报文，在LDNS查询某个域名时，冒充真正的权威DNS做出回应，使得LDNS得到一个虚假响应。如果LDNS接受了这个虚假响应并写入缓存，LDNS就会中毒。</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>DNS记录</p><p><a href="https://shnpd.github.io/2024/04/08/other/DNS记录/">https://shnpd.github.io/2024/04/08/other/DNS记录/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>ShiHaonan</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2024-04-08</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-03-10</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/DNS/">DNS</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/images/wxpay.jpg" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2024/04/08/other/DNS%E6%9F%A5%E8%AF%A2%E6%B5%81%E7%A8%8B/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">DNS查询流程</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2024/04/05/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%EF%BC%88hexo+github%EF%BC%89/"><span class="level-item">博客搭建（hexo+github）</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card" id="comments"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://shnpd.github.io/2024/04/08/other/DNS%E8%AE%B0%E5%BD%95/';
+            this.page.identifier = '2024/04/08/other/DNS记录/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'shns-blog' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#DNS记录"><span class="level-left"><span class="level-item">1</span><span class="level-item">DNS记录</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#A记录"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">A记录</span></span></a></li><li><a class="level is-mobile" href="#AAAA记录"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">AAAA记录</span></span></a></li><li><a class="level is-mobile" href="#CNAME记录"><span class="level-left"><span class="level-item">1.3</span><span class="level-item">CNAME记录</span></span></a></li><li><a class="level is-mobile" href="#MX记录"><span class="level-left"><span class="level-item">1.4</span><span class="level-item">MX记录</span></span></a></li><li><a class="level is-mobile" href="#TXT-记录"><span class="level-left"><span class="level-item">1.5</span><span class="level-item">TXT 记录</span></span></a></li><li><a class="level is-mobile" href="#NS记录"><span class="level-left"><span class="level-item">1.6</span><span class="level-item">NS记录</span></span></a></li><li><a class="level is-mobile" href="#SOA记录"><span class="level-left"><span class="level-item">1.7</span><span class="level-item">SOA记录</span></span></a></li><li><a class="level is-mobile" href="#PTR记录"><span class="level-left"><span class="level-item">1.8</span><span class="level-item">PTR记录</span></span></a></li></ul></li><li><a class="level is-mobile" href="#相关术语"><span class="level-left"><span class="level-item">2</span><span class="level-item">相关术语</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#胶水记录"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">胶水记录</span></span></a></li><li><a class="level is-mobile" href="#缓存投毒"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">缓存投毒</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/CSP%E6%A8%A1%E5%9E%8B/">【Go】CSP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Channel/">【Go】Channel</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Context/">【Go】Context</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/defer&amp;os.Exit()/">【Go】defer和os.Exit()</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/GMP%E6%A8%A1%E5%9E%8B/">【Go】GMP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Fabric/"><span class="level-start"><span class="level-item">Fabric</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/Golang/"><span class="level-start"><span class="level-item">Golang</span></span><span class="level-end"><span class="level-item tag">44</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Shell%E8%84%9A%E6%9C%AC/"><span class="level-start"><span class="level-item">Shell脚本</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/bytedance/"><span class="level-start"><span class="level-item">bytedance</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"><span class="level-start"><span class="level-item">以太坊</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%88%B7%E9%A2%98%E9%9B%86/"><span class="level-start"><span class="level-item">刷题集</span></span><span class="level-end"><span class="level-item tag">27</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="level-start"><span class="level-item">前端</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="level-start"><span class="level-item">区块链</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AD%A6%E6%9C%AF/"><span class="level-start"><span class="level-item">学术</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"><span class="level-start"><span class="level-item">密码学</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%B0%8F%E7%A8%8B%E5%BA%8F/"><span class="level-start"><span class="level-item">小程序</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/"><span class="level-start"><span class="level-item">技术总结</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/%E5%85%B6%E5%AE%83/"><span class="level-start"><span class="level-item">其它</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><span class="level-start"><span class="level-item">数据结构</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"><span class="level-start"><span class="level-item">机器学习</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9D%82%E9%A1%B9/"><span class="level-start"><span class="level-item">杂项</span></span><span class="level-end"><span class="level-item tag">31</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%AF%94%E7%89%B9%E5%B8%81/"><span class="level-start"><span class="level-item">比特币</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/"><span class="level-start"><span class="level-item">知识点整理</span></span><span class="level-end"><span class="level-item tag">19</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/mysql/"><span class="level-start"><span class="level-item">mysql</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/"><span class="level-start"><span class="level-item">redis</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">算法</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"><span class="level-start"><span class="level-item">网络安全</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li></ul></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">shn&#039;s blog</a><p class="is-size-7"><span>&copy; 2025 ShiHaonan</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">Welcome to shn's blog!</p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

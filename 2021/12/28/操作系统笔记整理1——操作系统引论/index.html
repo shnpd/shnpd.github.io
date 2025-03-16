@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>操作系统笔记整理1——操作系统引论 - shn&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="shn&#039;s blog"><meta name="msapplication-TileImage" content="/images/icon_blog.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="shn&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="​​点击阅读更多查看文章内容"><meta property="og:type" content="blog"><meta property="og:title" content="操作系统笔记整理1——操作系统引论"><meta property="og:url" content="https://shnpd.github.io/2021/12/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%861%E2%80%94%E2%80%94%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/"><meta property="og:site_name" content="shn&#039;s blog"><meta property="og:description" content="​​点击阅读更多查看文章内容"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/d0654354b016839b134f5dd2b780e306_1740931315914.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b7e6b3cd14e23db5294f0e9694209c79_1740931315914.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/106c6104ebbf346464bf6f8a50bbe298_1740931315914.png"><meta property="article:published_time" content="2021-12-28T09:53:12.000Z"><meta property="article:modified_time" content="2025-03-10T08:05:21.727Z"><meta property="article:author" content="ShiHaonan"><meta property="article:tag" content="操作系统"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/d0654354b016839b134f5dd2b780e306_1740931315914.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://shnpd.github.io/2021/12/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%861%E2%80%94%E2%80%94%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/"},"headline":"操作系统笔记整理1——操作系统引论","image":["https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/d0654354b016839b134f5dd2b780e306_1740931315914.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b7e6b3cd14e23db5294f0e9694209c79_1740931315914.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/106c6104ebbf346464bf6f8a50bbe298_1740931315914.png"],"datePublished":"2021-12-28T09:53:12.000Z","dateModified":"2025-03-10T08:05:21.727Z","author":{"@type":"Person","name":"ShiHaonan"},"publisher":{"@type":"Organization","name":"shn's blog","logo":{"@type":"ImageObject","url":{"text":"shn's blog"}}},"description":"​​点击阅读更多查看文章内容"}</script><link rel="canonical" href="https://shnpd.github.io/2021/12/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%861%E2%80%94%E2%80%94%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/"><link rel="icon" href="/images/icon_blog.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><meta name="msvalidate.01" content="E38AFEA650A8300110261393E7FD0A39"><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">shn&#039;s blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-12-28T09:53:12.000Z" title="12/28/2021, 5:53:12 PM">2021-12-28</time>发表</span><span class="level-item"><time dateTime="2025-03-10T08:05:21.727Z" title="3/10/2025, 4:05:21 PM">2025-03-10</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></span><span class="level-item">21 分钟读完 (大约3176个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">操作系统笔记整理1——操作系统引论</h1><div class="content"><p>​​点击阅读更多查看文章内容<span id="more"></span></p>
+<h1 id="点此链接可跳转到：操作系统笔记整理——目录索引页"><a href="#点此链接可跳转到：操作系统笔记整理——目录索引页" class="headerlink" title="点此链接可跳转到：操作系统笔记整理——目录索引页"></a><a target="_blank" rel="noopener" href="https://blog.csdn.net/shn111/article/details/122296621">点此链接可跳转到：操作系统笔记整理——目录索引页</a></h1><blockquote>
+<p>参考书籍：《计算机操作系统》第四版 汤小丹等编著</p>
+</blockquote>
+<blockquote>
+<p> @[toc]</p>
+</blockquote>
+<h1 id="操作系统的作用"><a href="#操作系统的作用" class="headerlink" title="操作系统的作用"></a>操作系统的作用</h1><ul>
+<li>作为用户与计算机硬件系统之间的接口</li>
+<li>作为计算机系统资源的管理者</li>
+<li>实现了对计算机资源的抽象</li>
+</ul>
+<h1 id="单道批处理系统"><a href="#单道批处理系统" class="headerlink" title="单道批处理系统"></a>单道批处理系统</h1><p>作业逐个送入内存运行<br>特征：自动型、顺序性、单道性<br>优点：减少了人工操作的时间，缓解了一定程度的人机速度矛盾，资源利用率有所提升。<br>缺点：内存中仅能有一道程序运行，只有该程序运行结束之后才能调入下一道程序，CPU有大量的时间是在空闲等待I&#x2F;O完成。资源利用率依然很低。<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/d0654354b016839b134f5dd2b780e306_1740931315914.png" alt="在这里插入图片描述"></p>
+<h1 id="多道批处理系统"><a href="#多道批处理系统" class="headerlink" title="多道批处理系统"></a>多道批处理系统</h1><p>解决单道批处理系统中内存仅存放一道作业，导致资源利用率和吞吐量低下的问题<br>多个作业先在外存“后备队列”中排队，经作业调度选择若干个调入内存，使它们共享CPU和系统中的各种资源。<br>特征：调度性、无序性、多道性<br>优点：资源的利用率高、系统吞吐量大<br>缺点：平均周转周期长、无交互能力</p>
+<blockquote>
+<p>例题：A、B 两个程序，程序 A 按顺序使用 CPU 10s，设备甲 5s，CPU 5s，  设备乙 10s，CPU 10s，程序 B<br>按顺序使用设备甲 10s，CPU 10s，设备乙 5s，CPU 5s，设备乙 10s。<br>问：<br>1、在顺序环境下执行程序 A 和 B，CPU利用率多少？    2、在多道环境下呢？<br>答：<br>1、A 和 B 顺序执行时，A 执行完毕 B 才开始，总共耗时 80s，占用 CPU40s，故利用率为 40&#x2F;80&#x3D;50%。<br>2、<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b7e6b3cd14e23db5294f0e9694209c79_1740931315914.png" alt="在这里插入图片描述"><br>多道时，两程序共耗时 45s, 占用 CPU 40s, 故利用率 40&#x2F;45&#x3D;88.89%。</p>
+</blockquote>
+<blockquote>
+<ul>
+<li>批处理操作系统的特征：</li>
+</ul>
+<ol>
+<li>脱机：是指用户脱机使用计算机，即用户提交作业之后直到获得结果之前几乎不再和计算机打交道。</li>
+<li>多道：是指多道程序运行，即按多道程序设计的调度原则，从一批后备作业中选取多道作业调入内存并组织它们运行；</li>
+<li>成批处理：是指操作员把用户提交的作业组织成一批，由操作系统负责每批作业间的自动调度。</li>
+</ol>
+<ul>
+<li>分时操作系统的特征：</li>
+</ul>
+<ol>
+<li>多路性：系统按分时原则为多个终端用户提供服务，允许多个用户共享一台计算机。</li>
+<li>独立性：每个用户在各自的终端上进行操作，彼此之间互不干扰</li>
+<li>及时性：用户的请求能在很短的时间内获得相应</li>
+<li>交互性：用户可以通过终端与系统进行广泛的人机对话</li>
+</ol>
+<ul>
+<li>实时操作系统的特征：</li>
+</ul>
+<ol>
+<li>多路性：系统周期性地对多路现场信息进行采集，以及对多个对象或多个执行机构进行控制</li>
+<li>独立性：对信息的采集和对对象的控制彼此互不干扰</li>
+<li>及时性：是指系统能及时响应外部事件的请求，并在规定时间内完成对该事件的处理</li>
+<li>交互性：仅限于用户发送某些特定的命令，如开始、停止、快进等，由系统立即响应。</li>
+<li>可靠性：是指系统本身要安全可靠，因为像生产过程的实时控制、航空订票等实时事务系统，信息处理的延误或丢失往往会带来不堪设想的后果。</li>
+</ol>
+</blockquote>
+<h1 id="操作系统的特征"><a href="#操作系统的特征" class="headerlink" title="操作系统的特征"></a>操作系统的特征</h1><ul>
+<li><p><strong>并发性（最重要特征）</strong>： 在一段时间内同时存在多道运行的程序（进程）<br> 宏观上：多道程序同时执行<br> 微观上：在单处理机系统中，任何时刻只有一道程序在执行，即微观上多道程序在CPU上交替执行。<br>并行：多道程序在<strong>同一时刻</strong>执行</p>
+</li>
+<li><p><strong>共享性</strong>：指系统中的资源不再为某道程序所独占，而是供多道程序共同使用。</p>
+<p><strong><font  color="blue">并发性和共享性是操作系统的两个最基本的特征</font></strong></p>
+</li>
+<li><p><strong>虚拟性</strong>：指把一个物理实体映射为若干个对应的逻辑实体。<br> 时分复用：即分时使用方式。如：虚拟处理机、虚拟设备。<br> 空分复用：用于提高存储空间的利用率。如：虚拟磁盘、虚拟存储器。</p>
+</li>
+<li><p><strong>异步性</strong>：异步性也称不确定性，指进程在执行中，其执行时间、顺序、向前推进的速度和时间等都是不可预知的。</p>
+</li>
+</ul>
+<h1 id="操作系统的功能"><a href="#操作系统的功能" class="headerlink" title="操作系统的功能"></a>操作系统的功能</h1><ul>
+<li>处理机管理</li>
+</ul>
+<p> 进程控制：状态转换<br> 进程同步：协调运行进程<br> 进程通信：合作进程信息交换<br> 调度 ：作业调度+进程调度</p>
+<ul>
+<li>存储器管理</li>
+</ul>
+<p>内存分配：为每道程序分配内存空间<br>内存保护：确保用户程序在自己的内存空间运行，互不干扰，不允许其访问操作系统的程序和数据，也不允许其转移到非共享的其他用户程序中执行<br>地址映射：逻辑地址-&gt;物理地址<br>内存扩充：虚拟存储技术</p>
+<ul>
+<li>设备管理</li>
+</ul>
+<p>缓冲管理：单缓冲、双缓冲、缓冲池<br>设备分配：根据用户请求和系统现有资源分配其所需设备<br>设备处理：设备处理程序又称为设备驱动程序，实现CPU和设备控制器之间的通信<br>虚拟设备</p>
+<ul>
+<li>文件管理</li>
+</ul>
+<p>文件存储空间的管理<br>目录管理<br>文件的读&#x2F;写管理和保护</p>
+<ul>
+<li>用户接口</li>
+</ul>
+<p>用户接口：联机用户接口、脱机用户接口、图形用户接口<br>程序接口：为用户程序访问系统资源而设置的，是其获得操作系统服务的唯一途径</p>
+<h1 id="微内核操作系统"><a href="#微内核操作系统" class="headerlink" title="微内核操作系统"></a>微内核操作系统</h1><p>当前比较流行的操作系统几乎全部采用微内核结构</p>
+<p>为了提高灵活性和可扩充性，OS分为：微内核、用于提供各种服务的一组服务器</p>
+<p><strong>微内核</strong>：能实现现代OS核心功能的小型内核，运行在核心态下，开机后常驻内存，不会因内存紧张而换出。<br> 1.实现与硬件紧密相关的处理<br> 2.实现一些较基本的功能（如地址变换）<br> 3.负责客户和服务器之间的通信</p>
+<p><strong>微内核OS技术的主要思想</strong>：在内核中留下一些最基本的功能，而将其他服务分离出去，由工作在用户态下的进程来实现，形成所谓“客户&#x2F;服务器”模式。客户进程可通过内核向服务器进程发送请求，以取得OS的服务。</p>
+<h2 id="微内核的结构"><a href="#微内核的结构" class="headerlink" title="微内核的结构"></a>微内核的结构</h2><ul>
+<li><p><strong>足够小的内核</strong><br>微内核并非是一个完整的OS，而只是将OS中最基本的部分放入微内核，通常包含有：<br>①.与硬件处理紧密相关的部分；<br>②.一些较基本的功能；<br>③.客户和服务器之间的通信</p>
+</li>
+<li><p><strong>基于客户&#x2F;服务器模式</strong><br>将操作系统中最基本的部分放入内核中，而把操作系统的绝大部分功能都放在内核外面的一组服务器（进程）中实现，如用于提供对进程(线程)进行管理的服务器等，它们都是被作为进程来实现的，运行在用户态。<br>客户和服务器之间是借助微内核提供的消息传递机制来实现信息交互的<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/106c6104ebbf346464bf6f8a50bbe298_1740931315914.png" alt="在这里插入图片描述"></p>
+</li>
+<li><p><strong>应用“机制与策略分离”原理</strong><br>机制：指实现某一功能的具体执行机构<br>策略：在机制的基础上，借助于某些参数和算法来实现该功能的方法。<br>简单理解：软件是策略，硬件是机制。命令是策略，实施是机制<br>微内核操作系统：只把机制放在OS的微内核中，把策略从内核中分离出去，可以把内核做得很小。 </p>
+</li>
+<li><p><strong>采用面向对象技术</strong></p>
+</li>
+</ul>
+<h2 id="微内核的基本功能"><a href="#微内核的基本功能" class="headerlink" title="微内核的基本功能"></a>微内核的基本功能</h2><ul>
+<li>进程(线程)管理<br>采用“机制与策略分离”的原理。例如：为实现进程调度，须在内存中设置一个或多个进程优先级队列，将制定进程从队列中调出，并投入执行。这一部分属于调度功能的<strong>机制</strong>部分，将其放入微内核中。而对于进程如何分类，以及优先级的确认方式或原则，都属于策略问题。放入微内核外的进程管理服务器中</li>
+<li>低级存储器管理<br>在微内核中，通常只配置最基本的低级存储器管理机制，如用于实现逻辑地址到物理地址的变换的页表机制和地址变换机制，这一部分依赖于硬件，放入微内核。而实现虚拟存储器管理的策略，则包含页面置换算法以及内存分配与回收策略的选择等，这部分应放在微内核外的存储器管理服务器中去实现。</li>
+<li>中断和陷入处理<br>大多数微内核操作系统都是将与硬件紧密相关的一小部分放入微内核中处理，此时微内核的主要功能就是捕获所发生的中断和陷入事件，并进行相应的前期处理，如现场保护，识别中断类型，将有关信息转化成消息后，再把它发送给相关服务器，由服务器进行后期处理</li>
+</ul>
+<p><strong>处理机状态</strong>：处理机至少需要两种独立的操作模式：核心态和用户态<br>核心态：又称系统态或管态，是操作系统运行时所处的状态。处理机处于核心态时可以执行硬件所提供的全部指令，包括特权指令和非特权指令。<br>用户态：又称为目态，是一般用户程序运行时所处的状态。处理机处于用户态时只能执行非特权指令。<br>用户态下程序不能将其运行状态改为核心态，这样就可以防止用户有意或无意的侵入系统，从而起到系统保护的作用。 </p>
+<h2 id="微内核操作系统的优缺点"><a href="#微内核操作系统的优缺点" class="headerlink" title="微内核操作系统的优缺点"></a>微内核操作系统的优缺点</h2><p><strong>优点</strong>：</p>
+<ul>
+<li>提高了系统的可扩展性</li>
+<li>增强了系统的可靠性</li>
+<li>可移植性强</li>
+<li>提供了对分布式系统的支持</li>
+<li>融入了面向对象技术</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>运行效率有所降低，在完成一次客户对操作系统提出的服务请求时，需要进行四次上下文切换：1.客户发送消息给内核；2.内核把消息发给服务器；3.服务器把相应消息发给内核；4.内核将响应消息发给客户；这在早期的OS中，一般只需要两次切换：1.执行系统调用后由用户态转向系统态；2.在系统完成用户请求的服务后，由系统态返回用户态。</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>操作系统笔记整理1——操作系统引论</p><p><a href="https://shnpd.github.io/2021/12/28/操作系统笔记整理1——操作系统引论/">https://shnpd.github.io/2021/12/28/操作系统笔记整理1——操作系统引论/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>ShiHaonan</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2021-12-28</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-03-10</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/images/wxpay.jpg" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2021/12/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%862%E2%80%94%E2%80%94%E8%BF%9B%E7%A8%8B%E7%9A%84%E6%8F%8F%E8%BF%B0%E4%B8%8E%E6%8E%A7%E5%88%B6%EF%BC%881%EF%BC%89/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">操作系统笔记整理2——进程的描述与控制（1）</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2021/12/26/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B05%E2%80%94%E2%80%94BTC%E7%BD%91%E7%BB%9C/"><span class="level-item">区块链学习笔记5——BTC网络</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card" id="comments"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://shnpd.github.io/2021/12/28/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%861%E2%80%94%E2%80%94%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%BC%95%E8%AE%BA/';
+            this.page.identifier = '2021/12/28/操作系统笔记整理1——操作系统引论/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'shns-blog' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#点此链接可跳转到：操作系统笔记整理——目录索引页"><span class="level-left"><span class="level-item">1</span><span class="level-item">点此链接可跳转到：操作系统笔记整理——目录索引页</span></span></a></li><li><a class="level is-mobile" href="#操作系统的作用"><span class="level-left"><span class="level-item">2</span><span class="level-item">操作系统的作用</span></span></a></li><li><a class="level is-mobile" href="#单道批处理系统"><span class="level-left"><span class="level-item">3</span><span class="level-item">单道批处理系统</span></span></a></li><li><a class="level is-mobile" href="#多道批处理系统"><span class="level-left"><span class="level-item">4</span><span class="level-item">多道批处理系统</span></span></a></li><li><a class="level is-mobile" href="#操作系统的特征"><span class="level-left"><span class="level-item">5</span><span class="level-item">操作系统的特征</span></span></a></li><li><a class="level is-mobile" href="#操作系统的功能"><span class="level-left"><span class="level-item">6</span><span class="level-item">操作系统的功能</span></span></a></li><li><a class="level is-mobile" href="#微内核操作系统"><span class="level-left"><span class="level-item">7</span><span class="level-item">微内核操作系统</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#微内核的结构"><span class="level-left"><span class="level-item">7.1</span><span class="level-item">微内核的结构</span></span></a></li><li><a class="level is-mobile" href="#微内核的基本功能"><span class="level-left"><span class="level-item">7.2</span><span class="level-item">微内核的基本功能</span></span></a></li><li><a class="level is-mobile" href="#微内核操作系统的优缺点"><span class="level-left"><span class="level-item">7.3</span><span class="level-item">微内核操作系统的优缺点</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/CSP%E6%A8%A1%E5%9E%8B/">【Go】CSP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Channel/">【Go】Channel</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Context/">【Go】Context</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/defer&amp;os.Exit()/">【Go】defer和os.Exit()</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/GMP%E6%A8%A1%E5%9E%8B/">【Go】GMP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Fabric/"><span class="level-start"><span class="level-item">Fabric</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/Golang/"><span class="level-start"><span class="level-item">Golang</span></span><span class="level-end"><span class="level-item tag">44</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Shell%E8%84%9A%E6%9C%AC/"><span class="level-start"><span class="level-item">Shell脚本</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/bytedance/"><span class="level-start"><span class="level-item">bytedance</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"><span class="level-start"><span class="level-item">以太坊</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%88%B7%E9%A2%98%E9%9B%86/"><span class="level-start"><span class="level-item">刷题集</span></span><span class="level-end"><span class="level-item tag">27</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="level-start"><span class="level-item">前端</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="level-start"><span class="level-item">区块链</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AD%A6%E6%9C%AF/"><span class="level-start"><span class="level-item">学术</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"><span class="level-start"><span class="level-item">密码学</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%B0%8F%E7%A8%8B%E5%BA%8F/"><span class="level-start"><span class="level-item">小程序</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/"><span class="level-start"><span class="level-item">技术总结</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/%E5%85%B6%E5%AE%83/"><span class="level-start"><span class="level-item">其它</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><span class="level-start"><span class="level-item">数据结构</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"><span class="level-start"><span class="level-item">机器学习</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9D%82%E9%A1%B9/"><span class="level-start"><span class="level-item">杂项</span></span><span class="level-end"><span class="level-item tag">31</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%AF%94%E7%89%B9%E5%B8%81/"><span class="level-start"><span class="level-item">比特币</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/"><span class="level-start"><span class="level-item">知识点整理</span></span><span class="level-end"><span class="level-item tag">19</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/mysql/"><span class="level-start"><span class="level-item">mysql</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/"><span class="level-start"><span class="level-item">redis</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">算法</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"><span class="level-start"><span class="level-item">网络安全</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li></ul></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">shn&#039;s blog</a><p class="is-size-7"><span>&copy; 2025 ShiHaonan</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">Welcome to shn's blog!</p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>网络安全笔记4——消息认证与杂凑函数 - shn&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="shn&#039;s blog"><meta name="msapplication-TileImage" content="/images/icon_blog.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="shn&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="​​点击阅读更多查看文章内容"><meta property="og:type" content="blog"><meta property="og:title" content="网络安全笔记4——消息认证与杂凑函数"><meta property="og:url" content="https://shnpd.github.io/2022/08/06/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B04%E2%80%94%E2%80%94%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E4%B8%8E%E6%9D%82%E5%87%91%E5%87%BD%E6%95%B0/"><meta property="og:site_name" content="shn&#039;s blog"><meta property="og:description" content="​​点击阅读更多查看文章内容"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/36919c22f14c0b2cce69357ef64d6dd2_1740930408909.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/bd01abe6df15d69054777a8e48646c6e_1740930408909.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/8aa0ef65d24d4aaf55b08ec49fb3ad57_1740930416748.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/ea3ce8bd1ee17f129b46e12a728bbd6f_1740930416748.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/efa629951fbd4ef6772e830050625ad2_1740930416748.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/9cdcf50d34475e0555f506ac24560cd0_1740930416748.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/d0f7c8072c08c5463c1edc573bb3363e_1740930416748.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/44ccee850f12a9cb8a3691bdae816fa3_1740930425414.png"><meta property="article:published_time" content="2022-08-06T10:14:56.000Z"><meta property="article:modified_time" content="2025-03-10T08:05:21.725Z"><meta property="article:author" content="ShiHaonan"><meta property="article:tag" content="web安全 哈希算法 安全"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/36919c22f14c0b2cce69357ef64d6dd2_1740930408909.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://shnpd.github.io/2022/08/06/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B04%E2%80%94%E2%80%94%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E4%B8%8E%E6%9D%82%E5%87%91%E5%87%BD%E6%95%B0/"},"headline":"网络安全笔记4——消息认证与杂凑函数","image":["https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/36919c22f14c0b2cce69357ef64d6dd2_1740930408909.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/bd01abe6df15d69054777a8e48646c6e_1740930408909.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/8aa0ef65d24d4aaf55b08ec49fb3ad57_1740930416748.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/ea3ce8bd1ee17f129b46e12a728bbd6f_1740930416748.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/efa629951fbd4ef6772e830050625ad2_1740930416748.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/9cdcf50d34475e0555f506ac24560cd0_1740930416748.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/d0f7c8072c08c5463c1edc573bb3363e_1740930416748.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/44ccee850f12a9cb8a3691bdae816fa3_1740930425414.png"],"datePublished":"2022-08-06T10:14:56.000Z","dateModified":"2025-03-10T08:05:21.725Z","author":{"@type":"Person","name":"ShiHaonan"},"publisher":{"@type":"Organization","name":"shn's blog","logo":{"@type":"ImageObject","url":{"text":"shn's blog"}}},"description":"​​点击阅读更多查看文章内容"}</script><link rel="canonical" href="https://shnpd.github.io/2022/08/06/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B04%E2%80%94%E2%80%94%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E4%B8%8E%E6%9D%82%E5%87%91%E5%87%BD%E6%95%B0/"><link rel="icon" href="/images/icon_blog.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><meta name="msvalidate.01" content="E38AFEA650A8300110261393E7FD0A39"><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">shn&#039;s blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-08-06T10:14:56.000Z" title="8/6/2022, 6:14:56 PM">2022-08-06</time>发表</span><span class="level-item"><time dateTime="2025-03-10T08:05:21.725Z" title="3/10/2025, 4:05:21 PM">2025-03-10</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a></span><span class="level-item">16 分钟读完 (大约2442个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">网络安全笔记4——消息认证与杂凑函数</h1><div class="content"><p>​​点击阅读更多查看文章内容<span id="more"></span></p>
+<h1 id="网络安全笔记4——消息认证与杂凑函数"><a href="#网络安全笔记4——消息认证与杂凑函数" class="headerlink" title="网络安全笔记4——消息认证与杂凑函数"></a>网络安全笔记4——消息认证与杂凑函数</h1><blockquote>
+<p>参考课程：<a target="_blank" rel="noopener" href="https://www.icourse163.org/course/BUAA-1466021165">中国大学MOOC《网络安全》——北京航空航天大学</a></p>
+</blockquote>
+<p>@[toc]</p>
+<h1 id="消息认证"><a href="#消息认证" class="headerlink" title="消息认证"></a>消息认证</h1><p><strong>认证(authentication)</strong></p>
+<ul>
+<li>保密性(confidentiality) → 加密机制<br>➢其他人看不懂消息的内容</li>
+<li>真实性(authenticity) → 认证机制<br>➢消息内容的完整性<br>➢消息内容的真实性<br>➢消息来源的真实性<br>➢实体身份的真实性</li>
+</ul>
+<p><strong>认证方式的分类</strong></p>
+<ul>
+<li><p>通信双方相互信任的认证(如企业内部人员之间)<br>对称认证( symmetric authentication)<br>主要防止来自第三方的攻击<br>例如检查文件是否被人修改过</p>
+</li>
+<li><p>通信双方相互不信任的认证(如商业伙伴之间)<br>非对称认证( asymmetric authentication)<br>主要防止来自对方的攻击<br>例如查验收到的文件是否真实</p>
+</li>
+</ul>
+<h1 id="杂凑函数"><a href="#杂凑函数" class="headerlink" title="杂凑函数"></a>杂凑函数</h1><blockquote>
+<p>信息的真实性可以通过验证一个数据的短烙印(imprint) 或Hash值的真实性来确认。</p>
+</blockquote>
+<ul>
+<li>Hash函数来源于计算机技术:将<strong>任意</strong>串压缩成<strong>定长</strong>的比特串。</li>
+<li>Hash函数的一些常见称谓:<br>中文:杂凑函数、散列函数、哈希函数。<br>英文: hash code, hash total, hash result, imprint, checksum, compression, compressed encoding, authenticator, fingerprint, Message Integrity Code, message digest.</li>
+<li>常见的hash函数有MD5、SHA、SM3(国产)</li>
+</ul>
+<h1 id="单向杂凑函数"><a href="#单向杂凑函数" class="headerlink" title="单向杂凑函数"></a>单向杂凑函数</h1><blockquote>
+<p>杂凑(Hash)函数是将任意长的数字串m映射成以个较短定长输出数字串的函数，我们关心的通常是<strong>单向杂凑函数</strong>。</p>
+</blockquote>
+<p>y &#x3D; H(x)可将任意长度的x变换成固定长度的y，并满足:</p>
+<ol>
+<li>快速性:任给x，计算y &#x3D; H(x)容易;</li>
+<li>单向性:任给y,由y &#x3D; H(x)计算x困难;</li>
+<li>无碰撞:寻找x1≠X2, 满足H(x1) &#x3D; H(x2)是困难的。</li>
+</ol>
+<p><strong>杂凑函数的性质</strong></p>
+<ul>
+<li>变量x可以是任意长度， 而H(x)的结果具有固定的长度n bits (如64b&#x2F;80b&#x2F; 160b等);</li>
+<li><strong>抗原象攻击</strong>:已知一个杂凑值y，找一个输入串x，使得y&#x3D; H(x)在计算上不可行;</li>
+<li><strong>抗碰撞攻击</strong>:找两个输入x<sub>1</sub>和x<sub>2</sub>(x<sub>1</sub> ≠ x<sub>2</sub>)，使得H(x<sub>1</sub>) &#x3D; H(x<sub>2</sub>)在计算上不可行。</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/36919c22f14c0b2cce69357ef64d6dd2_1740930408909.png" alt="在这里插入图片描述"></p>
+<ul>
+<li><strong>算法特点</strong>：不定长度输入，固定长度输出(MD5输出为16字节、 SHA-1输出长度为20字节)。</li>
+<li><strong>雪崩效应</strong>：若输入发生很小的变动，则可引起输出较大变动。</li>
+<li><strong>完全单向</strong>：已知输出无法推算出输入，已知两个输出的差别无法推算出输入的差别。</li>
+</ul>
+<p><strong>抗碰撞杂凑函数</strong></p>
+<p>强单向杂凑函数 VS 弱单向杂凑函数</p>
+<ol>
+<li>若杂凑函数H(x)是单向的，则称其为单向杂凑函数。</li>
+<li>给定单向杂凑函数H(x)，对任意给定M，其杂凑值h &#x3D; H(M)，要找出另外一个M’，使h &#x3D; H(M’)在计算上不可行，则称H(x)为<strong>弱单向杂凑函数</strong>。</li>
+<li>给定单向杂凑函数H(x)，若要找到任意一对输入M1、M2，且M1≠M2，使H(M1) &#x3D; H(M2)在计算.上不可行，则称H(x)为<strong>强单向杂凑函数</strong>。</li>
+</ol>
+<h1 id="Hash码的分类"><a href="#Hash码的分类" class="headerlink" title="Hash码的分类"></a>Hash码的分类</h1><ul>
+<li>校验和CRC: Cyclic Redundancy Check<br>即循环冗余校验码，是数据通信中常用的一种差错校验码</li>
+<li>消息认证码MAC: Message Authentication Code<br>MAC算法是<strong>有密钥参与杂凑运算</strong>的算法</li>
+<li>消息检测码MDC: Message Detection Code<br>MDC算法是<strong>无密钥参与杂凑运算</strong>的算法</li>
+<li>无碰撞性Hash函数: Collision-Free Hash Function<br>无碰撞的Hash函数是存在的，但在实际中很难找到它们</li>
+</ul>
+<h1 id="消息认证码-MAC-与消息检测码-MDC"><a href="#消息认证码-MAC-与消息检测码-MDC" class="headerlink" title="消息认证码(MAC)与消息检测码(MDC)"></a>消息认证码(MAC)与消息检测码(MDC)</h1><h2 id="消息认证码MAC"><a href="#消息认证码MAC" class="headerlink" title="消息认证码MAC"></a>消息认证码MAC</h2><p>MAC也称为密码校验和，它由下述函数产生</p>
+<ul>
+<li>MAC &#x3D; H(m||k) （||表示首尾拼接）</li>
+<li>其中，m是一个变长的消息，k是收发双方共享的密钥，H(m||k)是定长的<strong>认证符</strong>。</li>
+</ul>
+<p>发送者：<br>将消息m和此认证符一起发给接收者：**{m, H(m||k)}**</p>
+<p>接收者：<br>接收者在收到消息m’之后，计算：<strong>MAC’ &#x3D; H(m’||k)</strong><br>比较MAC’与MAC是否相等<br>若相等，则说明消息未被篡改;<br>若不等，则说明消息被改动了。</p>
+<ul>
+<li>消息的真实性依赖于共享密钥的真实性和保密性。</li>
+<li>任何拥有这一密钥的人均可以验证该消息的真实性。</li>
+<li>对消息真实性的保护已经转化成安全地在通信双方之间建立共享密钥的问题。</li>
+</ul>
+<h2 id="消息检测码MDC"><a href="#消息检测码MDC" class="headerlink" title="消息检测码MDC"></a>消息检测码MDC</h2><p>MDC也称为篡改检测码，它由下述函数产生</p>
+<ul>
+<li>MDC &#x3D; H(m)</li>
+<li>其中，m是一个变长的消息，H(m)是定长的杂凑函数值作为认证符。</li>
+</ul>
+<p>发送者：<br>将消息m和此认证符一起发给接收者：**{m, H(m)}**</p>
+<p>接收者：<br>接收者在收到消息m’之后，计算：<strong>MDC’ &#x3D; H(m’)</strong><br>比较MDC’与MDC是否相等<br>若相等，则说明消息未被篡改;<br>若不等，则说明消息被改动了。</p>
+<ul>
+<li>如果采用MDC，消息的真实性就转化成检验一个固定长度比特串的真实性(不需共享密钥)，即MDC &#x3D; H(m) ;</li>
+<li>需要认证信道传输MDC：发送者需要将MDC通过一特定的信道传送给对方。例如，发送者可以打电话告诉对方MDC值。而这个消息的真实性依赖于电话中对于发送者声音的确认。</li>
+</ul>
+<p><strong>若消息很长，MDC可以用迭代方法构造</strong></p>
+<p>迭代Hash函数</p>
+<ol>
+<li>信息X被分为t个分组: X<sub>1</sub>,X<sub>2</sub>,…X<sub>t</sub> (如必要，需填充补位<strong>padding</strong>)</li>
+<li>计算: h<sub>0</sub>&#x3D;<strong>IV</strong>(初始化向量)，h<sub>i</sub>&#x3D;f(X<sub>i</sub>,h<sub>i-1</sub>),…, H(X)&#x3D;g(h<sub>t</sub>)<br>➢<strong>H</strong>为Hash函数，<strong>f</strong>为轮函数，<strong>g</strong>为输出变换<br>➢<strong>IV</strong> (初始值)和<strong>padding</strong>(填充)将对安全有重要影响</li>
+</ol>
+<h1 id="杂凑函数的基本应用方式"><a href="#杂凑函数的基本应用方式" class="headerlink" title="杂凑函数的基本应用方式"></a>杂凑函数的基本应用方式</h1><h2 id="1-既提供保密性，又提供消息认证"><a href="#1-既提供保密性，又提供消息认证" class="headerlink" title="1. 既提供保密性，又提供消息认证"></a>1. 既提供保密性，又提供消息认证</h2><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/bd01abe6df15d69054777a8e48646c6e_1740930408909.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>提供保密性：只有Alice和Bob共享密钥K；</li>
+<li>提供认证：H(M)受密码保护。</li>
+</ul>
+<h2 id="2-仅提供消息认证"><a href="#2-仅提供消息认证" class="headerlink" title="2. 仅提供消息认证"></a>2. 仅提供消息认证</h2><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/8aa0ef65d24d4aaf55b08ec49fb3ad57_1740930416748.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>提供认证：H(M)受密码保护。</li>
+</ul>
+<h2 id="3-既提供消息认证，又提供数字签名"><a href="#3-既提供消息认证，又提供数字签名" class="headerlink" title="3. 既提供消息认证，又提供数字签名"></a>3. 既提供消息认证，又提供数字签名</h2><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/ea3ce8bd1ee17f129b46e12a728bbd6f_1740930416748.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>提供数字签名:只有Alice能产生S<sub>K<sub>s</sub><sup>A</sup></sub>[H(M)]；</li>
+<li>提供认证: H(M)受密码保护</li>
+</ul>
+<h2 id="4-既提供保密性，又提供消息认证和数字签名"><a href="#4-既提供保密性，又提供消息认证和数字签名" class="headerlink" title="4. 既提供保密性，又提供消息认证和数字签名"></a>4. 既提供保密性，又提供消息认证和数字签名</h2><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/efa629951fbd4ef6772e830050625ad2_1740930416748.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>提供保密性: 只有Alice和Bob共享密钥K;</li>
+<li>提供数字签名：只有Alice能产生S<sub>K<sub>s</sub><sup>A</sup></sub>[H(M)]；</li>
+<li>提供认证: H(M)受密码保护</li>
+</ul>
+<h2 id="5-仅提供消息认证"><a href="#5-仅提供消息认证" class="headerlink" title="5. 仅提供消息认证"></a>5. 仅提供消息认证</h2><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/9cdcf50d34475e0555f506ac24560cd0_1740930416748.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>提供认证：只有Alice和Bob共享随机状态S</li>
+</ul>
+<h2 id="6-既提供保密性，又提供消息认证"><a href="#6-既提供保密性，又提供消息认证" class="headerlink" title="6. 既提供保密性，又提供消息认证"></a>6. 既提供保密性，又提供消息认证</h2><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/d0f7c8072c08c5463c1edc573bb3363e_1740930416748.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>提供保密性：只有Alice和Bob共享密钥K;</li>
+<li>提供认证：只有Alice和Bob共享随机状态S</li>
+</ul>
+<h1 id="常用杂凑函数"><a href="#常用杂凑函数" class="headerlink" title="常用杂凑函数"></a>常用杂凑函数</h1><h2 id="MD系列杂凑函数介绍"><a href="#MD系列杂凑函数介绍" class="headerlink" title="MD系列杂凑函数介绍"></a>MD系列杂凑函数介绍</h2><p>MD（Message-Digest Algorithm）</p>
+<p>Ron Rivest设计的杂凑函数系列</p>
+<ul>
+<li>MD2[RFC1319]，已被Rogier等于1995年攻破;</li>
+<li>MD4[RFC1320]，已被攻破;</li>
+<li>MD5是MD4的改进型[RFC1321]，被王小云攻破。</li>
+</ul>
+<hr>
+<ul>
+<li>MD5的Hash值长度为128bits；</li>
+<li>MD5被标准化组织IETF接纳并获得广泛应用；</li>
+<li>但是，目前MD5已经过时，不能再使用。</li>
+</ul>
+<h2 id="SHA系列杂凑函数"><a href="#SHA系列杂凑函数" class="headerlink" title="SHA系列杂凑函数"></a>SHA系列杂凑函数</h2><p>SHA（Secure Hash Algorithm）</p>
+<ul>
+<li>NIST和NSA为配合DSS，设计了安全杂凑标准(SHS)，其算法为SHA[FIPS PUB 180]，修改的版本被称为SHA-1[FIPS PUB 180-1]。</li>
+<li>SHA&#x2F;SHA-1采用了与MD4相似的设计准则，其结构也类似于MD4，但其输出为160bit。</li>
+<li>Google于2017年2月公布了一个攻破SHA-1算法的实例，因此国内外正转向使用SHA-256和SHA-512算法。</li>
+</ul>
+<h2 id="中国商用密码SM3算法"><a href="#中国商用密码SM3算法" class="headerlink" title="中国商用密码SM3算法"></a>中国商用密码SM3算法</h2><blockquote>
+<p>2010年，国家密码管理局颁布了中国商用密码杂凑函数SM3。SM3是 一种采用Merkle-Damgard结构的杂凑函数。国家密码管理局公告(第22号) 详细描述SM3密码杂凑算法。</p>
+</blockquote>
+<p><strong>特点：</strong></p>
+<ol>
+<li>消息分组512比特，输出杂凑值256比特，采用Merkle-Damgard结构。</li>
+<li>SM3的压缩函数与SHA-256的压缩函数结构相似，但是SM3更复杂。</li>
+<li>SM3算法具有快速扩散能力，能抵抗各种已知攻击，具有很高的安全性。</li>
+</ol>
+<h2 id="SHA与MD4、MD5的比较"><a href="#SHA与MD4、MD5的比较" class="headerlink" title="SHA与MD4、MD5的比较"></a>SHA与MD4、MD5的比较</h2><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/44ccee850f12a9cb8a3691bdae816fa3_1740930425414.png" alt="在这里插入图片描述"></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>网络安全笔记4——消息认证与杂凑函数</p><p><a href="https://shnpd.github.io/2022/08/06/网络安全笔记4——消息认证与杂凑函数/">https://shnpd.github.io/2022/08/06/网络安全笔记4——消息认证与杂凑函数/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>ShiHaonan</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2022-08-06</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-03-10</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/web%E5%AE%89%E5%85%A8-%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95-%E5%AE%89%E5%85%A8/">web安全 哈希算法 安全</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/images/wxpay.jpg" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2022/08/07/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B05%E2%80%94%E2%80%94%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">网络安全笔记5——数字签名</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2022/08/04/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B03%E2%80%94%E2%80%94%E5%8F%8C%E9%92%A5%E5%AF%86%E7%A0%81%E4%BD%93%E5%88%B6/"><span class="level-item">网络安全笔记3——双钥密码体制</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card" id="comments"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://shnpd.github.io/2022/08/06/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B04%E2%80%94%E2%80%94%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E4%B8%8E%E6%9D%82%E5%87%91%E5%87%BD%E6%95%B0/';
+            this.page.identifier = '2022/08/06/网络安全笔记4——消息认证与杂凑函数/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'shns-blog' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#网络安全笔记4——消息认证与杂凑函数"><span class="level-left"><span class="level-item">1</span><span class="level-item">网络安全笔记4——消息认证与杂凑函数</span></span></a></li><li><a class="level is-mobile" href="#消息认证"><span class="level-left"><span class="level-item">2</span><span class="level-item">消息认证</span></span></a></li><li><a class="level is-mobile" href="#杂凑函数"><span class="level-left"><span class="level-item">3</span><span class="level-item">杂凑函数</span></span></a></li><li><a class="level is-mobile" href="#单向杂凑函数"><span class="level-left"><span class="level-item">4</span><span class="level-item">单向杂凑函数</span></span></a></li><li><a class="level is-mobile" href="#Hash码的分类"><span class="level-left"><span class="level-item">5</span><span class="level-item">Hash码的分类</span></span></a></li><li><a class="level is-mobile" href="#消息认证码-MAC-与消息检测码-MDC"><span class="level-left"><span class="level-item">6</span><span class="level-item">消息认证码(MAC)与消息检测码(MDC)</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#消息认证码MAC"><span class="level-left"><span class="level-item">6.1</span><span class="level-item">消息认证码MAC</span></span></a></li><li><a class="level is-mobile" href="#消息检测码MDC"><span class="level-left"><span class="level-item">6.2</span><span class="level-item">消息检测码MDC</span></span></a></li></ul></li><li><a class="level is-mobile" href="#杂凑函数的基本应用方式"><span class="level-left"><span class="level-item">7</span><span class="level-item">杂凑函数的基本应用方式</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-既提供保密性，又提供消息认证"><span class="level-left"><span class="level-item">7.1</span><span class="level-item">1. 既提供保密性，又提供消息认证</span></span></a></li><li><a class="level is-mobile" href="#2-仅提供消息认证"><span class="level-left"><span class="level-item">7.2</span><span class="level-item">2. 仅提供消息认证</span></span></a></li><li><a class="level is-mobile" href="#3-既提供消息认证，又提供数字签名"><span class="level-left"><span class="level-item">7.3</span><span class="level-item">3. 既提供消息认证，又提供数字签名</span></span></a></li><li><a class="level is-mobile" href="#4-既提供保密性，又提供消息认证和数字签名"><span class="level-left"><span class="level-item">7.4</span><span class="level-item">4. 既提供保密性，又提供消息认证和数字签名</span></span></a></li><li><a class="level is-mobile" href="#5-仅提供消息认证"><span class="level-left"><span class="level-item">7.5</span><span class="level-item">5. 仅提供消息认证</span></span></a></li><li><a class="level is-mobile" href="#6-既提供保密性，又提供消息认证"><span class="level-left"><span class="level-item">7.6</span><span class="level-item">6. 既提供保密性，又提供消息认证</span></span></a></li></ul></li><li><a class="level is-mobile" href="#常用杂凑函数"><span class="level-left"><span class="level-item">8</span><span class="level-item">常用杂凑函数</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#MD系列杂凑函数介绍"><span class="level-left"><span class="level-item">8.1</span><span class="level-item">MD系列杂凑函数介绍</span></span></a></li><li><a class="level is-mobile" href="#SHA系列杂凑函数"><span class="level-left"><span class="level-item">8.2</span><span class="level-item">SHA系列杂凑函数</span></span></a></li><li><a class="level is-mobile" href="#中国商用密码SM3算法"><span class="level-left"><span class="level-item">8.3</span><span class="level-item">中国商用密码SM3算法</span></span></a></li><li><a class="level is-mobile" href="#SHA与MD4、MD5的比较"><span class="level-left"><span class="level-item">8.4</span><span class="level-item">SHA与MD4、MD5的比较</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/CSP%E6%A8%A1%E5%9E%8B/">【Go】CSP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Channel/">【Go】Channel</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Context/">【Go】Context</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/defer&amp;os.Exit()/">【Go】defer和os.Exit()</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/GMP%E6%A8%A1%E5%9E%8B/">【Go】GMP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Fabric/"><span class="level-start"><span class="level-item">Fabric</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/Golang/"><span class="level-start"><span class="level-item">Golang</span></span><span class="level-end"><span class="level-item tag">44</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Shell%E8%84%9A%E6%9C%AC/"><span class="level-start"><span class="level-item">Shell脚本</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/bytedance/"><span class="level-start"><span class="level-item">bytedance</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"><span class="level-start"><span class="level-item">以太坊</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%88%B7%E9%A2%98%E9%9B%86/"><span class="level-start"><span class="level-item">刷题集</span></span><span class="level-end"><span class="level-item tag">27</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="level-start"><span class="level-item">前端</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="level-start"><span class="level-item">区块链</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AD%A6%E6%9C%AF/"><span class="level-start"><span class="level-item">学术</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"><span class="level-start"><span class="level-item">密码学</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%B0%8F%E7%A8%8B%E5%BA%8F/"><span class="level-start"><span class="level-item">小程序</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/"><span class="level-start"><span class="level-item">技术总结</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/%E5%85%B6%E5%AE%83/"><span class="level-start"><span class="level-item">其它</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><span class="level-start"><span class="level-item">数据结构</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"><span class="level-start"><span class="level-item">机器学习</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9D%82%E9%A1%B9/"><span class="level-start"><span class="level-item">杂项</span></span><span class="level-end"><span class="level-item tag">31</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%AF%94%E7%89%B9%E5%B8%81/"><span class="level-start"><span class="level-item">比特币</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/"><span class="level-start"><span class="level-item">知识点整理</span></span><span class="level-end"><span class="level-item tag">19</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/mysql/"><span class="level-start"><span class="level-item">mysql</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/"><span class="level-start"><span class="level-item">redis</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">算法</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"><span class="level-start"><span class="level-item">网络安全</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li></ul></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">shn&#039;s blog</a><p class="is-size-7"><span>&copy; 2025 ShiHaonan</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">Welcome to shn's blog!</p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

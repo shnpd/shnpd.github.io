@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>网络安全笔记5——数字签名 - shn&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="shn&#039;s blog"><meta name="msapplication-TileImage" content="/images/icon_blog.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="shn&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="​​点击阅读更多查看文章内容"><meta property="og:type" content="blog"><meta property="og:title" content="网络安全笔记5——数字签名"><meta property="og:url" content="https://shnpd.github.io/2022/08/07/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B05%E2%80%94%E2%80%94%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/"><meta property="og:site_name" content="shn&#039;s blog"><meta property="og:description" content="​​点击阅读更多查看文章内容"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/181a2d6f63ebd352de5027f7e365a588_1740930392236.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/9f853b858488a9ecce03337a9e15b243_1740930392236.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/4eedf56931324c1da148fa47764419c4_1740930392236.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a55a1ae7f74236318d628d3b315a5fe0_1740930392236.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/2c7a2759f2bb90974909da0602534286_1740930400086.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/d553f89bb4a869551aec008bcb6e4718_1740930400086.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/839e932f875cbd93935d217667372775_1740930400086.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/fd6d60cea1277a59a69b208c2251ba4d_1740930400086.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/914b52d6cb405ea0490c99456790edfe_1740930400086.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b4d257a55abff7e9e83a6a2b78195e6b_1740930408909.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/9087dc8ce30f88b9d398660ee766347e_1740930408909.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/92ee3d13bb3d31f6358f9205051cf54d_1740930408909.png"><meta property="article:published_time" content="2022-08-07T08:33:54.000Z"><meta property="article:modified_time" content="2025-03-10T08:05:21.698Z"><meta property="article:author" content="ShiHaonan"><meta property="article:tag" content="web安全 安全 网络"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/181a2d6f63ebd352de5027f7e365a588_1740930392236.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://shnpd.github.io/2022/08/07/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B05%E2%80%94%E2%80%94%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/"},"headline":"网络安全笔记5——数字签名","image":["https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/181a2d6f63ebd352de5027f7e365a588_1740930392236.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/9f853b858488a9ecce03337a9e15b243_1740930392236.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/4eedf56931324c1da148fa47764419c4_1740930392236.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a55a1ae7f74236318d628d3b315a5fe0_1740930392236.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/2c7a2759f2bb90974909da0602534286_1740930400086.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/d553f89bb4a869551aec008bcb6e4718_1740930400086.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/839e932f875cbd93935d217667372775_1740930400086.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/fd6d60cea1277a59a69b208c2251ba4d_1740930400086.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/914b52d6cb405ea0490c99456790edfe_1740930400086.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b4d257a55abff7e9e83a6a2b78195e6b_1740930408909.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/9087dc8ce30f88b9d398660ee766347e_1740930408909.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/92ee3d13bb3d31f6358f9205051cf54d_1740930408909.png"],"datePublished":"2022-08-07T08:33:54.000Z","dateModified":"2025-03-10T08:05:21.698Z","author":{"@type":"Person","name":"ShiHaonan"},"publisher":{"@type":"Organization","name":"shn's blog","logo":{"@type":"ImageObject","url":{"text":"shn's blog"}}},"description":"​​点击阅读更多查看文章内容"}</script><link rel="canonical" href="https://shnpd.github.io/2022/08/07/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B05%E2%80%94%E2%80%94%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/"><link rel="icon" href="/images/icon_blog.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><meta name="msvalidate.01" content="E38AFEA650A8300110261393E7FD0A39"><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">shn&#039;s blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-08-07T08:33:54.000Z" title="8/7/2022, 4:33:54 PM">2022-08-07</time>发表</span><span class="level-item"><time dateTime="2025-03-10T08:05:21.698Z" title="3/10/2025, 4:05:21 PM">2025-03-10</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a></span><span class="level-item">17 分钟读完 (大约2495个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">网络安全笔记5——数字签名</h1><div class="content"><p>​​点击阅读更多查看文章内容<span id="more"></span></p>
+<h1 id="网络安全笔记5——数字签名"><a href="#网络安全笔记5——数字签名" class="headerlink" title="网络安全笔记5——数字签名"></a>网络安全笔记5——数字签名</h1><blockquote>
+<p>参考课程：<a target="_blank" rel="noopener" href="https://www.icourse163.org/course/BUAA-1466021165">中国大学MOOC《网络安全》——北京航空航天大学</a></p>
+</blockquote>
+<p>@[toc]</p>
+<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><p>类似于手书签名，数字签名也应满足以下要求:</p>
+<ol>
+<li>收方能够确认或证实发方的签名，但不能伪造签名<br>简记为R1-条件。</li>
+<li>发方发出签名的消息给收方后，不能再否认他所签发的消息<br>简记为S-条件。</li>
+<li>收方对已收到的签名消息不能否认，即有收报认证<br>简记为R2-条件。</li>
+<li>第三者可以确认收发双方之间的消息传送，但不能伪造这一过程<br>简记为T条件。</li>
+</ol>
+<blockquote>
+<p>Alice采用自己的<strong>私钥</strong>对消息m签名，Alice将m和签名发送给Bob;<br>Bob收到m和签名后，Bob采用Alice的<strong>公钥</strong>验证签名的有效性。</p>
+</blockquote>
+<h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><p>按照消息是否被压缩分类：<br>对<strong>整体消息</strong>进行签名<br>对<strong>压缩的消息</strong>进行签名</p>
+<p>按照消息&#x2F;签名的对应关系分类：<br><strong>确定性</strong>数字签名 (Deterministic Signature) :<br>消息与签名一一对应， 对同一消息的签名永不变化，如RSA算法;<br><strong>随机化</strong>数字签名 (Randomized Signature) :<br>对同一消息的签名是变化的。因此，此类签名取决于算法中随机参数的取值，如ElGamal算法。</p>
+<h2 id="数学表示"><a href="#数学表示" class="headerlink" title="数学表示"></a>数学表示</h2><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/181a2d6f63ebd352de5027f7e365a588_1740930392236.png" alt="在这里插入图片描述"></p>
+<h1 id="RSA数字签名机制"><a href="#RSA数字签名机制" class="headerlink" title="RSA数字签名机制"></a>RSA数字签名机制</h1><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/9f853b858488a9ecce03337a9e15b243_1740930392236.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>显然，由于只有签名者知道私钥d,根据RSA体制知，其他人不可能伪造签名;</li>
+<li>易于证实{m, s}是否是合法的消息&#x2F;签名对，只要计算m&#x3D;s<sup>e</sup> mod n即可。</li>
+<li><strong>安全性</strong><br>RSA体制的安全性依赖于n&#x3D; P1 x p2分解的困难性。</li>
+</ul>
+<h1 id="ElGamal数字签名机制"><a href="#ElGamal数字签名机制" class="headerlink" title="ElGamal数字签名机制"></a>ElGamal数字签名机制</h1><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/4eedf56931324c1da148fa47764419c4_1740930392236.png" alt="在这里插入图片描述"><br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a55a1ae7f74236318d628d3b315a5fe0_1740930392236.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>未知私钥时，伪造签名相当于求解离散对数;</li>
+<li>若攻击者掌握了<strong>同一随机数k</strong>下两个消息m<sub>1</sub>、m<sub>2</sub> 的合法签名(r<sub>1</sub>,s<sub>1</sub>)、(r<sub>2</sub>,s<sub>2</sub>)， 就会构造如下的方程:<br>m<sub>1</sub> &#x3D; r<sub>1</sub> * x + s<sub>1</sub> * k<br>m<sub>2</sub> &#x3D; r<sub>2</sub> * x + s<sub>2</sub> * k</li>
+<li><strong>安全性</strong><br>要确保此签名体制的安全性，就必须保证每次签名时，<strong>选择不同的随机数k</strong>。</li>
+</ul>
+<h1 id="Schnorr数字签名机制"><a href="#Schnorr数字签名机制" class="headerlink" title="Schnorr数字签名机制"></a>Schnorr数字签名机制</h1><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/2c7a2759f2bb90974909da0602534286_1740930400086.png" alt="在这里插入图片描述"><br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/d553f89bb4a869551aec008bcb6e4718_1740930400086.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>大部分随机数生成依赖于可信第三方机构等<br>NIST随机数生成器、Random.org网站、区块链上数据</li>
+</ul>
+<h1 id="DSS数字签名机制"><a href="#DSS数字签名机制" class="headerlink" title="DSS数字签名机制"></a>DSS数字签名机制</h1><blockquote>
+<p>DSA是DSS数字签名标准中所采用的数字签名算法；</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/839e932f875cbd93935d217667372775_1740930400086.png" alt="在这里插入图片描述"><br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/fd6d60cea1277a59a69b208c2251ba4d_1740930400086.png" alt="在这里插入图片描述"><br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/914b52d6cb405ea0490c99456790edfe_1740930400086.png" alt="在这里插入图片描述"></p>
+<h1 id="SM2数字签名算法"><a href="#SM2数字签名算法" class="headerlink" title="SM2数字签名算法"></a>SM2数字签名算法</h1><blockquote>
+<p>2010年12月17日，国家密码管理局颁布了中国商用公钥密码标准算法SM2。SM2是一组基于椭圆曲线的公钥密码算法。国家密码管理局公告(第21号) 详细描述了SM2系列算法。</p>
+<ol>
+<li>SM2是一组基于椭圆曲线的公钥密码算法</li>
+<li>包含加解密算法、<strong>数字签名算法</strong>和密钥交换协议</li>
+<li>本节讲解SM2公钥密码算法中的<strong>数字签名算法</strong></li>
+</ol>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b4d257a55abff7e9e83a6a2b78195e6b_1740930408909.png" alt="在这里插入图片描述"><br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/9087dc8ce30f88b9d398660ee766347e_1740930408909.png" alt="在这里插入图片描述"><br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/92ee3d13bb3d31f6358f9205051cf54d_1740930408909.png" alt="在这里插入图片描述"></p>
+<h1 id="具有特殊功能的数字签名机制"><a href="#具有特殊功能的数字签名机制" class="headerlink" title="具有特殊功能的数字签名机制"></a>具有特殊功能的数字签名机制</h1><h2 id="不可否认签名"><a href="#不可否认签名" class="headerlink" title="不可否认签名"></a>不可否认签名</h2><p>1989年，Chaum和Antwerpen提出不可否认签名的概念</p>
+<ul>
+<li>为什么需要不可否认签名?普通签名可以精确地被复制，适合公开声明之类文件的发布;但对于个人或公司信件，特别是有价值文件签名，不允许随意复制和发布。</li>
+<li><strong>这类签名要求在签名者合作下才能验证签名</strong>。如果无签名者合作，这类签名不可验证，从而可以防止恶意的攻击者随意<strong>复制和散布</strong>签名者所签的文件。</li>
+<li>这一性质可以用于<strong>知识产权的保护</strong>等，可在电子出版物的知识产权保护中大显身手。产权拥有者可以控制产品的发布。</li>
+</ul>
+<h2 id="防失败签名"><a href="#防失败签名" class="headerlink" title="防失败签名"></a>防失败签名</h2><p>1991年Pfitzmann和Waidner提出防失败签名的概念</p>
+<ul>
+<li>这是一种强安全性的数字签名，可防范<strong>有充足计算资源的攻击者。</strong></li>
+<li>当用户Alice的签名受到攻击，甚至在<strong>分析出Alice私钥的情况下</strong>，攻击者也难以伪造Alice的签名。</li>
+<li>同时，用户Alice也难以对自己的签名进行抵赖。</li>
+<li>van Heyst和Pederson曾提出了一个防失败签名方案，它是<strong>一次性签名</strong>方案， 即给定密钥只能签署一个消息。</li>
+</ul>
+<h2 id="盲签名"><a href="#盲签名" class="headerlink" title="盲签名"></a>盲签名</h2><p>1983年，Chuam等人最先提出了盲签名的概念</p>
+<ul>
+<li>对于一般的数字签名来说，签名者总要先知道文件内容后才签名，这是正常的应用情形。</li>
+<li>有时需要签名者对一 个文件做数字签名，但文<strong>件所有者不想让签名者知道文件的内容。</strong></li>
+<li>利用<strong>盲变换</strong>可以实现盲签名。</li>
+<li>在<strong>选举投票</strong>中，可以采用盲签名。(在不知道选票内容的情况下对选票签名)</li>
+<li>在<strong>数字货币协议</strong>中，可以采用盲签名。</li>
+<li>在<strong>电子商务系统</strong>中，盲签名有重要的应用。</li>
+</ul>
+<h2 id="群签名"><a href="#群签名" class="headerlink" title="群签名"></a>群签名</h2><p>1991年Chaum和van Heys提出群签名的概念</p>
+<ul>
+<li>只有<strong>群中的成员</strong>才能代表该群体进行数字签名。</li>
+<li>接收方用公钥验证群签名，但<strong>无法知道由群体中的哪个成员所签。</strong></li>
+<li>发生争议时，由<strong>群体中的成员或可信赖机构</strong>识别群签名的签名者。</li>
+<li>此类签名可以用于项目投标。例如:<br>各投标公司组成一个群体，且各公司都<strong>匿名地采用群签名</strong>对自己的标书签名。<br>当某公司中标后，<strong>招标方就可以识别出签名的公司</strong>，而其他标书<strong>仍保持匿名</strong>。<br>中标方若想反悔已无济于事，因为在没有他参与的情况下，仍可以正确地识别出签名人是谁。</li>
+</ul>
+<h2 id="代理签名"><a href="#代理签名" class="headerlink" title="代理签名"></a>代理签名</h2><p>1995年，Membo等人最先提出代理签名的概念</p>
+<ul>
+<li>代理签名就是<strong>委托人授权某个代理人</strong>进行的签名，在委托签名时，签名密钥不交给代理人。代理签名有如下几个特性:</li>
+</ul>
+<ol>
+<li><strong>不可区分性</strong>：代理签名与委托人的签名不可区分;</li>
+<li><strong>不可伪造性</strong>：只有委托人和代理人可以建立合法的签名;</li>
+<li><strong>代理签名的差异</strong>：代理人无法伪造一个合法的代理签名， 即伪造的代理签名可以被检测出来;</li>
+<li><strong>可证实性</strong>：签名验证人可以相信委托签名就是委托人认可的签名消息;</li>
+<li><strong>可识别性</strong>：委托人可从代理签名中确定出代理人的身份;</li>
+<li><strong>不可抵赖性</strong>：代理签名人不能抵赖已被接受的代理签名。</li>
+</ol>
+<h2 id="指定证实人签名"><a href="#指定证实人签名" class="headerlink" title="指定证实人签名"></a>指定证实人签名</h2><p>1994年，Okamoto等人最先提出指定证实人签名的概念</p>
+<ul>
+<li>在一个机构中，指定<strong>一个人负责证实所有人的签名</strong>。</li>
+<li>任何成员的签名都具有不可否认性， 但<strong>证实工作均由指定人完成</strong>。签名者必须限定由谁才能证实他的签名。</li>
+<li>证实人充当了<strong>仲裁角色</strong>，使用<strong>证实人的公钥</strong>验证所有人的签名。</li>
+<li>此类签名有助于<strong>防止签名失效</strong>。</li>
+<li>例如，在签名人的公钥确实丢失，或者在他休假、病倒或去世时，证实人都能对其签名进行验证。</li>
+</ul>
+<h2 id="一次性签名"><a href="#一次性签名" class="headerlink" title="一次性签名"></a>一次性签名</h2><p>1978年，Rabin最先提出<strong>一次性签名</strong>的概念</p>
+<ul>
+<li>签名者至多只能对一个消息进行签名，否则签名就可能被伪造。</li>
+<li>在公钥签名体制中，一次性签名要求对每个签名消息都要<strong>采用一个新的公钥</strong>作为验证参数。</li>
+<li>现有的一次性签名方案包括Rabin、Merkle、 GMR、Bos等方案。</li>
+<li>这类方案多与可信第三方(TTP) 结合，并通过认证树结构实现。</li>
+<li>一次性签名的优点是<strong>签名和验证速度非常快</strong>，特别适用于计算能力比较低的芯片和智能卡实现。</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>网络安全笔记5——数字签名</p><p><a href="https://shnpd.github.io/2022/08/07/网络安全笔记5——数字签名/">https://shnpd.github.io/2022/08/07/网络安全笔记5——数字签名/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>ShiHaonan</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2022-08-07</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-03-10</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/web%E5%AE%89%E5%85%A8-%E5%AE%89%E5%85%A8-%E7%BD%91%E7%BB%9C/">web安全 安全 网络</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/images/wxpay.jpg" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2022/08/09/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B06%E2%80%94%E2%80%94%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6%E4%B8%8E%E5%85%AC%E9%92%A5%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">网络安全笔记6——数字证书与公钥基础设施</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2022/08/06/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B04%E2%80%94%E2%80%94%E6%B6%88%E6%81%AF%E8%AE%A4%E8%AF%81%E4%B8%8E%E6%9D%82%E5%87%91%E5%87%BD%E6%95%B0/"><span class="level-item">网络安全笔记4——消息认证与杂凑函数</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card" id="comments"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://shnpd.github.io/2022/08/07/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B05%E2%80%94%E2%80%94%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D/';
+            this.page.identifier = '2022/08/07/网络安全笔记5——数字签名/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'shns-blog' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#网络安全笔记5——数字签名"><span class="level-left"><span class="level-item">1</span><span class="level-item">网络安全笔记5——数字签名</span></span></a></li><li><a class="level is-mobile" href="#基本概念"><span class="level-left"><span class="level-item">2</span><span class="level-item">基本概念</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#分类"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">分类</span></span></a></li><li><a class="level is-mobile" href="#数学表示"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">数学表示</span></span></a></li></ul></li><li><a class="level is-mobile" href="#RSA数字签名机制"><span class="level-left"><span class="level-item">3</span><span class="level-item">RSA数字签名机制</span></span></a></li><li><a class="level is-mobile" href="#ElGamal数字签名机制"><span class="level-left"><span class="level-item">4</span><span class="level-item">ElGamal数字签名机制</span></span></a></li><li><a class="level is-mobile" href="#Schnorr数字签名机制"><span class="level-left"><span class="level-item">5</span><span class="level-item">Schnorr数字签名机制</span></span></a></li><li><a class="level is-mobile" href="#DSS数字签名机制"><span class="level-left"><span class="level-item">6</span><span class="level-item">DSS数字签名机制</span></span></a></li><li><a class="level is-mobile" href="#SM2数字签名算法"><span class="level-left"><span class="level-item">7</span><span class="level-item">SM2数字签名算法</span></span></a></li><li><a class="level is-mobile" href="#具有特殊功能的数字签名机制"><span class="level-left"><span class="level-item">8</span><span class="level-item">具有特殊功能的数字签名机制</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#不可否认签名"><span class="level-left"><span class="level-item">8.1</span><span class="level-item">不可否认签名</span></span></a></li><li><a class="level is-mobile" href="#防失败签名"><span class="level-left"><span class="level-item">8.2</span><span class="level-item">防失败签名</span></span></a></li><li><a class="level is-mobile" href="#盲签名"><span class="level-left"><span class="level-item">8.3</span><span class="level-item">盲签名</span></span></a></li><li><a class="level is-mobile" href="#群签名"><span class="level-left"><span class="level-item">8.4</span><span class="level-item">群签名</span></span></a></li><li><a class="level is-mobile" href="#代理签名"><span class="level-left"><span class="level-item">8.5</span><span class="level-item">代理签名</span></span></a></li><li><a class="level is-mobile" href="#指定证实人签名"><span class="level-left"><span class="level-item">8.6</span><span class="level-item">指定证实人签名</span></span></a></li><li><a class="level is-mobile" href="#一次性签名"><span class="level-left"><span class="level-item">8.7</span><span class="level-item">一次性签名</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/CSP%E6%A8%A1%E5%9E%8B/">【Go】CSP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Channel/">【Go】Channel</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Context/">【Go】Context</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/defer&amp;os.Exit()/">【Go】defer和os.Exit()</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/GMP%E6%A8%A1%E5%9E%8B/">【Go】GMP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Fabric/"><span class="level-start"><span class="level-item">Fabric</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/Golang/"><span class="level-start"><span class="level-item">Golang</span></span><span class="level-end"><span class="level-item tag">44</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Shell%E8%84%9A%E6%9C%AC/"><span class="level-start"><span class="level-item">Shell脚本</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/bytedance/"><span class="level-start"><span class="level-item">bytedance</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"><span class="level-start"><span class="level-item">以太坊</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%88%B7%E9%A2%98%E9%9B%86/"><span class="level-start"><span class="level-item">刷题集</span></span><span class="level-end"><span class="level-item tag">27</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="level-start"><span class="level-item">前端</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="level-start"><span class="level-item">区块链</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AD%A6%E6%9C%AF/"><span class="level-start"><span class="level-item">学术</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"><span class="level-start"><span class="level-item">密码学</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%B0%8F%E7%A8%8B%E5%BA%8F/"><span class="level-start"><span class="level-item">小程序</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/"><span class="level-start"><span class="level-item">技术总结</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/%E5%85%B6%E5%AE%83/"><span class="level-start"><span class="level-item">其它</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><span class="level-start"><span class="level-item">数据结构</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"><span class="level-start"><span class="level-item">机器学习</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9D%82%E9%A1%B9/"><span class="level-start"><span class="level-item">杂项</span></span><span class="level-end"><span class="level-item tag">31</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%AF%94%E7%89%B9%E5%B8%81/"><span class="level-start"><span class="level-item">比特币</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/"><span class="level-start"><span class="level-item">知识点整理</span></span><span class="level-end"><span class="level-item tag">19</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/mysql/"><span class="level-start"><span class="level-item">mysql</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/"><span class="level-start"><span class="level-item">redis</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">算法</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"><span class="level-start"><span class="level-item">网络安全</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li></ul></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">shn&#039;s blog</a><p class="is-size-7"><span>&copy; 2025 ShiHaonan</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">Welcome to shn's blog!</p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

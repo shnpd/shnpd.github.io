@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>【Golang】Golang格式化输出 - shn&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="shn&#039;s blog"><meta name="msapplication-TileImage" content="/images/icon_blog.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="shn&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="​​点击阅读更多查看文章内容"><meta property="og:type" content="blog"><meta property="og:title" content="【Golang】Golang格式化输出"><meta property="og:url" content="https://shnpd.github.io/2022/11/16/%E3%80%90Golang%E3%80%91Golang%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA/"><meta property="og:site_name" content="shn&#039;s blog"><meta property="og:description" content="​​点击阅读更多查看文章内容"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://shnpd.github.io/img/og_image.png"><meta property="article:published_time" content="2022-11-16T02:09:50.000Z"><meta property="article:modified_time" content="2025-03-06T08:59:59.673Z"><meta property="article:author" content="ShiHaonan"><meta property="article:tag" content="golang 开发语言 后端"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://shnpd.github.io/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://shnpd.github.io/2022/11/16/%E3%80%90Golang%E3%80%91Golang%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA/"},"headline":"【Golang】Golang格式化输出","image":["https://shnpd.github.io/img/og_image.png"],"datePublished":"2022-11-16T02:09:50.000Z","dateModified":"2025-03-06T08:59:59.673Z","author":{"@type":"Person","name":"ShiHaonan"},"publisher":{"@type":"Organization","name":"shn's blog","logo":{"@type":"ImageObject","url":{"text":"shn's blog"}}},"description":"​​点击阅读更多查看文章内容"}</script><link rel="canonical" href="https://shnpd.github.io/2022/11/16/%E3%80%90Golang%E3%80%91Golang%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA/"><link rel="icon" href="/images/icon_blog.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><meta name="msvalidate.01" content="E38AFEA650A8300110261393E7FD0A39"><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">shn&#039;s blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-11-16T02:09:50.000Z" title="11/16/2022, 10:09:50 AM">2022-11-16</time>发表</span><span class="level-item"><time dateTime="2025-03-06T08:59:59.673Z" title="3/6/2025, 4:59:59 PM">2025-03-06</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Golang/">Golang</a></span><span class="level-item">8 分钟读完 (大约1150个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">【Golang】Golang格式化输出</h1><div class="content"><p>​​点击阅读更多查看文章内容<span id="more"></span></p>
+<h1 id="fmt"><a href="#fmt" class="headerlink" title="fmt"></a>fmt</h1><p>Go语言用于控制文本输出常用的标准库是<strong>fmt</strong></p>
+<p><strong>fmt</strong>中主要用于输出的函数有:</p>
+<ul>
+<li>Print: 输出到控制台，不接受任何格式化操作</li>
+<li>Println: 输出到控制台并换行</li>
+<li>Printf: 格式化输出，只可以打印出格式化的字符串，只可以直接输出字符串类型的变量（不可以直接输出别的类型）</li>
+<li>Sprintf: 格式化并返回一个字符串而不带任何输出</li>
+<li>Fprintf: 来格式化并输出到io.Writers而不是os.Stdout</li>
+</ul>
+<hr>
+<h1 id="格式化"><a href="#格式化" class="headerlink" title="格式化"></a>格式化</h1><p>通过Printf函数来测试下Go语言里面的字符串格式化:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fmt.Sprintf(格式化样式, 参数列表…)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>格式样式: 字符串形式，格式化符号以%开头，%s字符串格式，%d十进制的整数格式</li>
+<li>参数列表: 多个参数以逗号分隔，个数必须与格式化样式中的个数一一对应，否则运行时会报错</li>
+</ul>
+<p>比如:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">username := <span class="string">&quot;boy&quot;</span></span><br><span class="line">fmt.Printf(<span class="string">&quot;welcome, %s&quot;</span>, username)</span><br></pre></td></tr></table></figure>
+
+<h2 id="整数格式化"><a href="#整数格式化" class="headerlink" title="整数格式化"></a>整数格式化</h2><table>
+<thead>
+<tr>
+<th>占 位 符</th>
+<th>描 述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>%b</td>
+<td>整数以二进制方式显示</td>
+</tr>
+<tr>
+<td>%o</td>
+<td>整数以八进制方式显示</td>
+</tr>
+<tr>
+<td>%d</td>
+<td>整数以十进制方式显示</td>
+</tr>
+<tr>
+<td>%x</td>
+<td>整数以十六进制方式显示</td>
+</tr>
+<tr>
+<td>%X</td>
+<td>整数以十六进制、字母大写方式显示</td>
+</tr>
+<tr>
+<td>%c</td>
+<td>相应Unicode码点所表示的字符</td>
+</tr>
+<tr>
+<td>%U</td>
+<td>Unicode字符，Unicode格式：123，等同于“U+007B”</td>
+</tr>
+</tbody></table>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%b \n&quot;</span>, <span class="number">123</span>) <span class="comment">//1111011</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%o \n&quot;</span>, <span class="number">123</span>) <span class="comment">//173</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%d \n&quot;</span>, <span class="number">123</span>) <span class="comment">//123</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%x \n&quot;</span>, <span class="number">123</span>) <span class="comment">//7b</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%X \n&quot;</span>, <span class="number">123</span>) <span class="comment">//7B   </span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%c \n&quot;</span>, <span class="number">123</span>) <span class="comment">//&#123;</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%U \n&quot;</span>, <span class="number">123</span>) <span class="comment">//U+007B </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="浮点数格式化"><a href="#浮点数格式化" class="headerlink" title="浮点数格式化"></a>浮点数格式化</h2><table>
+<thead>
+<tr>
+<th>占 位 符</th>
+<th>描 述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>%e</td>
+<td>科学计数法，例如 1.234560e+02</td>
+</tr>
+<tr>
+<td>%E</td>
+<td>科学计数法，例如 1.234560E+02</td>
+</tr>
+<tr>
+<td>%f</td>
+<td>有小数点而无指数，例如 123.456</td>
+</tr>
+<tr>
+<td>%F</td>
+<td>等价于%f</td>
+</tr>
+<tr>
+<td>%g</td>
+<td>根据情况选择 %e 或 %f 以产生更紧凑的（无末尾的0）输出</td>
+</tr>
+<tr>
+<td>%G</td>
+<td>根据情况选择 %E 或 %F 以产生更紧凑的（无末尾的0）输出</td>
+</tr>
+</tbody></table>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%e \n&quot;</span>, <span class="number">123.456</span>) <span class="comment">//1.234560e+02</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%E \n&quot;</span>, <span class="number">123.456</span>) <span class="comment">//1.234560E+02</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%f \n&quot;</span>, <span class="number">123.456</span>) <span class="comment">//123.456000</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%F \n&quot;</span>, <span class="number">123.456</span>) <span class="comment">//123.456000</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%g \n&quot;</span>, <span class="number">123.456</span>) <span class="comment">//123.456</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%G \n&quot;</span>, <span class="number">123.456</span>) <span class="comment">//123.456 </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="布尔类型格式化"><a href="#布尔类型格式化" class="headerlink" title="布尔类型格式化"></a>布尔类型格式化</h2><table>
+<thead>
+<tr>
+<th>占 位 符</th>
+<th>描 述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>%t</td>
+<td>true 或 false</td>
+</tr>
+</tbody></table>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%t&quot;</span>, <span class="literal">true</span>) <span class="comment">//true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="字符格式化"><a href="#字符格式化" class="headerlink" title="字符格式化"></a>字符格式化</h2><table>
+<thead>
+<tr>
+<th>占 位 符</th>
+<th>描 述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>%c</td>
+<td>相应Unicode码点所表示的字符</td>
+</tr>
+</tbody></table>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%c&quot;</span>, <span class="number">0x4E2D</span>) <span class="comment">//中</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="字符串格式化"><a href="#字符串格式化" class="headerlink" title="字符串格式化"></a>字符串格式化</h2><table>
+<thead>
+<tr>
+<th>占 位 符</th>
+<th>描 述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>%s</td>
+<td>直接输出字符串或者[]byte</td>
+</tr>
+<tr>
+<td>%q</td>
+<td>双引号围绕的字符串，由Go语法安全地转义</td>
+</tr>
+<tr>
+<td>%x</td>
+<td>每个字节用两字符十六进制数表示（使用a-f）</td>
+</tr>
+<tr>
+<td>%X</td>
+<td>每个字节用两字符十六进制数表示（使用A-F）</td>
+</tr>
+</tbody></table>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%s \n&quot;</span>, <span class="string">&quot;Hello world&quot;</span>) <span class="comment">//Hello world</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%q \n&quot;</span>, <span class="string">&quot;Hello world&quot;</span>) <span class="comment">//&quot;Hello world&quot;</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%x \n&quot;</span>, <span class="string">&quot;Hello world&quot;</span>) <span class="comment">//48656c6c6f20776f726c64</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%X \n&quot;</span>, <span class="string">&quot;Hello world&quot;</span>) <span class="comment">//48656C6C6F20776F726C64</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="指针格式化"><a href="#指针格式化" class="headerlink" title="指针格式化"></a>指针格式化</h2><table>
+<thead>
+<tr>
+<th>占 位 符</th>
+<th>描 述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>%p</td>
+<td>表示为十六进制，并加上前导的0x</td>
+</tr>
+<tr>
+<td>%#p</td>
+<td>表示为十六进制，没有前导的0x</td>
+</tr>
+</tbody></table>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := <span class="string">&quot;Hello world&quot;</span></span><br><span class="line">	b := &amp;a</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%p \n&quot;</span>, b)  <span class="comment">//0xc000046230</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%#p \n&quot;</span>, b) <span class="comment">//c000046230</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="通用占位符"><a href="#通用占位符" class="headerlink" title="通用占位符"></a>通用占位符</h2><table>
+<thead>
+<tr>
+<th>占 位 符</th>
+<th>描 述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>%v</td>
+<td>值的默认格式</td>
+</tr>
+<tr>
+<td>%+v</td>
+<td>类似%v，但输出结构体时会添加字段名</td>
+</tr>
+<tr>
+<td>%#v</td>
+<td>相应值的Go语法表示</td>
+</tr>
+<tr>
+<td>%T</td>
+<td>相应值的类型的Go语法表示</td>
+</tr>
+<tr>
+<td>%%</td>
+<td>百分号,字面上的%,非占位符含义</td>
+</tr>
+</tbody></table>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%v \n&quot;</span>, <span class="string">&quot;Hello World&quot;</span>)   <span class="comment">//Hello World</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%+v \n&quot;</span>, <span class="string">&quot;Hello World&quot;</span>)  <span class="comment">//Hello World</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%#v \n&quot;</span>, <span class="string">&quot;Hello World&quot;</span>)  <span class="comment">//&quot;Hello World&quot;</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%T \n&quot;</span>, <span class="string">&quot;Hello World&quot;</span>)   <span class="comment">//string</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%%%v \n&quot;</span>, <span class="string">&quot;Hello World&quot;</span>) <span class="comment">//%Hello World</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="宽度表示"><a href="#宽度表示" class="headerlink" title="宽度表示"></a>宽度表示</h2><p><strong>浮点数精度控制</strong><br>宽度通过一个紧跟在百分号后面的十进制数指定，如果未指定宽度，则表示值时除必需之外不作填充。<br>精度通过（可选的）宽度后跟点号后跟的十进制数指定。如果未指定精度，会使用默认精度；如果点号后没有跟数字，表示精度为0。举例如下</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;|%f|\n&quot;</span>, <span class="number">123.456</span>)     <span class="comment">//|123.456000|</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;|%12f|\n&quot;</span>, <span class="number">123.456</span>)   <span class="comment">//|  123.456000|</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;|%.3f|\n&quot;</span>, <span class="number">123.456</span>)   <span class="comment">//|123.456|</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;|%12.3f|\n&quot;</span>, <span class="number">123.456</span>) <span class="comment">//|     123.456|</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;|%12.f|\n&quot;</span>, <span class="number">123.456</span>)  <span class="comment">//|         123|</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>字符串长度控制</strong></p>
+<p>宽度设置格式：占位符中间加一个数字, 数字分正负, +: 右对齐, -: 左对齐<br>最小宽度：百分号后紧跟十进制数，不够部分可以选择补0<br>最大宽度：小数点后的十进制数，超出的部分会被截断</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;|%s|\n&quot;</span>, <span class="string">&quot;123.456&quot;</span>)    <span class="comment">//|123.456|</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;|%12s|\n&quot;</span>, <span class="string">&quot;123.456&quot;</span>)  <span class="comment">//|     123.456|</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;|%-12s|\n&quot;</span>, <span class="string">&quot;123.456&quot;</span>) <span class="comment">//|123.456     |</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;|%012s|\n&quot;</span>, <span class="string">&quot;123.456&quot;</span>) <span class="comment">//|00000123.456|</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;|%.5s|\n&quot;</span>, <span class="string">&quot;123.456&quot;</span>)  <span class="comment">//|123.4|</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</div><div class="article-licensing box"><div class="licensing-title"><p>【Golang】Golang格式化输出</p><p><a href="https://shnpd.github.io/2022/11/16/【Golang】Golang格式化输出/">https://shnpd.github.io/2022/11/16/【Golang】Golang格式化输出/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>ShiHaonan</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2022-11-16</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-03-06</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/golang-%E5%BC%80%E5%8F%91%E8%AF%AD%E8%A8%80-%E5%90%8E%E7%AB%AF/">golang 开发语言 后端</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/images/wxpay.jpg" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2022/12/04/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%841%E3%80%91%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">【数据结构1】数据结构的基本概念</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2022/11/12/fabric%E7%BD%91%E7%BB%9C%E6%90%AD%E5%BB%BA/"><span class="level-item">fabric网络搭建</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card" id="comments"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://shnpd.github.io/2022/11/16/%E3%80%90Golang%E3%80%91Golang%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA/';
+            this.page.identifier = '2022/11/16/【Golang】Golang格式化输出/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'shns-blog' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#fmt"><span class="level-left"><span class="level-item">1</span><span class="level-item">fmt</span></span></a></li><li><a class="level is-mobile" href="#格式化"><span class="level-left"><span class="level-item">2</span><span class="level-item">格式化</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#整数格式化"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">整数格式化</span></span></a></li><li><a class="level is-mobile" href="#浮点数格式化"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">浮点数格式化</span></span></a></li><li><a class="level is-mobile" href="#布尔类型格式化"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">布尔类型格式化</span></span></a></li><li><a class="level is-mobile" href="#字符格式化"><span class="level-left"><span class="level-item">2.4</span><span class="level-item">字符格式化</span></span></a></li><li><a class="level is-mobile" href="#字符串格式化"><span class="level-left"><span class="level-item">2.5</span><span class="level-item">字符串格式化</span></span></a></li><li><a class="level is-mobile" href="#指针格式化"><span class="level-left"><span class="level-item">2.6</span><span class="level-item">指针格式化</span></span></a></li><li><a class="level is-mobile" href="#通用占位符"><span class="level-left"><span class="level-item">2.7</span><span class="level-item">通用占位符</span></span></a></li><li><a class="level is-mobile" href="#宽度表示"><span class="level-left"><span class="level-item">2.8</span><span class="level-item">宽度表示</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/CSP%E6%A8%A1%E5%9E%8B/">【Go】CSP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Channel/">【Go】Channel</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/Context/">【Go】Context</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/defer&amp;os.Exit()/">【Go】defer和os.Exit()</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/GMP%E6%A8%A1%E5%9E%8B/">【Go】GMP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Fabric/"><span class="level-start"><span class="level-item">Fabric</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/Golang/"><span class="level-start"><span class="level-item">Golang</span></span><span class="level-end"><span class="level-item tag">44</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Shell%E8%84%9A%E6%9C%AC/"><span class="level-start"><span class="level-item">Shell脚本</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/bytedance/"><span class="level-start"><span class="level-item">bytedance</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"><span class="level-start"><span class="level-item">以太坊</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%88%B7%E9%A2%98%E9%9B%86/"><span class="level-start"><span class="level-item">刷题集</span></span><span class="level-end"><span class="level-item tag">27</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="level-start"><span class="level-item">前端</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="level-start"><span class="level-item">区块链</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AD%A6%E6%9C%AF/"><span class="level-start"><span class="level-item">学术</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"><span class="level-start"><span class="level-item">密码学</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%B0%8F%E7%A8%8B%E5%BA%8F/"><span class="level-start"><span class="level-item">小程序</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/"><span class="level-start"><span class="level-item">技术总结</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/%E5%85%B6%E5%AE%83/"><span class="level-start"><span class="level-item">其它</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><span class="level-start"><span class="level-item">数据结构</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"><span class="level-start"><span class="level-item">机器学习</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9D%82%E9%A1%B9/"><span class="level-start"><span class="level-item">杂项</span></span><span class="level-end"><span class="level-item tag">31</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%AF%94%E7%89%B9%E5%B8%81/"><span class="level-start"><span class="level-item">比特币</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/"><span class="level-start"><span class="level-item">知识点整理</span></span><span class="level-end"><span class="level-item tag">19</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/mysql/"><span class="level-start"><span class="level-item">mysql</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/"><span class="level-start"><span class="level-item">redis</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">算法</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"><span class="level-start"><span class="level-item">网络安全</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li></ul></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">shn&#039;s blog</a><p class="is-size-7"><span>&copy; 2025 ShiHaonan</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">Welcome to shn's blog!</p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
