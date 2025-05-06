@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>操作系统笔记整理12——磁盘存储器的管理 - shn&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="shn&#039;s blog"><meta name="msapplication-TileImage" content="/images/icon_blog.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="shn&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="​​点击阅读更多查看文章内容"><meta property="og:type" content="blog"><meta property="og:title" content="操作系统笔记整理12——磁盘存储器的管理"><meta property="og:url" content="https://shnpd.github.io/2022/01/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%8612%E2%80%94%E2%80%94%E7%A3%81%E7%9B%98%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E7%AE%A1%E7%90%86/"><meta property="og:site_name" content="shn&#039;s blog"><meta property="og:description" content="​​点击阅读更多查看文章内容"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e8441b111efea8ca096c63c909b98fdf_1740931083040.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/aaf3e69a24f5a7176ea824596c3950f6_1740931083040.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/3f05c76797f502328d1a2807c70b4f0c_1740931083040.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/4187b44160431612d1a02231d7bb3007_1740931083040.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/c66cbb687cb51e5da8e0d9b1348c1f71_1740931089313.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a68b7bcbf61841932f1634aead8a2ca2_1740931089313.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/0449353e62a7ae7617192a35f5d5bb2a_1740931089313.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/66883cd4ed5ea6534fa65ee6701fc335_1740931089313.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/9a3dad6db90dacfca4c15b5c59f19976_1740931089313.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/2dc0d74376ec98fe3c29dacc2a6011c3_1740931096499.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/60e03cd358dfa733e51d997cb716e0bd_1740931096499.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/2a1e9e0c736dfaa1488e7b6576ae54ed_1740931096499.png"><meta property="article:published_time" content="2022-01-02T05:22:31.000Z"><meta property="article:modified_time" content="2025-03-13T08:46:42.039Z"><meta property="article:author" content="ShiHaonan"><meta property="article:tag" content="操作系统"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e8441b111efea8ca096c63c909b98fdf_1740931083040.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://shnpd.github.io/2022/01/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%8612%E2%80%94%E2%80%94%E7%A3%81%E7%9B%98%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E7%AE%A1%E7%90%86/"},"headline":"操作系统笔记整理12——磁盘存储器的管理","image":["https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e8441b111efea8ca096c63c909b98fdf_1740931083040.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/aaf3e69a24f5a7176ea824596c3950f6_1740931083040.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/3f05c76797f502328d1a2807c70b4f0c_1740931083040.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/4187b44160431612d1a02231d7bb3007_1740931083040.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/c66cbb687cb51e5da8e0d9b1348c1f71_1740931089313.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a68b7bcbf61841932f1634aead8a2ca2_1740931089313.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/0449353e62a7ae7617192a35f5d5bb2a_1740931089313.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/66883cd4ed5ea6534fa65ee6701fc335_1740931089313.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/9a3dad6db90dacfca4c15b5c59f19976_1740931089313.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/2dc0d74376ec98fe3c29dacc2a6011c3_1740931096499.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/60e03cd358dfa733e51d997cb716e0bd_1740931096499.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/2a1e9e0c736dfaa1488e7b6576ae54ed_1740931096499.png"],"datePublished":"2022-01-02T05:22:31.000Z","dateModified":"2025-03-13T08:46:42.039Z","author":{"@type":"Person","name":"ShiHaonan"},"publisher":{"@type":"Organization","name":"shn's blog","logo":{"@type":"ImageObject","url":{"text":"shn's blog"}}},"description":"​​点击阅读更多查看文章内容"}</script><link rel="canonical" href="https://shnpd.github.io/2022/01/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%8612%E2%80%94%E2%80%94%E7%A3%81%E7%9B%98%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E7%AE%A1%E7%90%86/"><link rel="icon" href="/images/icon_blog.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><meta name="msvalidate.01" content="E38AFEA650A8300110261393E7FD0A39"><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">shn&#039;s blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-01-02T05:22:31.000Z" title="1/2/2022, 1:22:31 PM">2022-01-02</time>发表</span><span class="level-item"><time dateTime="2025-03-13T08:46:42.039Z" title="3/13/2025, 4:46:42 PM">2025-03-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></span><span class="level-item">1 小时读完 (大约7713个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">操作系统笔记整理12——磁盘存储器的管理</h1><div class="content"><p>​​点击阅读更多查看文章内容<span id="more"></span></p>
+<h1 id="点此链接可跳转到：操作系统笔记整理——目录索引页"><a href="#点此链接可跳转到：操作系统笔记整理——目录索引页" class="headerlink" title="点此链接可跳转到：操作系统笔记整理——目录索引页"></a><a target="_blank" rel="noopener" href="https://blog.csdn.net/shn111/article/details/122296621">点此链接可跳转到：操作系统笔记整理——目录索引页</a></h1><blockquote>
+<p>参考书籍：《计算机操作系统》第四版 汤小丹等编著</p>
+</blockquote>
+<blockquote>
+<p>@[toc]</p>
+</blockquote>
+<h1 id="外存的组织方式"><a href="#外存的组织方式" class="headerlink" title="外存的组织方式"></a>外存的组织方式</h1><p>外存的组织方式有</p>
+<ul>
+<li>连续组织方式：为每个文件分配一片连续的磁盘空间，由此所形成的文件物理结构将是顺序式的文件结构</li>
+<li>链接组织方式：可以为每个文件分配不连续的磁盘空间，通过链接指针将一个文件的所有盘块链接在一起，由此所形成的是链接式的文件结构</li>
+<li>索引组织方式：索引式文件结构</li>
+</ul>
+<h2 id="连续组织方式"><a href="#连续组织方式" class="headerlink" title="连续组织方式"></a>连续组织方式</h2><p>为每一个文件分配一片连续的磁盘块。例如，第一个盘块的地址为b，则第二个盘块的地址为b+1，第三个盘块的地址为b+2。通常它们都位于一条磁道上，在进行读&#x2F;写时不必移动磁头，仅当访问到磁道的最后一个盘块后才需要移到下一条磁道。<br>这样所形成的文件结构称为顺序文件结构，此时的物理文件称为顺序文件。<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e8441b111efea8ca096c63c909b98fdf_1740931083040.png" alt="在这里插入图片描述"><br>文件目录项中只需要保存文件的起始块号和长度（连续的块数）。<br>连续组织方式会形成外部碎片。可以通过紧凑 (compact) 技术把外存空闲空间合并成连续的区域。但对外存空间的一次紧凑所花费的时间远比内存紧凑一次的时间多。</p>
+<p><strong>优点</strong>：</p>
+<ol>
+<li>顺序访问容易</li>
+<li>访问速度快，磁头移动距离少（换磁道时才移动）。</li>
+<li>保证了逻辑文件中的记录顺序与存储器中文件占用盘块的顺序的一致性。 从逻辑地址映射到物理地址较简单。</li>
+</ol>
+<p><strong>缺点</strong>：</p>
+<ol>
+<li>要求有连续的存储空间。</li>
+<li>存在外部碎片</li>
+<li>必须事先知道文件的长度。有时需要估计（预留空间问题）。</li>
+<li>不能灵活地插入删除</li>
+</ol>
+<h2 id="链接组织方式"><a href="#链接组织方式" class="headerlink" title="链接组织方式"></a>链接组织方式</h2><p>将文件装到多个<strong>离散</strong>的盘块中，通过每个盘块上的链接指针，将同属于一个文件的多个盘块链接成一个链表，由此所形成的的物理文件称为链接文件。</p>
+<p>链接分配分为隐式链接和显式链接两种。</p>
+<h3 id="隐式链接"><a href="#隐式链接" class="headerlink" title="隐式链接"></a>隐式链接</h3><p>采用隐式链接分配方式时，在文件目录的每个目录项中，保存指向链接文件第一个盘块和最后一个盘块的指针。<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/aaf3e69a24f5a7176ea824596c3950f6_1740931083040.png" alt="在这里插入图片描述"><br><strong>缺点</strong>：</p>
+<ul>
+<li>只适合于顺序访问，对随机访问极其低效。如果要访问文件所在的第 i 个盘块，则必须先读出文件的第一个盘块，· · · ，顺序地查找直至第 i 块（访问第 i 盘块，需要启动 i 次磁盘）。</li>
+<li>可靠性差，任何一个指针出现问题，都会导致整个链的断开。</li>
+<li>指针占存储空间。如果指针占用 4 个字节，对于盘块大小为 512 字节的磁盘，则每个盘块中只有 508 个字节可供用户使用。</li>
+</ul>
+<h3 id="显示链接"><a href="#显示链接" class="headerlink" title="显示链接"></a>显示链接</h3><p>把用于链接的指针显式地存放在内存的一张表中，查找在内存中进行。</p>
+<p>文件分配表 FAT (File Allocation Table)</p>
+<ul>
+<li>文件分配表在整个逻辑磁盘分区仅设置一张。 表序号为整个磁盘的物理块号。</li>
+<li>表项中存放链接指针，即下一个块号。 </li>
+<li>文件的首块号存入相应文件的 FCB 中。</li>
+</ul>
+<p>特点：FAT 表在内存中，查找记录的过程是在内存中进行的，不仅显著地提高了检索速度，而且大大减少了访问磁盘的次数。<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/3f05c76797f502328d1a2807c70b4f0c_1740931083040.png" alt="在这里插入图片描述"><br><strong>缺点</strong>：</p>
+<ul>
+<li>FAT表需占用较大的内存空间</li>
+</ul>
+<h2 id="FAT-File-Allocation-Table-技术"><a href="#FAT-File-Allocation-Table-技术" class="headerlink" title="FAT(File Allocation Table)技术"></a>FAT(File Allocation Table)技术</h2><p>在FAT中引入了“卷”的概念，支持将一个物理磁盘分成四个逻辑磁盘，每个逻辑磁盘就是一个卷(也称为分区)，每个卷都是一个能被单独格式化和使用的逻辑单元，供文件系统分配空间时使用。</p>
+<p>一个卷中包含了文件系统信息，一组文件以及空闲空间。每个卷都有专门区域存放自己的目录和FAT表，以及自己的逻辑驱动器字母。(通常对仅有一个硬盘的计算机，最多将其硬盘划分为”C:”、”D:”、”E:”、”F:”四个卷)。在现代OS中，一个物理磁盘可以划分成多个卷，一个卷也可以由多个物理磁盘组成。</p>
+<p>FAT 文件系统共三个版本：FAT12，FAT16 和 FAT32。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/4187b44160431612d1a02231d7bb3007_1740931083040.png" alt="在这里插入图片描述"></p>
+<h3 id="簇的概念"><a href="#簇的概念" class="headerlink" title="簇的概念"></a>簇的概念</h3><blockquote>
+<p>若干个连续的扇区 (sector) 或盘块称为一簇，簇的大小一般是 2^n^ 个扇区或盘块。比如，一个簇可包含4个盘块，在进行盘块分配时，是以簇为单位进行的。在链接文件中的每个元素也是以簇为单位的。FAT文件系统把簇作为一个虚拟扇区。文件的存储空间通常由多个簇组成。</p>
+</blockquote>
+<p><strong>如何选择簇的大小</strong><br>两个极端：大到能容纳整个文件，小到一个扇区。<br>如果簇较大：可提高 I&#x2F;O 访问性能，减少访问时间，但簇内碎片浪费问题 较严重。<br>如果簇较小：簇内的碎片浪费较小，但可能存在簇编号空间不够的问题（如 FAT12、16）。</p>
+<h3 id="FAT12文件系统"><a href="#FAT12文件系统" class="headerlink" title="FAT12文件系统"></a>FAT12文件系统</h3><p>每个 FAT 表的表项数占 12 位，即 FAT 表最多允许4096(2^12^)个表项。<br>如果采用盘块作为基本分配单位，每个盘块（扇区）的大小一般是 512 字节，则每个磁盘分区的容量为 2MB（4096×512 B）。一个物理磁盘最多支持 4 个逻辑磁盘分区，所以可管理的磁盘最大容量为 8MB。<br>如果采用簇（cluster）作为基本分配单位，当一个簇包含 8 个扇区时， 磁盘容量可以达到 64MB。</p>
+<blockquote>
+<p>磁盘分区容量与簇大小的关系</p>
+<ul>
+<li>如果磁盘分区容量增加，而簇的总数保持不变即簇编号所需位数保持不变，则簇就变大。缺点是簇内碎片浪费增加。</li>
+<li>如果磁盘分区容量增加，而簇的大小不变，则簇的总数就会增加，相应地簇的编号所需要的位数增加。</li>
+</ul>
+<p>以簇作为基本分配单位的优点：</p>
+<ul>
+<li>可以管理较大容量磁盘。</li>
+<li>在相同的磁盘容量条件下，可以减少 FAT 表的表项数，使 FAT 表占用更少的存储空间，减少了访问 FAT 表的存取开销，提高了文件系统的效率。</li>
+</ul>
+</blockquote>
+<h3 id="FAT16文件系统"><a href="#FAT16文件系统" class="headerlink" title="FAT16文件系统"></a>FAT16文件系统</h3><p>每个 FAT 表的表项数占 16 位，即 FAT 表最多允许65536(2^16^)个表项。<br>一个磁盘分区可以管理 65536 个簇。在 FAT16 的每个簇中可以有的盘块数为 4、8、16、32、64。如果每个簇中最大的盘块或扇区数为 64，FAT16可以管理的最大分区空间为 65536× 64×512 &#x3D; 2048 MB。（不引入簇为 32MB）</p>
+<p>优点：可以管理更大的容量磁盘。<br>缺点：当磁盘容量迅速增加时，FAT16 文件系统簇内碎片所造成的浪费 比较严重。</p>
+<h3 id="FAT32文件系统"><a href="#FAT32文件系统" class="headerlink" title="FAT32文件系统"></a>FAT32文件系统</h3><p>每个 FAT 表的表项数占 32 位，即 FAT 表最多允许 2^32^&#x3D;4,294,967,296 个表项。<br>FAT32 可以管理更多的簇，这样就允许采用较小的簇（较少簇内碎片），通常FAT32 的每个簇都固定为 4 KB（如果盘块大小为 512B，则每簇包括 8 个扇区）。</p>
+<p><strong>缺点</strong></p>
+<ul>
+<li>FAT表很大，运行速度慢</li>
+<li>有最小管理空间的限制，FAT32卷至少要有65537个簇，不支持容量小于512MB的分区</li>
+</ul>
+<h2 id="NTFS-New-Technology-File-System-文件系统"><a href="#NTFS-New-Technology-File-System-文件系统" class="headerlink" title="NTFS(New Technology File System)文件系统"></a>NTFS(New Technology File System)文件系统</h2><p>NTFS是目前的主流文件系统</p>
+<p>NTFS 具有很多新特征：</p>
+<ul>
+<li>NTFS 文件系统使用了 64 位磁盘地址，理论上可以支持 2^64^ 字节的磁盘分区（实际支持最大分区容量为 2TB）。</li>
+<li>支持长文件名，单个文件名限制在 255 个字符以内，全路径名为 32767 个 字符。</li>
+<li>具有系统容错功能。</li>
+<li>提供了数据的一致性功能（日志文件和检查点）。</li>
+<li>提供了文件加密、文件压缩等功能。</li>
+</ul>
+<h3 id="磁盘的组织"><a href="#磁盘的组织" class="headerlink" title="磁盘的组织"></a>磁盘的组织</h3><p>NTFS 也是以簇作为磁盘空间分配和回收的基本单位。一个文件占用若 干个簇，一个簇只属于一个文件。</p>
+<p>NTFS 通过簇来间接管理磁盘，不需要知道盘块的大小，使 NTFS 具有了与磁盘物理盘块大小无关的独立性，很容易支持盘块大小不是 512 字节的非标准磁盘。</p>
+<p>在 NTFS 文件系统中，把卷上簇的大小称为“卷因子”，一个簇包含 2^n^(n为整数) 个盘块。</p>
+<p>簇的大小可由格式化命令按磁盘容量和应用需求来确定，可以为 512B、1KB、…，最大可达64KB。为了在传输效率和簇内碎片之间进行折中，NTFS 在大多数情况下簇的大小 4KB。</p>
+<p>NTFS 使用逻辑簇号（LCN）和虚拟簇号（VCN）来进行簇的定位。</p>
+<p>LCN是以卷为单位，把整个卷中所有的簇从头到尾进行简单的编号。NTFS 在进行地址映射时，可以通过卷因子与 LCN 的乘积，便可算出卷上的物理字节偏移量，从而得到文件数据所在的物理磁盘地址。</p>
+<p>VCN是以文件为单位，把某个文件的簇按顺序编号。<br>只要知道了文件开始的簇地址，就可以把 VCN 映射到 LCN。</p>
+<h3 id="文件的组织"><a href="#文件的组织" class="headerlink" title="文件的组织"></a>文件的组织</h3><p>在 NTFS 中，以卷为单位，把一个卷中的所有文件信息都以文件记录的方式记录在一张主控文件表 MFT (Master File Table) 中。</p>
+<p>MFT 为每一个文件保存着一组称为“属性”的记录，在 MFT 中占有一行。每行大小固定为 1 KB，每行称为所对应文件的元数据 (metadata)，也称为文件控制字。</p>
+<p>当文件较小时，可以把文件的所有属性直接记录在元数据中。<br>当文件较大时，元数据仅记录该文件的一部分属性，文件的 data 属性（文件内容）等记录到卷中的其它簇中，并将这些簇按其所记录文件的属性进行分类，分别链接成多个队列，并将指向这些队列的指针保存在元数据中。</p>
+<h2 id="索引组织方式"><a href="#索引组织方式" class="headerlink" title="索引组织方式"></a>索引组织方式</h2><blockquote>
+<p>链接分配方式解决了连续分配方式存在的问题（要求连续空间、外部碎 片等），但又出现了另外两个问题：<br>不能支持高效的直接存取。隐式链接分配方式查找某一个块必须从第一块开始沿指针进行。显式链接分配方式要对一个较大的文件进行直接存取， 必须首先在 FAT 中顺序地查找许多盘块号。<br>FAT 需占用较大的内存空间。由于一个文件所占用盘块的盘块号是随机地分布在 FAT 表中的，因而只有将整个 FAT 表调入内存，才能保证在 FAT 表中找到一个文件的所有盘块号。当磁盘容量较大时，FAT 表可能要占用数兆字节的内存空间，这是令人难以接受的。</p>
+</blockquote>
+<p>事实上在打开某个文件时，只需把该文件占用的盘块编号调入内存即可， 没有必要把整个 FAT 表调入内存。</p>
+<p>改进：把每个文件所对应的盘块号集中地放在一起，在访问到某个文件时，将该文件所对应的盘块号一起调入内存。</p>
+<p>索引分配：为每一个文件分配一个索引块（表），再把分配给该文件的所有块号，都记录在该索引块中。索引块就是一个含有许多块号地址的数组。</p>
+<h3 id="单级索引分配"><a href="#单级索引分配" class="headerlink" title="单级索引分配"></a>单级索引分配</h3><p>单级索引分配为每个文件分配一个索引块 (表)，把分配给该文件的所有盘块号都记录在该索引块中。<br>在建立一个文件时，只需在该文件的目录项中填上指向索引块的指针<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/c66cbb687cb51e5da8e0d9b1348c1f71_1740931089313.png" alt="在这里插入图片描述"></p>
+<h3 id="多级索引分配"><a href="#多级索引分配" class="headerlink" title="多级索引分配"></a>多级索引分配</h3><p>多级索引分配为这些索引块再建立一级索引，即系统再分配一个（目录）索引块，作为第一级索引的索引块（两级索引）。</p>
+<blockquote>
+<p>如果每个盘块的大小为 1 KB，每个盘块号占 4 个字节，则在一个索引块 中可存放 256 个盘块号。在两级索引时，最多可存放的盘块号总数 N &#x3D;  256×256 &#x3D; 64 K 个，即所允许的文件最大长度为 64 MB。<br>如果每个盘块的大小为 4 KB，每个盘块号占 4 个字节，单级索引时所允 许的文件最大长度为 1024×4 KB &#x3D;4MB<br>如果采用两级级索引时最大文件长度为 1024×1024×4 KB &#x3D;4GB</p>
+</blockquote>
+<p>优点：大大加快了对文件的查找速度<br>缺点：启动磁盘的次数随着索引级数的增加而增多</p>
+<h3 id="增量式索引组织方式"><a href="#增量式索引组织方式" class="headerlink" title="增量式索引组织方式"></a>增量式索引组织方式</h3><p>在采用混合索引分配方式的文件系统中，索引结点中设置了 13 个地址项，前10 个是直接地址项，后 3 个是间接地址项。</p>
+<p>直接地址：在索引结点中设置 10 个直接地址项，用来存放直接地址。假如每个 盘块的大小为 4KB，当文件不大于 40KB 时，便可直接从索引结点中读出该文件的全部盘块号。</p>
+<p>一次间接地址：利用索引结点中的一次间接地址项来提供一次间址。一次间址块中可存放 1K 个盘块号，允许文件长达 4MB。事实上就是一级索引分配方式<br>多次间接地址：利用二次间接地址项提供二次间接地址。在采用二次间址方式 时，文件最大长度可达 4GB。同理在采用三次间地方式时，所允许的文件最大长度可达 4TB。实质上就是二级索引分配方式。<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a68b7bcbf61841932f1634aead8a2ca2_1740931089313.png" alt="在这里插入图片描述"></p>
+<h1 id="文件存储空间的管理"><a href="#文件存储空间的管理" class="headerlink" title="文件存储空间的管理"></a>文件存储空间的管理</h1><blockquote>
+<p>文件存储空间的管理可采用连续分配和离散分配方式。<br>内存分配基本不采用连续分配方式。外存管理中，小文件经常采用连续分配方式，大文件采用离散分配方式。</p>
+</blockquote>
+<p>存储空间的常用管理方法</p>
+<ul>
+<li>空闲表法和空闲链法</li>
+<li>位示图法</li>
+<li>成组链接法</li>
+</ul>
+<h2 id="空闲表法和空闲链法"><a href="#空闲表法和空闲链法" class="headerlink" title="空闲表法和空闲链法"></a>空闲表法和空闲链法</h2><h3 id="空闲表法"><a href="#空闲表法" class="headerlink" title="空闲表法"></a>空闲表法</h3><p>空闲表也叫空闲文件目录，是将文件存储器上一个个连续的未分配区域（称作空闲文件）按第一个空闲块号，连续空闲的块数，具体的位置信息（物理块号）等信息记在空闲表中。<br>这种方法适合于建立连续文件，适合少量的空闲区。<br>如果存取空间中有着大量的小的空白区，则空闲表变得很大，因而效率大为降低。<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/0449353e62a7ae7617192a35f5d5bb2a_1740931089313.png" alt="在这里插入图片描述"><br>当请求分配存储空间时，系统依次扫描空闲文件目录的表目，直到找到一个合适的空闲文件为止（首次适应算法），分配给用户进程，修改空闲表。</p>
+<p>当用户撤消一个文件时，系统回收该文件所占用的空间。扫描空闲表目录，寻找一个空表目，并将释放空间的第一个物理块号及它所占的物理 块数填到这个表目中。考虑回收区是否与空闲表中插入点的前区和后区相邻接，对相邻接者应予以合并。</p>
+<h3 id="空闲链法"><a href="#空闲链法" class="headerlink" title="空闲链法"></a>空闲链法</h3><p>空闲盘块链：把所有“空闲块”（即未分配使用的物理块，也称“自由块”）链接起来。当创建一个文件需要存储块时，就从链头上依次取下若干块来，而撤销文件时则将回收空间又依次链接到链尾上。</p>
+<p>空闲盘区链：把磁盘上的所有空闲盘区（每个盘区可包含若干个盘块） 拉成一条链。在每个盘区上除含有用于指示下一个空闲盘区的指针外， 还有指明本盘区大小（盘块数）的信息。</p>
+<p>优点：分配和回收的过程非常简单。<br>缺点：为一个文件分配盘块时，可能要多次重复操作。</p>
+<h2 id="位示图法"><a href="#位示图法" class="headerlink" title="位示图法"></a>位示图法</h2><p>位示图（二维）：利用二进制的一位（bit）来表示磁盘中一个盘块的使用情况。</p>
+<p>每个字节的每一位都对应了一个物理块的状态。当该位取 1 时，表示对应的物理块已分配；取 0 时表示该物理块未分配。</p>
+<p>特点：占空间少，可放入内存，易于访问。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/66883cd4ed5ea6534fa65ee6701fc335_1740931089313.png" alt="在这里插入图片描述"><br><strong>盘块的分配</strong>：</p>
+<ol>
+<li>顺序扫描，找一个或一组值为 0 的块。</li>
+<li>把找到的二进制位转换成与之相应的盘块号。假定找到的“0”的二进制位在, 第 i 行、第 j 列， 每行位数为 n，则相应的盘块号：b&#x3D;n(i-1)+j。(根据实际题目的起始编号计算)</li>
+<li>修改位示图：map[i,j]&#x3D;1。</li>
+</ol>
+<p><strong>盘块的回收</strong>：</p>
+<ol>
+<li>由盘块号 b 得行列号 (i,j)<br>i &#x3D; (b-1) div n +1<br>j &#x3D; (b-1) mod n +1<br>div 取整	mod 取余 </li>
+<li>修改位示图：map[i,j]&#x3D;0</li>
+</ol>
+<h2 id="成组链接法"><a href="#成组链接法" class="headerlink" title="成组链接法"></a>成组链接法</h2><p>成组链接法是结合了空闲表和空闲链优点的一种空闲盘块管理方法，并克服了空闲表过大或空闲链过长的缺点。</p>
+<ol>
+<li>空闲盘块号栈：存放一组空闲盘块的盘块号（最多 100 个），以及栈中尚有的空闲盘块号数 N（兼作栈顶指针，当N&#x3D;100时，它指向S.free(99)）。s.free(0) 是栈底，栈满时的栈顶为S.free(99)。</li>
+<li>所有空闲盘块被分成若干组（每组 100 个）。</li>
+<li>把每组的盘块数 N 和该组所有的盘块号记入其前一组盘块的第一个盘块。 </li>
+<li>把第一组的盘块数和所有盘块号记入空闲盘块号栈中，作为当前可供分配的空闲盘块号。</li>
+<li>最末一组只有99个可用盘块，其盘块号分别记入前一组的S.free(1)~S.free(99)中，而在S.free(0)中则存放“0”作为空闲盘块链的结束标志。(注:最后一组的盘块数仍为100，但实际可供使用的空闲盘块数却是99，对应的编号为(1~99),0号盘中放空闲盘块链的结束标志，而不再是空闲盘块号)</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/9a3dad6db90dacfca4c15b5c59f19976_1740931089313.png" alt="在这里插入图片描述"></p>
+<p><strong>空闲盘块的分配与回收</strong><br><strong>分配</strong>：<br>从栈顶取出一空闲盘块号，将与之对应的盘块分配给用户，然后 将栈顶指针下移一格。到s.free(0)时，所分配的磁盘块号是栈中最后一个可用盘块号，由于该块内容为下一组的所有盘块号，因此要先将该块的内容读入栈中，然后才能将该块分配出去。<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/2dc0d74376ec98fe3c29dacc2a6011c3_1740931096499.png" alt="在这里插入图片描述"><br><strong>回收</strong>：<br>将回收盘块的盘块号压入空闲盘块号栈的顶部，并执行空闲盘块数 N加1 操作。到栈满时，将现有栈中的 100 个盘块弹出栈，组成新的一组空闲盘块组。它们的盘块号被记入新回收的盘块中，再将其盘块号作为新栈底（记录了前一组的 100 个盘块号）。<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/60e03cd358dfa733e51d997cb716e0bd_1740931096499.png" alt="在这里插入图片描述"></p>
+<h1 id="提高磁盘I-O速度的途径"><a href="#提高磁盘I-O速度的途径" class="headerlink" title="提高磁盘I&#x2F;O速度的途径"></a>提高磁盘I&#x2F;O速度的途径</h1><blockquote>
+<p>提高文件的访问速度可从三方面着手：<br>1 改进文件的目录结构以及检索目录的方法以减少对目录的查找时间。<br>2 选用好的文件存储结构<br>3 提高磁盘 I&#x2F;O 速度</p>
+<ul>
+<li>设置磁盘高速缓存（Disk Cache）</li>
+<li>其它方法（提前读、延迟写、虚拟盘）</li>
+<li>采用高度可靠、快速的磁盘系统：独立磁盘冗余阵列（RAID）</li>
+</ul>
+</blockquote>
+<h2 id="磁盘高速缓存"><a href="#磁盘高速缓存" class="headerlink" title="磁盘高速缓存"></a>磁盘高速缓存</h2><p>磁盘高速缓存是指内存中的一部分存储空间，用来暂存从磁盘读出的一系列盘块中的信息，所以它是一组在逻辑上属于磁盘，而物理上是驻留在内存中的盘块。<br>当出现一个访问磁盘的请求时，由核心先去查看磁盘高速缓冲器，若请求的盘块内容已在缓存中，便可从高速缓存中直接读取，省去了启动磁盘的时间，如果不在，才需要启动磁盘将所需要的盘块内容读入，并把盘块内容送给磁盘高速缓存。</p>
+<h3 id="数据交付方式"><a href="#数据交付方式" class="headerlink" title="数据交付方式"></a>数据交付方式</h3><p>数据交付是指将磁盘高速缓存中的数据传送给请求者进程。</p>
+<p>步骤：请求访问磁盘时先查缓存、后查磁盘并更新缓存。 </p>
+<p>系统采取两种方式把数据交付给请求进程：<br>数据交付：系统直接将磁盘高速缓存中的数据传送到请求者进程的内存工 作区。<br>指针交付：只将指向磁盘高速缓存中该数据的指针，交付给请求者进程。<br>后一种方式由于所传送的数据量少，节省了数据从磁盘高速缓存到进程的内存工作区的时间。</p>
+<h3 id="置换算法"><a href="#置换算法" class="headerlink" title="置换算法"></a>置换算法</h3><p>在将磁盘中的盘块读入到磁盘高速缓存中时，若因磁盘高速缓存已满，则采用常用的算法进行置换：<br>最近最久未使用算法 LRU<br>最近未使用算法 NRU<br>最少使用算法 LFU</p>
+<p>请求调页与磁盘 I&#x2F;O 中的工作情况不同，在置换算法中所应考虑的问题 也有所差异。磁盘高速缓存置换时除上述算法外还应考虑的问题：<br>访问频率：请求调页 &gt; 磁盘 I&#x2F;O<br>可预见性：请求调页 &lt; 磁盘 I&#x2F;O<br>数据的一致性：一旦系统发生故障，高速缓存中的数据将会丢失，如果未 拷回磁盘，会造成数据的不一致。</p>
+<h3 id="周期性地写回磁盘"><a href="#周期性地写回磁盘" class="headerlink" title="周期性地写回磁盘"></a>周期性地写回磁盘</h3><p>数据的一致性解决方法：将系统中所有盘块数据拉成一条 LRU（最近最 久未使用算法）链，需要一致性的块放在LRU 队列的头部，优先回写。 可能在不久之后再使用的盘块数据，挂在 LRU 链的尾部。</p>
+<p>系统中所有盘块数据拉成一条 LRU 链，经常访问的数据被挂在链尾，一 直保留磁盘高速缓存中，可能长期不会被写回磁盘。若系统出故障，则存在磁盘高速缓存中的数据将丢失。</p>
+<p>在UNIX系统中专门增设一个修改程序，使之在后台运行，该程序周期性地调用一个系统调动SYNC，其主要功能就是强制性地将所有在高速缓存中已修改的盘块数据写回磁盘。一般是把两次调用SYNC的时间间隔定位30s。这样，因系统故障所造成的工作损失不会超过30s的工作量</p>
+<h2 id="提高磁盘I-O速度的其他方法"><a href="#提高磁盘I-O速度的其他方法" class="headerlink" title="提高磁盘I&#x2F;O速度的其他方法"></a>提高磁盘I&#x2F;O速度的其他方法</h2><h3 id="提前读"><a href="#提前读" class="headerlink" title="提前读"></a>提前读</h3><p>由于用户对文件的访问常用顺序方式，所以可采用预先读方式，即在读当 前块的同时，连同将下一块提前读入缓冲。当访问下一块数据时，其已在 缓冲中，而不需去启动磁盘 I&#x2F;O。</p>
+<h3 id="延迟写"><a href="#延迟写" class="headerlink" title="延迟写"></a>延迟写</h3><p>在缓存中的数据，本应立即写回磁盘，考虑不久可能再用，故不立即写回磁盘，挂在空闲缓冲区队列末尾。<br>当该缓冲区仍在队列中时，任何访问该数据的进程，都可直接读出其中的数据而不必去访问磁盘。<br>随着空闲缓冲区的使用，缓冲区也缓缓往前移动，直至移到空闲缓冲队列之首。当再有进程申请到该缓冲区时，才将该缓冲区的数据写入磁盘，而把该缓冲区作为空闲缓冲区分配出去。</p>
+<h3 id="优化物理块的分布"><a href="#优化物理块的分布" class="headerlink" title="优化物理块的分布"></a>优化物理块的分布</h3><p>使磁头移动的距离最小。<br>多个连续的块组成一簇，以簇为单位进行分配。</p>
+<h3 id="虚拟盘"><a href="#虚拟盘" class="headerlink" title="虚拟盘"></a>虚拟盘</h3><p>虚拟盘是利用内存去仿真磁盘，又称为 RAM 盘。</p>
+<p>虚拟盘对用户是透明的，仅是感觉略微快些而已。<br>虚拟盘是易失性存储器（内存），关机或重新启动计算机时，虚拟盘上的信息将丢失，所以在关机或重新启动计算机前，一定要及时把在虚拟盘上的 重要的数据存放到真正的硬盘中。</p>
+<p>虚拟盘与磁盘高速缓存的区别：RAM 盘中的内容由用户控制，而缓存中的 内容则由 OS 控制。</p>
+<h2 id="廉价磁盘冗余阵列-RAID"><a href="#廉价磁盘冗余阵列-RAID" class="headerlink" title="廉价磁盘冗余阵列(RAID)"></a>廉价磁盘冗余阵列(RAID)</h2><p>RAID是利用一台磁盘阵列控制器来统一管理和控制一组磁盘驱动器，组成一个高度可靠的、快速的大容量磁盘系统。<br>并行交叉存取（条带化存取）、 冗余存取、校验存取</p>
+<p><strong>并行交叉存取</strong><br>在该系统中，有多台磁盘驱动器，系统将每一盘块中的数据分为若干个子盘块数据，再把每一个子盘块的数据分别存储到各个不同磁盘中的相同位置上。以后当要将一个盘块的数据传送到内存时，采取并行传输方式，将各个盘块中的子盘块数据同时向内存中传输，从而使传输时间大大减少</p>
+<p><strong>RAID的分级</strong></p>
+<ul>
+<li><p>RAID0：仅提供了并行交叉存取<br>仅提供了并行交叉存取，没有数据冗余；无容错功能，不增强可靠性。</p>
+</li>
+<li><p>RAID1：具有磁盘镜像功能<br>完全相同的数据重复存 于多个盘上。注意：数据读取时可选任一独立磁盘，但修改时必须对所 有镜像同时进行，以保证数据一致性。<br>具有高可靠性，分布存放；镜像冗余，空间利用率 50%，代价很高，需 要 2n 个独立磁盘；不校验。</p>
+</li>
+<li><p>RAID2：Hamming Code ECC（汉明码错误检测与修正）</p>
+</li>
+<li><p>RAID3：Parallel transfer with parity（并行传输及校验）</p>
+</li>
+<li><p>RAID4：Independent Data disks with shared Parity disk（独立的数据硬盘与共享的校验硬盘）</p>
+</li>
+<li><p>RAID5：Independent Data disks with distributed parity blocks（独立的数据磁盘 与分布式校验块）</p>
+</li>
+<li><p>RAID6：Independent Data disks with two independent distributed parity  schemes（独立的数据硬盘与两个独立分布式校验方案）</p>
+</li>
+<li><p>RAID7：Optimized Asynchrony for High I&#x2F;O Rates as well as High Data Transfer  Rates（最优化的异步高 I&#x2F;O 速率和高数据传输率）</p>
+</li>
+<li><p>RAID10：此级别是 RAID 0 与 RAID 1 的结合（stripping+mirroring）</p>
+</li>
+</ul>
+<blockquote>
+<p>各级RAID的比较<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/2a1e9e0c736dfaa1488e7b6576ae54ed_1740931096499.png" alt="在这里插入图片描述"></p>
+</blockquote>
+</div><div class="article-licensing box"><div class="licensing-title"><p>操作系统笔记整理12——磁盘存储器的管理</p><p><a href="https://shnpd.github.io/2022/01/02/操作系统/操作系统笔记整理12——磁盘存储器的管理/">https://shnpd.github.io/2022/01/02/操作系统/操作系统笔记整理12——磁盘存储器的管理/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>ShiHaonan</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2022-01-02</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-03-13</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/images/wxpay.jpg" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2022/01/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%862%E2%80%94%E2%80%94%E7%89%A9%E7%90%86%E5%B1%82/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">计算机网络笔记整理2——物理层</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2022/01/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%8611%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6%E5%92%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/"><span class="level-item">操作系统笔记整理11——文件和文件系统</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card" id="comments"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://shnpd.github.io/2022/01/02/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%8612%E2%80%94%E2%80%94%E7%A3%81%E7%9B%98%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E7%AE%A1%E7%90%86/';
+            this.page.identifier = '2022/01/02/操作系统/操作系统笔记整理12——磁盘存储器的管理/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'shns-blog' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#点此链接可跳转到：操作系统笔记整理——目录索引页"><span class="level-left"><span class="level-item">1</span><span class="level-item">点此链接可跳转到：操作系统笔记整理——目录索引页</span></span></a></li><li><a class="level is-mobile" href="#外存的组织方式"><span class="level-left"><span class="level-item">2</span><span class="level-item">外存的组织方式</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#连续组织方式"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">连续组织方式</span></span></a></li><li><a class="level is-mobile" href="#链接组织方式"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">链接组织方式</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#隐式链接"><span class="level-left"><span class="level-item">2.2.1</span><span class="level-item">隐式链接</span></span></a></li><li><a class="level is-mobile" href="#显示链接"><span class="level-left"><span class="level-item">2.2.2</span><span class="level-item">显示链接</span></span></a></li></ul></li><li><a class="level is-mobile" href="#FAT-File-Allocation-Table-技术"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">FAT(File Allocation Table)技术</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#簇的概念"><span class="level-left"><span class="level-item">2.3.1</span><span class="level-item">簇的概念</span></span></a></li><li><a class="level is-mobile" href="#FAT12文件系统"><span class="level-left"><span class="level-item">2.3.2</span><span class="level-item">FAT12文件系统</span></span></a></li><li><a class="level is-mobile" href="#FAT16文件系统"><span class="level-left"><span class="level-item">2.3.3</span><span class="level-item">FAT16文件系统</span></span></a></li><li><a class="level is-mobile" href="#FAT32文件系统"><span class="level-left"><span class="level-item">2.3.4</span><span class="level-item">FAT32文件系统</span></span></a></li></ul></li><li><a class="level is-mobile" href="#NTFS-New-Technology-File-System-文件系统"><span class="level-left"><span class="level-item">2.4</span><span class="level-item">NTFS(New Technology File System)文件系统</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#磁盘的组织"><span class="level-left"><span class="level-item">2.4.1</span><span class="level-item">磁盘的组织</span></span></a></li><li><a class="level is-mobile" href="#文件的组织"><span class="level-left"><span class="level-item">2.4.2</span><span class="level-item">文件的组织</span></span></a></li></ul></li><li><a class="level is-mobile" href="#索引组织方式"><span class="level-left"><span class="level-item">2.5</span><span class="level-item">索引组织方式</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#单级索引分配"><span class="level-left"><span class="level-item">2.5.1</span><span class="level-item">单级索引分配</span></span></a></li><li><a class="level is-mobile" href="#多级索引分配"><span class="level-left"><span class="level-item">2.5.2</span><span class="level-item">多级索引分配</span></span></a></li><li><a class="level is-mobile" href="#增量式索引组织方式"><span class="level-left"><span class="level-item">2.5.3</span><span class="level-item">增量式索引组织方式</span></span></a></li></ul></li></ul></li><li><a class="level is-mobile" href="#文件存储空间的管理"><span class="level-left"><span class="level-item">3</span><span class="level-item">文件存储空间的管理</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#空闲表法和空闲链法"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">空闲表法和空闲链法</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#空闲表法"><span class="level-left"><span class="level-item">3.1.1</span><span class="level-item">空闲表法</span></span></a></li><li><a class="level is-mobile" href="#空闲链法"><span class="level-left"><span class="level-item">3.1.2</span><span class="level-item">空闲链法</span></span></a></li></ul></li><li><a class="level is-mobile" href="#位示图法"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">位示图法</span></span></a></li><li><a class="level is-mobile" href="#成组链接法"><span class="level-left"><span class="level-item">3.3</span><span class="level-item">成组链接法</span></span></a></li></ul></li><li><a class="level is-mobile" href="#提高磁盘I-O速度的途径"><span class="level-left"><span class="level-item">4</span><span class="level-item">提高磁盘I/O速度的途径</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#磁盘高速缓存"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">磁盘高速缓存</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#数据交付方式"><span class="level-left"><span class="level-item">4.1.1</span><span class="level-item">数据交付方式</span></span></a></li><li><a class="level is-mobile" href="#置换算法"><span class="level-left"><span class="level-item">4.1.2</span><span class="level-item">置换算法</span></span></a></li><li><a class="level is-mobile" href="#周期性地写回磁盘"><span class="level-left"><span class="level-item">4.1.3</span><span class="level-item">周期性地写回磁盘</span></span></a></li></ul></li><li><a class="level is-mobile" href="#提高磁盘I-O速度的其他方法"><span class="level-left"><span class="level-item">4.2</span><span class="level-item">提高磁盘I/O速度的其他方法</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#提前读"><span class="level-left"><span class="level-item">4.2.1</span><span class="level-item">提前读</span></span></a></li><li><a class="level is-mobile" href="#延迟写"><span class="level-left"><span class="level-item">4.2.2</span><span class="level-item">延迟写</span></span></a></li><li><a class="level is-mobile" href="#优化物理块的分布"><span class="level-left"><span class="level-item">4.2.3</span><span class="level-item">优化物理块的分布</span></span></a></li><li><a class="level is-mobile" href="#虚拟盘"><span class="level-left"><span class="level-item">4.2.4</span><span class="level-item">虚拟盘</span></span></a></li></ul></li><li><a class="level is-mobile" href="#廉价磁盘冗余阵列-RAID"><span class="level-left"><span class="level-item">4.3</span><span class="level-item">廉价磁盘冗余阵列(RAID)</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-04-21T12:20:00.000Z">2025-04-21</time></p><p class="title"><a href="/2025/04/21/gonote/%E3%80%90Go%E3%80%91%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">【Go】堆和栈变量</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-19T16:00:00.000Z">2025-03-20</time></p><p class="title"><a href="/2025/03/20/gonote/%E3%80%90Go%E3%80%91atomic%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C/">【Go】atomic原子操作</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-14T16:00:00.000Z">2025-03-15</time></p><p class="title"><a href="/2025/03/15/interview/redis/%E3%80%90redis%E3%80%91%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">【redis】数据类型</a></p><p class="categories"><a href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">知识点整理</a> / <a href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/">redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/%E3%80%90Go%E3%80%91Channel/">【Go】Channel</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/%E3%80%90Go%E3%80%91CSP%E6%A8%A1%E5%9E%8B/">【Go】CSP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Fabric/"><span class="level-start"><span class="level-item">Fabric</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/Golang/"><span class="level-start"><span class="level-item">Golang</span></span><span class="level-end"><span class="level-item tag">45</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Shell%E8%84%9A%E6%9C%AC/"><span class="level-start"><span class="level-item">Shell脚本</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/bytedance/"><span class="level-start"><span class="level-item">bytedance</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"><span class="level-start"><span class="level-item">以太坊</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%88%B7%E9%A2%98%E9%9B%86/"><span class="level-start"><span class="level-item">刷题集</span></span><span class="level-end"><span class="level-item tag">27</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="level-start"><span class="level-item">前端</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="level-start"><span class="level-item">区块链</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AD%A6%E6%9C%AF/"><span class="level-start"><span class="level-item">学术</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"><span class="level-start"><span class="level-item">密码学</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%B0%8F%E7%A8%8B%E5%BA%8F/"><span class="level-start"><span class="level-item">小程序</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><span class="level-start"><span class="level-item">数据结构</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"><span class="level-start"><span class="level-item">机器学习</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9D%82%E9%A1%B9/"><span class="level-start"><span class="level-item">杂项</span></span><span class="level-end"><span class="level-item tag">31</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%AF%94%E7%89%B9%E5%B8%81/"><span class="level-start"><span class="level-item">比特币</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/"><span class="level-start"><span class="level-item">知识点整理</span></span><span class="level-end"><span class="level-item tag">19</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/mysql/"><span class="level-start"><span class="level-item">mysql</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/"><span class="level-start"><span class="level-item">redis</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">算法</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"><span class="level-start"><span class="level-item">网络安全</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li></ul></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">shn&#039;s blog</a><p class="is-size-7"><span>&copy; 2025 ShiHaonan</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">Welcome to shn's blog!</p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

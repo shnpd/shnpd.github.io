@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>计算机网络笔记整理4——网络层 - shn&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="shn&#039;s blog"><meta name="msapplication-TileImage" content="/images/icon_blog.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="shn&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="​​点击阅读更多查看文章内容"><meta property="og:type" content="blog"><meta property="og:title" content="计算机网络笔记整理4——网络层"><meta property="og:url" content="https://shnpd.github.io/2022/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%864%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%B1%82/"><meta property="og:site_name" content="shn&#039;s blog"><meta property="og:description" content="​​点击阅读更多查看文章内容"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/c2d48e7b321e92534bebec1583819426_1740930981228.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/5ad36c8b522f35fa8c1ef0251621847b_1740930988695.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/83f6a44e7d96af9f4b6ca3413c41352a_1740930988695.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/14c26d22c9887bc3954066a16fd9e45d_1740930988695.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b76de96bd0223025dd3224d0e046c38b_1740930988695.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/648403a660a0fa9c2b0bbc8c78cf4005_1740930988695.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/661294f6c64c0d90926e389e43371370_1740930996546.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/d267adf106afa1838afd52d344f42532_1740930996546.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/61543fcc54e2e8db4069743b87149b26_1740930996546.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/5a26f567534e34254ef5d1a0d0e16467_1740930996546.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/dcdf88467392cf0bbe4fb5cc9931077e_1740930996546.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/f476c9667211b9f3422a9f0090ab3b0d_1740931004957.png"><meta property="og:image" content="https://i-blog.csdnimg.cn/blog_migrate/ad3b1b05186313d078c4bb26137c5796.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/421ef694fcedb577fc189a858ec3d920_1740931004957.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/c3422f77f4d35e57d127a7e35bcaba97_1740931004957.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/0a7334986d588b26b4b1c46c27341923_1740931004957.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/ae1139267d6b91e68026676211cca311_1740931004957.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/5b1298ca778bad2beccd2869a123cf01_1740931012874.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/2eb673e7c83bf3d8d99b859b035efc2a_1740931012874.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/3b259faccb5599914c05602230830c78_1740931012874.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/d804e193d1388a4ddcf61b4581d5a216_1740931012874.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/76d357d07cb280e026f3f9988b51444d_1740931012874.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/ab9a3dce503d24444640173fbf42834a_1740931020385.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/f475f165cca18a40fe8065b13b23a72d_1740931020385.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/8a234f94062853d39c6661cb3e16341e_1740931020385.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/4aa97cb4c706b37bb1e33dd1ec08a6be_1740931020385.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/0120a5f277def0a5449baa0500461fc7_1740931020385.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/990ae9614aa5e98bcc18e6a49a45b1b3_1740931028449.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/758356c568295a04209d4e90491978cb_1740931028449.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/6789dfa848b109656893a1ac4e85100b_1740931028449.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a288a9f54cb395256b1bc6e7806edf76_1740931028449.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/3cde73ee2dc30f3a1d13158081e3456c_1740931028449.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/4ea033034ae5f505eb16c4abca495f96_1740931036727.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/97dec096446ced7b190546aaa1bd4167_1740931036727.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b88897492d628eac8883acae8cb46caa_1740931036727.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/1827657e8157e20beefe2057937be4ef_1740931036727.png"><meta property="article:published_time" content="2022-01-03T05:53:09.000Z"><meta property="article:modified_time" content="2025-03-13T08:46:46.127Z"><meta property="article:author" content="ShiHaonan"><meta property="article:tag" content="网络 网络协议"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/c2d48e7b321e92534bebec1583819426_1740930981228.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://shnpd.github.io/2022/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%864%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%B1%82/"},"headline":"计算机网络笔记整理4——网络层","image":["https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/c2d48e7b321e92534bebec1583819426_1740930981228.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/5ad36c8b522f35fa8c1ef0251621847b_1740930988695.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/83f6a44e7d96af9f4b6ca3413c41352a_1740930988695.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/14c26d22c9887bc3954066a16fd9e45d_1740930988695.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b76de96bd0223025dd3224d0e046c38b_1740930988695.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/648403a660a0fa9c2b0bbc8c78cf4005_1740930988695.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/661294f6c64c0d90926e389e43371370_1740930996546.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/d267adf106afa1838afd52d344f42532_1740930996546.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/61543fcc54e2e8db4069743b87149b26_1740930996546.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/5a26f567534e34254ef5d1a0d0e16467_1740930996546.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/dcdf88467392cf0bbe4fb5cc9931077e_1740930996546.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/f476c9667211b9f3422a9f0090ab3b0d_1740931004957.png","https://i-blog.csdnimg.cn/blog_migrate/ad3b1b05186313d078c4bb26137c5796.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/421ef694fcedb577fc189a858ec3d920_1740931004957.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/c3422f77f4d35e57d127a7e35bcaba97_1740931004957.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/0a7334986d588b26b4b1c46c27341923_1740931004957.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/ae1139267d6b91e68026676211cca311_1740931004957.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/5b1298ca778bad2beccd2869a123cf01_1740931012874.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/2eb673e7c83bf3d8d99b859b035efc2a_1740931012874.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/3b259faccb5599914c05602230830c78_1740931012874.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/d804e193d1388a4ddcf61b4581d5a216_1740931012874.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/76d357d07cb280e026f3f9988b51444d_1740931012874.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/ab9a3dce503d24444640173fbf42834a_1740931020385.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/f475f165cca18a40fe8065b13b23a72d_1740931020385.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/8a234f94062853d39c6661cb3e16341e_1740931020385.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/4aa97cb4c706b37bb1e33dd1ec08a6be_1740931020385.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/0120a5f277def0a5449baa0500461fc7_1740931020385.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/990ae9614aa5e98bcc18e6a49a45b1b3_1740931028449.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/758356c568295a04209d4e90491978cb_1740931028449.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/6789dfa848b109656893a1ac4e85100b_1740931028449.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a288a9f54cb395256b1bc6e7806edf76_1740931028449.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/3cde73ee2dc30f3a1d13158081e3456c_1740931028449.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/4ea033034ae5f505eb16c4abca495f96_1740931036727.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/97dec096446ced7b190546aaa1bd4167_1740931036727.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b88897492d628eac8883acae8cb46caa_1740931036727.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/1827657e8157e20beefe2057937be4ef_1740931036727.png"],"datePublished":"2022-01-03T05:53:09.000Z","dateModified":"2025-03-13T08:46:46.127Z","author":{"@type":"Person","name":"ShiHaonan"},"publisher":{"@type":"Organization","name":"shn's blog","logo":{"@type":"ImageObject","url":{"text":"shn's blog"}}},"description":"​​点击阅读更多查看文章内容"}</script><link rel="canonical" href="https://shnpd.github.io/2022/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%864%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%B1%82/"><link rel="icon" href="/images/icon_blog.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><meta name="msvalidate.01" content="E38AFEA650A8300110261393E7FD0A39"><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">shn&#039;s blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-01-03T05:53:09.000Z" title="1/3/2022, 1:53:09 PM">2022-01-03</time>发表</span><span class="level-item"><time dateTime="2025-03-13T08:46:46.127Z" title="3/13/2025, 4:46:46 PM">2025-03-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></span><span class="level-item">1 小时读完 (大约7441个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">计算机网络笔记整理4——网络层</h1><div class="content"><p>​​点击阅读更多查看文章内容<span id="more"></span></p>
+<h1 id="点此链接可跳转到：计算机网络笔记整理——目录索引页"><a href="#点此链接可跳转到：计算机网络笔记整理——目录索引页" class="headerlink" title="点此链接可跳转到：计算机网络笔记整理——目录索引页"></a><a target="_blank" rel="noopener" href="https://blog.csdn.net/shn111/article/details/122296621?spm=1001.2014.3001.5501">点此链接可跳转到：计算机网络笔记整理——目录索引页</a></h1><blockquote>
+<p>参考书籍：《计算机网络》第八版 谢希仁编著</p>
+</blockquote>
+<blockquote>
+<p>@[toc]</p>
+</blockquote>
+<h1 id="网络层提供的两种服务"><a href="#网络层提供的两种服务" class="headerlink" title="网络层提供的两种服务"></a>网络层提供的两种服务</h1><h2 id="虚电路服务"><a href="#虚电路服务" class="headerlink" title="虚电路服务"></a>虚电路服务</h2><p>网络负责可靠交付</p>
+<p>采用<strong>面向连接</strong>的通信方式，通信之前先建立虚电路，以保证双方通信所需的一切网络资源，再使用可靠传输的网络协议，使所发送的分组无差错、按序到达终点，不丢失、不重复。<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/c2d48e7b321e92534bebec1583819426_1740930981228.png" alt="在这里插入图片描述"></p>
+<h2 id="数据报服务"><a href="#数据报服务" class="headerlink" title="数据报服务"></a>数据报服务</h2><p>网络层向上只提供简单灵活的、无连接的、尽最大努力交付的数据报服务</p>
+<p>网络在发送分组时不需要先建立连接，每一个分组(即IP数据报)独立发送。<strong>网络层不提供服务质量的承诺</strong>。所传送的分组可能出错、丢失、重复和失序(不按序到达终点)，也不保证分组传送的时限。<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/5ad36c8b522f35fa8c1ef0251621847b_1740930988695.png" alt="在这里插入图片描述"></p>
+<blockquote>
+<p>虚电路服务与数据报服务的对比</p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/83f6a44e7d96af9f4b6ca3413c41352a_1740930988695.png" alt="在这里插入图片描述"></p>
+</blockquote>
+<h1 id="网络互联的概念、设备、层次、协议"><a href="#网络互联的概念、设备、层次、协议" class="headerlink" title="网络互联的概念、设备、层次、协议"></a>网络互联的概念、设备、层次、协议</h1><p>网络互连是指将不同的网络连接起来，以构成更大规模的网络系统，实现网络间的数据通信、资源共享和协同工作。网络互连都是只用路由器进行网络互连和路由选择。</p>
+<p>网际协议IP是TCP&#x2F;IP体系中两个最主要的协议之一，与之配套使用的还有三个协议：</p>
+<ul>
+<li>地址解析协议ARP</li>
+<li>网际控制报文协议ICMP</li>
+<li>网际组管理协议IGMP</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/14c26d22c9887bc3954066a16fd9e45d_1740930988695.png" alt="在这里插入图片描述"><br><strong>实现网络互联的中间设备</strong>：</p>
+<ul>
+<li>物理层中继系统：转发器</li>
+<li>数据链路层中继系统：网桥或桥接器</li>
+<li>网络层中继系统：路由器</li>
+<li>网桥和路由器的混合物：桥路器</li>
+<li>网络层以上的中继系统：网关</li>
+</ul>
+<h1 id="分类IP地址"><a href="#分类IP地址" class="headerlink" title="分类IP地址"></a>分类IP地址</h1><p>每一类地址都有两个固定长度的子段组成，其中一个是网络号net-id，它标志主机(或路由器)所连接到的网络，另一个是主机号host-id，它标志该主机(或路由器)<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b76de96bd0223025dd3224d0e046c38b_1740930988695.png" alt="在这里插入图片描述"></p>
+<p><strong>各类IP地址的指派范围</strong></p>
+<blockquote>
+<p><strong><font color=red>注：根据最新标准B类地址网络号128.0以及C类地址网络号192.0.0不再保留，故B类地址最大可指派网络数应该为16384，第一个可指派的网络号应为128.0；C类地址最大可指派网络数应该为2097152，第一个可指派的网络号应为192.0.0</strong></font><br>参考：<a href="B%E7%B1%BB%E5%9C%B0%E5%9D%80%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%8F%AF%E5%88%86%E6%B4%BE%E7%9A%84%E7%BD%91%E7%BB%9C%E5%8F%B7%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E6%98%AF128.0%EF%BC%9F%20-%20tckidd%E7%9A%84%E5%9B%9E%E7%AD%94%20-%20%E7%9F%A5%E4%B9%8E%20https://www.zhihu.com/question/37927675/answer/82062124">B类地址第一个可分派的网络号为什么不是128.0？ - tckidd的回答 - 知乎<br>https://www.zhihu.com/question/37927675/answer/82062124</a></p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/648403a660a0fa9c2b0bbc8c78cf4005_1740930988695.png" alt="在这里插入图片描述"></p>
+<blockquote>
+<p><strong>5类IP地址的范围：</strong><br>A：1.0.0.0 - 126.255.255.255<br>B：128.0.0.0 - 191.255.255.255<br>C：192.0.0.0 - 223.255.255.255<br>D：224.0.0.0 - 239.255.255.255<br>E：240.0.0.0 - 247.255.255.255<br><strong>私有地址的范围分别是：</strong><br>A类地址范围：<br>10.0.0.0—10.255.255.255<br>B类地址范围：<br>172.16.0.0—172.31.255.555<br>C类地址范围：<br>192.168.0.0—192.168.255.255</p>
+</blockquote>
+<p><strong>一般不指派的特殊IP地址</strong><br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/661294f6c64c0d90926e389e43371370_1740930996546.png" alt="在这里插入图片描述"></p>
+<h1 id="无分类编址CIDR"><a href="#无分类编址CIDR" class="headerlink" title="无分类编址CIDR"></a>无分类编址CIDR</h1><p>CIDR：无分类域间路由选择<br>CIDR消除了传统的A类、B类和C类地址以及子网的概念，可以更有效的分配IPv4的地址空间</p>
+<p>2级结构：网络前缀和主机号<br>网络前缀的位数可以取0~32之间的任意值<br>CIDR记法：斜线记法 a.b.c.d&#x2F;n：二进制IP地址的前n位是网络前缀</p>
+<h2 id="地址块"><a href="#地址块" class="headerlink" title="地址块"></a>地址块</h2><p>CIDR把网络前缀都相同的连续的IP地址组成“CIDR地址块”<br>一个CIDR地址块包含的IP地址数，取决于网络前缀的位数</p>
+<blockquote>
+<p>128.14.32.0&#x2F;20表示的地址块共有2^12^个地址，因为斜线后面的20是网络前缀的位数，所以主机号是12位<br>这个地址块的起始地址是128.14.32.0<br>最小地址：128.14.32.0<br>最大地址：128.14.47.255<br>全0和全1第主机号地址一般不使用</p>
+</blockquote>
+<blockquote>
+<p>注意：地址表示的含义<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/d267adf106afa1838afd52d344f42532_1740930996546.png" alt="在这里插入图片描述"></p>
+</blockquote>
+<h2 id="地址掩码"><a href="#地址掩码" class="headerlink" title="地址掩码"></a>地址掩码</h2><p>地址掩码长度&#x3D;32位<br>由一连串1和接着的一连串0组成，1的个数就是网络前缀的长度<br>(IP地址)AND(地址掩码)&#x3D;网络地址</p>
+<blockquote>
+<p>三个特殊的CIDR地址块<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/61543fcc54e2e8db4069743b87149b26_1740930996546.png" alt="在这里插入图片描述"></p>
+</blockquote>
+<p><strong>全球国家及地区分配IP数排名</strong><br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/5a26f567534e34254ef5d1a0d0e16467_1740930996546.png" alt="在这里插入图片描述"></p>
+<h2 id="路由聚合"><a href="#路由聚合" class="headerlink" title="路由聚合"></a>路由聚合</h2><blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/dcdf88467392cf0bbe4fb5cc9931077e_1740930996546.png" alt="在这里插入图片描述"><br>路由聚合有利于减少路由器之间的路由选择信息的交换，从而提高了整个互联网的性能</p>
+</blockquote>
+<h1 id="IP数据报"><a href="#IP数据报" class="headerlink" title="IP数据报"></a>IP数据报</h1><p>一个IP数据包由首部和数据两部分组成<br>首部的前一部分是固定长度，<strong>共20字节</strong>，是所有IP数据报必须具有的。<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/f476c9667211b9f3422a9f0090ab3b0d_1740931004957.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>版本：IP协议的版本，目前的IP协议版本号为4(即IPv4)</li>
+<li>首部长度：占4位，可表示的最大数值是15个单位(一个单位4字节),因此IP首部的最大长度为60字节</li>
+<li>总长度：首部和数据之和的长度，占16位，因此数据报的最大长度为65535字节，总长度必须不超过最大传送单元MTU</li>
+<li>标识：计数器，用来产生IP数据报的标识，同一数据报的分片使用同一标识</li>
+<li>标志：占3位，目前只有两位有意义，标志字段的最低位是MF(More Fragment)。MF&#x3D;1表示后面“还有分片”。MF&#x3D;0表示最后一个分片。标志字段中间的一位是DF(Don’t Fragment)，只有当DF&#x3D;0时才允许分片</li>
+<li>片偏移：占13位，指出：较长的分组在分片后，某片在原分组中的相对位置。片偏移以8个字节为偏移单位。(除最后一个数据报片外，其他每个分片的长度一定是8字节的整数倍)</li>
+<li>生存时间：记为TTL，指示数据报在网络中可通过的路由器数的最大值</li>
+<li>协议：指出此数据报携带的数据使用何种协议，以确定目的主机的IP层需将数据部分上交给哪个协议进程</li>
+<li>首部校验和：只校验数据报的首部</li>
+<li>可变部分：就是一个选项字段，用来支持排错、测量以及安全等措施，内容很丰富，实际上这些选项很少被使用。<blockquote>
+<p>例题</p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/ad3b1b05186313d078c4bb26137c5796.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-uNXfpWqq-1641188343105)(2022-01-02-21-22-16.png)]"><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/421ef694fcedb577fc189a858ec3d920_1740931004957.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-7mhnMvxV-1641188343105)(2022-01-02-21-22-30.png)]"><br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/c3422f77f4d35e57d127a7e35bcaba97_1740931004957.png" alt="[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-wyzWpEab-1641188343106)(2022-01-02-21-22-44.png)]"></p>
+</blockquote>
+</li>
+</ul>
+<h1 id="ARP协议"><a href="#ARP协议" class="headerlink" title="ARP协议"></a>ARP协议</h1><h2 id="IP地址与MAC地址的区别"><a href="#IP地址与MAC地址的区别" class="headerlink" title="IP地址与MAC地址的区别"></a>IP地址与MAC地址的区别</h2><ul>
+<li>MAC地址(或物理地址)：是数据链路层和物理层使用的地址；IP地址：是网络层和以上各层使用的地址，是一种逻辑地址</li>
+<li>MAC地址具有唯一性；IP地址不具有唯一性</li>
+<li>MAC地址是Ethernet网卡上的地址，长度为48位；IP地址目前主流是32位长</li>
+<li>IP地址放在IP数据报的首部，MAC地址放在MAC帧的首部</li>
+<li>从源主机到目的主机的通信中，IP数据报首部中的源IP地址和目的IP地址始终不变，而数据链路层的帧首部中的源地址和目的地址在随着网络的不同而不断变化。</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/0a7334986d588b26b4b1c46c27341923_1740931004957.png" alt="在这里插入图片描述"></p>
+<h2 id="地址解析协议ARP"><a href="#地址解析协议ARP" class="headerlink" title="地址解析协议ARP"></a>地址解析协议ARP</h2><p>作用：从网络层使用的IP地址，解析出在数据链路层使用的硬件地址<br>ARP高速缓存：存放所在局域网内各主机和路由器的IP地址到硬件地址的映射表</p>
+<p>当主机A向本局域网上的主机B发送IP数据报时，现在其ARP高速缓存中查找B的IP地址</p>
+<ul>
+<li>如有，就可查出其对应的硬件地址写入MAC帧，然后通过局域网将该MAC帧发往此硬件地址</li>
+<li>如没有，ARP进程在本局域网上<strong>广播发送</strong>一个<strong>ARP请求报文</strong>。收到<strong>ARP相应分组</strong>后，将得到的IP地址到硬件地址的映射写入ARP高速缓存</li>
+</ul>
+<p>ARP请求分组：包含发送方硬件地址&#x2F;发送方IP地址&#x2F;目标方硬件地址(<strong>未知时填1</strong>)&#x2F;目标方IP地址<br>本地广播ARP请求：路由器不转发ARP请求<br>ARP响应分组：包含发送方硬件地址&#x2F;发送方IP地址&#x2F;目标方硬件地址&#x2F;目标方IP地址<br>ARP分组封装在物理网络的帧中传输</p>
+<p>ARP是解决同一个局域网上的主机或路由器的IP地址和硬件地址的映射问题，<strong>当目的主机和源主机不在同一个局域网，则通过ARP找到本局域网上的某个路由器的硬件地址</strong>，剩下的工作由这个路由器完成<br>发送方是路由器，要把IP数据包转发到本网络上的另一个主机。这时用ARP找到目的主机的硬件地址<br>发送方是路由器，要把IP数据包转发到另一个网络上的一个主机。这时用ARP找到本网络上另一个路由器的硬件地址。剩下的工作由这个路由器完成。</p>
+<h1 id="网际控制报文协议ICMP"><a href="#网际控制报文协议ICMP" class="headerlink" title="网际控制报文协议ICMP"></a>网际控制报文协议ICMP</h1><p>ICMP是IP层的协议</p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/ae1139267d6b91e68026676211cca311_1740931004957.png" alt="在这里插入图片描述"></p>
+<p><strong>ICMP报文有三大类</strong>：ICMP差错报告报文、ICMP控制报文、ICMP询问报文</p>
+<p>ICMP差错报告报文有3种：终点不可达、时间超过、参数问题<br>ICMP控制报文有2种：源点抑制报文(不再使用)&#x2F;改变路由(重定向)<br>ICMP请求报文有2种：回送请求或回送回答、时间戳请求或时间戳回答</p>
+<p><strong>ICMP的应用</strong>：<br>PING：用来测试两个主机之间的连通性,应用层直接使用网络层ICMP，没有通过运输层TCP或UDP<br>Traceroute：用来跟踪一个分组从源点到终点的路径<br>MTU：利用IP数据报标志字段的中间位DF</p>
+<ul>
+<li>将IP数据报的标志字段的DF位置1；</li>
+<li>当路由器发现IP数据报长度大于MTU时，丢弃并发回一个要求分片的ICMP报文；</li>
+<li>将IP数据报长度递减，DF位置1重发，知道不再收到ICMP报文。</li>
+</ul>
+<p><strong>ICMP的作用</strong>：<br>为了更有效的转发IP数据报和提高交付成功的机会，在网际层使用了网际控制报文协议ICMP。</p>
+<p>ICMP协议是TCP&#x2F;IP协议的一个子协议。用在IP主机、路由器之间传递控制消息，控制消息是指网络通不通、主机是否可达、路由是否可用等网络本身的消息。即提供差错报告和询问报文。</p>
+<h1 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h1><p>装有NAT软件的路由器叫做NAT路由器，它至少有一个有效的外部全球地址</p>
+<p>使用本地地址的主机在和外界通信时，都要在NAT路由器上将其本地地址转换成全球IP地址，才能和互联网互联</p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/5b1298ca778bad2beccd2869a123cf01_1740931012874.png" alt="在这里插入图片描述"></p>
+<ol>
+<li>内部主机A用本地地址IP<del>A</del>和互联网上主机B通信所发送的数据报必须经过NAT路由器。</li>
+<li>NAT路由器将数据报的源地址IP<del>A</del>转换成全球地址IP<del>G</del>,并把转换结果记录到NAT地址转换表中，目的地址IP<del>B</del>保持不变，然后发送到互联网。</li>
+<li>NAT路由器收到主机B发回的数据报时，知道数据报中的源地址是IP<del>B</del>而目的地址是IP<del>G</del></li>
+<li>根据NAT转换表，NAT路由器将目的地址IP<del>G</del>转换为IP<del>A</del>，转发给最终的内部主机A<blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/2eb673e7c83bf3d8d99b859b035efc2a_1740931012874.png" alt="在这里插入图片描述"></p>
+</blockquote>
+</li>
+</ol>
+<p>当NAT路由器具有n个全球IP地址时，专用网内最多可以同时有n台主机接入到互联网。这样就可以使专用网内较多数量的主机，轮流使用NAT路由器有限数量的全球IP地址</p>
+<h1 id="路由器的构成、转发分组、路由表"><a href="#路由器的构成、转发分组、路由表" class="headerlink" title="路由器的构成、转发分组、路由表"></a>路由器的构成、转发分组、路由表</h1><h2 id="路由器的构成"><a href="#路由器的构成" class="headerlink" title="路由器的构成"></a>路由器的构成</h2><p>路由器是一种具有多个输入端口和多个输出端口的专用计算机，其任务是转发分组<br>整个的路由器结构可分为两大部分：路由选择部分和分组转发部分</p>
+<ul>
+<li>路由选择部分也叫作控制部分，主要任务是构造路由表，同时不断地更新和维护路由表</li>
+<li>分组转发部分，是数据层面，由交换结构、一组输入端口和一组输出端口组成。</li>
+</ul>
+<h2 id="转发分组的流程"><a href="#转发分组的流程" class="headerlink" title="转发分组的流程"></a>转发分组的流程</h2><p>分组在互联网中是逐跳转发的<br>基于终点的转发：基于分组首部中的目的地址传送和转发</p>
+<p><strong>最长前缀匹配</strong>：在查找路由表时可能会得到不止一个匹配结果，应从匹配结果中选择具有最长网络前缀的路由</p>
+<p><strong>两种特殊路由</strong>：</p>
+<ul>
+<li>主机路由：对特定目的主机的IP地址专门指明的一个路由，网络前缀就是a.b.c.d&#x2F;32，放在转发表的最前面，可方便地控制网络和测试网络，或需要考虑某种安全问题时采用</li>
+<li>默认路由：不管分组的最终目的网络在哪里，都由指定的路由器R来处理，用特殊前缀0.0.0.0&#x2F;0表示，可减少路由表所占用的空间和搜索路由表所用的时间</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/3b259faccb5599914c05602230830c78_1740931012874.png" alt="在这里插入图片描述"></p>
+<h2 id="路由表"><a href="#路由表" class="headerlink" title="路由表"></a>路由表</h2><p>按主机所在的网络地址来制作路由表<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/d804e193d1388a4ddcf61b4581d5a216_1740931012874.png" alt="在这里插入图片描述"></p>
+<h1 id="路由协议"><a href="#路由协议" class="headerlink" title="路由协议"></a>路由协议</h1><p>互联网采用分层次的路由选择协议，这是因为</p>
+<ul>
+<li>互联网的规则非常大</li>
+<li>许多单位不愿意外界了解自己单位网络的布局细节和本部门采用的路由选择协议，但同时还希望连接到互联网上</li>
+</ul>
+<p><strong>自治系统AS</strong>：在单一技术管理下的许多网络、IP地址以及路由器，而这些路由器使用一种自治系统内部的路由选择协议和共同的度量。每一个AS对其他AS表现出的是一个单一的和一致的路由选择策略</p>
+<p><strong>两类路由选择协议</strong>：</p>
+<ul>
+<li>内部网关协议IGP：在一个自治系统内部使用的路由选择协议，包括RIP、OSPF</li>
+<li>外部网关协议EGP：在不同自治系统之间进行路由选择时使用，使用最多：BGP-4</li>
+<li>自治系统之间的路由选择叫做域间路由选择，自治系统内部的路由选择叫做域内路由选择<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/76d357d07cb280e026f3f9988b51444d_1740931012874.png" alt="在这里插入图片描述"></li>
+</ul>
+<h2 id="内部网关协议RIP"><a href="#内部网关协议RIP" class="headerlink" title="内部网关协议RIP"></a>内部网关协议RIP</h2><p>RIP是一种分布式、基于距离向量的路由选择协议<br>每个路由器都要维护从它自己到其他每一个目的网络的距离记录</p>
+<p><strong>距离</strong>：一个路由器到直接连接的网络的距离为1，到非直接连接的网络的距离为所经过的路由器数加1；“距离”也称为“跳数”，每经过一个路由器，跳数就加1。</p>
+<p>一条路径最多只能包含15个路由器。“距离”等于16时即相当于不可达，<strong>只适用于小型互联网</strong></p>
+<h3 id="RIP协议的特点"><a href="#RIP协议的特点" class="headerlink" title="RIP协议的特点"></a>RIP协议的特点</h3><ul>
+<li>仅和相邻路由器交换信息</li>
+<li>交换的信息是当前本路由器所知道的全部信息，即自己现在的路由表</li>
+<li>按固定的时间间隔交换路由信息(如30秒)</li>
+</ul>
+<h3 id="路由表的建立"><a href="#路由表的建立" class="headerlink" title="路由表的建立"></a>路由表的建立</h3><ul>
+<li>路由器在刚刚开始工作时，路由表为空，它只知道和他直连的网络，并将其加入路由表</li>
+<li>以后，每一个路由器也只和相邻路由器交换并更新路由信息</li>
+<li>经过若干次更新后，所有的路由器都会知道到达本自治系统中任何一个网络的最短距离和下一跳路由器的地址</li>
+<li>RIP协议的收敛过程较快。“收敛”就是在自治系统中所有的结点都得到正确的路由选择信息的过程</li>
+</ul>
+<h3 id="距离向量算法"><a href="#距离向量算法" class="headerlink" title="距离向量算法"></a>距离向量算法</h3><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/ab9a3dce503d24444640173fbf42834a_1740931020385.png" alt="在这里插入图片描述"></p>
+<blockquote>
+<p><strong>例题：路由表更新</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/f475f165cca18a40fe8065b13b23a72d_1740931020385.png" alt="在这里插入图片描述"></p>
+</blockquote>
+<h3 id="坏消息传播慢"><a href="#坏消息传播慢" class="headerlink" title="坏消息传播慢"></a>坏消息传播慢</h3><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/8a234f94062853d39c6661cb3e16341e_1740931020385.png" alt="在这里插入图片描述"></p>
+<ul>
+<li>R1说：我到网1的距离是16(表示无法到达)，是直接交付</li>
+<li>R2在收到R1的更新报文之前，还发送原来的报文，R2并不知道R1出了故障</li>
+<li>R1收到R2发的更新报文后，误以为可以通过R2到达网1，于是修改自己的路由信息为1，3，R2。表示“我到网1的距离为3，下一条经过R2”</li>
+<li>R2收到后又更新自己的路由表为1，4，R1</li>
+<li>这样不断更新下去，知道R1和R2到网1的距离都增大到16时，R1和R2才知道网1是不可达的</li>
+</ul>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><p>优点：实现简单，开销较小<br>缺点：<br>RIP限制了网络的规则，它能使用的最大距离为15<br>路由器之间交换的路由信息是路由器中的完整路由表，因而随着网络规模的扩大，开销也就增加<br>“坏消息传播得慢”，使更新过程的收敛时间过长</p>
+<h2 id="内部网关协议OSPF"><a href="#内部网关协议OSPF" class="headerlink" title="内部网关协议OSPF"></a>内部网关协议OSPF</h2><p>开放最短路径优先OSPF<br>使用了Dijkstra提出的最短路径算法SPF<br>最主要的特征就是使用<strong>链路状态协议</strong>，而不像RIP那样的距离向量协议</p>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
+<li>OSPF直接用IP数据报传送</li>
+<li>向本自治系统中所有路由器发送信息，这里使用的方法是洪泛法，路由器向所有相邻的路由器发送信息，而每一个相邻的路由器又再将此信息发往其所有的相邻路由器(但不再发送给刚刚发来信息的那个路由器)</li>
+<li>发送的信息就是与本路由器<strong>相邻的所有路由器的链路状态</strong>，但这只是路由器所知道的部分信息(“链路状态”就是说明本路由器都和哪些路由器相邻，以及该链路的“度量”，也称为“代价”)</li>
+<li>当链路状态发生变化或每隔一段时间(如30分钟),路由器才用洪泛法发送链路状态信息</li>
+</ul>
+<p><strong>链路状态数据库</strong>：各路由器之间频繁地交换链路状态信息，因此所有的路由器最终都能建立一个链路状态数据库，这个数据库实际上就是全网的拓扑图，在全网范围内是一致的。<br>OSPF的链路状态数据库能较快的更新，OSPF的<strong>更新过程收敛得快</strong>是其重要优点</p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/4aa97cb4c706b37bb1e33dd1ec08a6be_1740931020385.png" alt="在这里插入图片描述"></p>
+<h4 id="区域"><a href="#区域" class="headerlink" title="区域"></a>区域</h4><p>OSPF将一个自治系统再划分为若干个更小的范围，叫做区域，每个区域都有一个32位的区域标识符(用点分十进制表示)</p>
+<p>划分区域的好处是将利用洪泛法交换信息的范围局限于每一个区域中，在一个区域内部的路由器只知道本区域的完整网络拓扑</p>
+<blockquote>
+<p>OSPF采用层次结构的区域划分。在上层的区域叫做主干区域(标识符为0.0.0.0)，作用是连通其他在下层的区域，从其他区域来的信息都由<strong>区域边界路由器</strong>进行概括，在主干区域内的路由器叫做<strong>主干路由器</strong>，主干路由器可以同时是边界路由器，在主干区域内还要有一个路由器专门和其他自治系统交换路由信息，这样的路由器叫做<strong>自治系统边界路由器</strong><br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/0120a5f277def0a5449baa0500461fc7_1740931020385.png" alt="在这里插入图片描述"></p>
+</blockquote>
+<h4 id="其它特点"><a href="#其它特点" class="headerlink" title="其它特点"></a>其它特点</h4><ul>
+<li>OSPF对于不同类型的业务可计算出不同的路由</li>
+<li>到同一网络有多条相同代价的路径，可以将通信量分配给这几条路径。叫做多路径间的负载均衡</li>
+<li>支持可变长度的子网划分和无分类编址CIDR</li>
+<li>每一个链路状态都带上一个32位的序号，序号越大状态越新。</li>
+</ul>
+<h3 id="OSPF分组类型"><a href="#OSPF分组类型" class="headerlink" title="OSPF分组类型"></a>OSPF分组类型</h3><ul>
+<li>问候分组：发现和维持邻站的可达性</li>
+<li>数据库描述：给出自己的链路状态数据库的摘要信息</li>
+<li>链路状态请求：向对方请求发送自己缺少的某些链路状态的详细信息</li>
+<li>链路状态更新：用洪泛法对全网更新链路状态</li>
+<li>链路状态确认：对链路更新分组的确认</li>
+</ul>
+<p><strong>OSPF不用UDP而是直接用IP数据报传送</strong><br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/990ae9614aa5e98bcc18e6a49a45b1b3_1740931028449.png" alt="在这里插入图片描述"></p>
+<h2 id="外部网关协议BGP"><a href="#外部网关协议BGP" class="headerlink" title="外部网关协议BGP"></a>外部网关协议BGP</h2><p>BGP是不同自治系统的路由器之间交换路由信息的协议</p>
+<p>力求选择出一条能够到达目的网络且比较好的路由，而<strong>并非要寻找一条最佳的路由</strong></p>
+<p>采用路径向量路由选择协议</p>
+<h3 id="BGP路由"><a href="#BGP路由" class="headerlink" title="BGP路由"></a>BGP路由</h3><ul>
+<li>eBGP连接(external BGP)：两个边界路由器进行通信时，必须先建立<strong>TCP连接</strong>，运行eBGP协议，这种TCP连接又称为半永久性连接(双方交换完信息后仍然保持着连接状态)</li>
+<li>iBGP连接(internal BGP)：在AS内部，两个路由器之间还需要建立一个逻辑连接(也使用TCP连接)。运行iBGP协议，在一个AS内部所有的iBGP必须是全连通的。即使两个路由器之间没有物理连接，但它们仍然有iBGP连接</li>
+<li>IGP、iBGP、eBGP的关系<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/758356c568295a04209d4e90491978cb_1740931028449.png" alt="在这里插入图片描述"></li>
+</ul>
+<blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/6789dfa848b109656893a1ac4e85100b_1740931028449.png" alt="在这里插入图片描述"><br>BGP发言人往往就是BGP边界路由器<br>一个BGP发言人与其他自治系统中的BGP发言人要交换路由信息，就要先建立<strong>TCP连接</strong>，然后在此连接上交换BGP报文以建立BGP会话，利用BGP会话交换路由信息。利用TCP连接交换路由信息的两个BGP发言人，彼此成为对方的<strong>邻站</strong>或<strong>对等站</strong>。<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a288a9f54cb395256b1bc6e7806edf76_1740931028449.png" alt="在这里插入图片描述"></p>
+</blockquote>
+<blockquote>
+<p>BGP路由&#x3D;[前缀，BGP属性]&#x3D;[前缀，AS-PATH，NEXT-HOP]<br>前缀：指明到哪一个子网（用CIDR记法表示）<br>AS-PATH：自治系统路径，通告BGP路由所经过的自治系统，每经过一个AS，就将其自治系统号加入AS-PATH<br>NEXT-HOP：下一跳，通告的BGP路由起点<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/3cde73ee2dc30f3a1d13158081e3456c_1740931028449.png" alt="在这里插入图片描述"></p>
+</blockquote>
+<h3 id="三种不同的自治系统"><a href="#三种不同的自治系统" class="headerlink" title="三种不同的自治系统"></a>三种不同的自治系统</h3><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/4ea033034ae5f505eb16c4abca495f96_1740931036727.png" alt="在这里插入图片描述"></p>
+<blockquote>
+<p>BGP路由如何避免兜圈子？<br>AS在检查收到的BGP路由的AS-PATH中已经有了自己，立即删除掉这条路由(在属性AS-PATH中，不允许出现相同的AS号)</p>
+</blockquote>
+<h3 id="BGP的路由选择"><a href="#BGP的路由选择" class="headerlink" title="BGP的路由选择"></a>BGP的路由选择</h3><ul>
+<li>本地偏好值最高的路由</li>
+<li>AS跳数最小的路由</li>
+<li>热土豆路由选择算法(分组在AS内转发次数最少的路由)</li>
+<li>路由器BGP标识符的数值最小的路由</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/97dec096446ced7b190546aaa1bd4167_1740931036727.png" alt="在这里插入图片描述"></p>
+<h1 id="IPv6"><a href="#IPv6" class="headerlink" title="IPv6"></a>IPv6</h1><p>IPv6仍支持无连接的传送，但将协议数据单元PDU称为分组，而不是数据报</p>
+<p><strong>主要变化</strong>：</p>
+<ul>
+<li>更大的地址空间</li>
+<li>扩展的地址层次结构</li>
+<li>灵活的首部格式</li>
+<li>改进的选项</li>
+<li>允许协议继续扩充</li>
+<li>支持即插即用(自动配置)</li>
+<li>支持资源的预分配</li>
+<li>首部改为8字节对齐</li>
+</ul>
+<p>IPv6数据报由两大部分组成：基本首部、有效载荷(也称为净负荷。允许有零个或多个扩展首部，再后面是数据部分)<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/b88897492d628eac8883acae8cb46caa_1740931036727.png" alt="在这里插入图片描述"></p>
+<p><strong>地址格式</strong><br>IPv6数据报的目的地址可以是以下三种之一：</p>
+<ul>
+<li>单播：点对点</li>
+<li>多播：一对多</li>
+<li>任播：IPv6新增的一种类型，任播的终点是一组计算机，但只交付其中的一个，通常是距离最近的一个</li>
+</ul>
+<p><strong>IPv6采用冒号十六进制记法</strong><br>每个16位的值用十六进制表示，各值之间用冒号分割</p>
+<p>允许把数字前面的0省略，例如可以把“0000”中的前3个0省略，写成1个0</p>
+<p>零压缩：一连串连续的0可以为一对冒号所取代。FF05:0:0:0:0:0:0:B3 可压缩为 FF05::B3<br><strong>在任一地址中只能使用一次零压缩</strong></p>
+<p><strong>点分十进制记法的后缀</strong><br>冒号十六进制记法可结合使用点分十进制记法的后缀，在IPv4向IPv6的转换阶段特别有用<br>0:0:0:0:0:0:128.10.2.1<br>零压缩-&gt;::128.10.2.1</p>
+<p>CIDR的斜线表示法仍然可用<br>60位的前缀12AB00000000CD3可记为<br>12AB:0000:0000:CD30:0000:0000:0000:0000&#x2F;60<br>或：12AB::CD30:0:0:0:0&#x2F;60<br>或：12AB:0:0:CD30::&#x2F;60</p>
+<p>IPV6地址分类<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/1827657e8157e20beefe2057937be4ef_1740931036727.png" alt="在这里插入图片描述"></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>计算机网络笔记整理4——网络层</p><p><a href="https://shnpd.github.io/2022/01/03/计算机网络/计算机网络笔记整理4——网络层/">https://shnpd.github.io/2022/01/03/计算机网络/计算机网络笔记整理4——网络层/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>ShiHaonan</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2022-01-03</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-03-13</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E7%BD%91%E7%BB%9C-%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/">网络 网络协议</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/images/wxpay.jpg" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2022/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%865%E2%80%94%E2%80%94%E8%BF%90%E8%BE%93%E5%B1%82/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">计算机网络笔记整理5——运输层</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2022/01/02/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%863%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82/"><span class="level-item">计算机网络笔记整理3——数据链路层</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card" id="comments"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://shnpd.github.io/2022/01/03/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%AC%94%E8%AE%B0%E6%95%B4%E7%90%864%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%B1%82/';
+            this.page.identifier = '2022/01/03/计算机网络/计算机网络笔记整理4——网络层/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'shns-blog' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#点此链接可跳转到：计算机网络笔记整理——目录索引页"><span class="level-left"><span class="level-item">1</span><span class="level-item">点此链接可跳转到：计算机网络笔记整理——目录索引页</span></span></a></li><li><a class="level is-mobile" href="#网络层提供的两种服务"><span class="level-left"><span class="level-item">2</span><span class="level-item">网络层提供的两种服务</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#虚电路服务"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">虚电路服务</span></span></a></li><li><a class="level is-mobile" href="#数据报服务"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">数据报服务</span></span></a></li></ul></li><li><a class="level is-mobile" href="#网络互联的概念、设备、层次、协议"><span class="level-left"><span class="level-item">3</span><span class="level-item">网络互联的概念、设备、层次、协议</span></span></a></li><li><a class="level is-mobile" href="#分类IP地址"><span class="level-left"><span class="level-item">4</span><span class="level-item">分类IP地址</span></span></a></li><li><a class="level is-mobile" href="#无分类编址CIDR"><span class="level-left"><span class="level-item">5</span><span class="level-item">无分类编址CIDR</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#地址块"><span class="level-left"><span class="level-item">5.1</span><span class="level-item">地址块</span></span></a></li><li><a class="level is-mobile" href="#地址掩码"><span class="level-left"><span class="level-item">5.2</span><span class="level-item">地址掩码</span></span></a></li><li><a class="level is-mobile" href="#路由聚合"><span class="level-left"><span class="level-item">5.3</span><span class="level-item">路由聚合</span></span></a></li></ul></li><li><a class="level is-mobile" href="#IP数据报"><span class="level-left"><span class="level-item">6</span><span class="level-item">IP数据报</span></span></a></li><li><a class="level is-mobile" href="#ARP协议"><span class="level-left"><span class="level-item">7</span><span class="level-item">ARP协议</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#IP地址与MAC地址的区别"><span class="level-left"><span class="level-item">7.1</span><span class="level-item">IP地址与MAC地址的区别</span></span></a></li><li><a class="level is-mobile" href="#地址解析协议ARP"><span class="level-left"><span class="level-item">7.2</span><span class="level-item">地址解析协议ARP</span></span></a></li></ul></li><li><a class="level is-mobile" href="#网际控制报文协议ICMP"><span class="level-left"><span class="level-item">8</span><span class="level-item">网际控制报文协议ICMP</span></span></a></li><li><a class="level is-mobile" href="#NAT"><span class="level-left"><span class="level-item">9</span><span class="level-item">NAT</span></span></a></li><li><a class="level is-mobile" href="#路由器的构成、转发分组、路由表"><span class="level-left"><span class="level-item">10</span><span class="level-item">路由器的构成、转发分组、路由表</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#路由器的构成"><span class="level-left"><span class="level-item">10.1</span><span class="level-item">路由器的构成</span></span></a></li><li><a class="level is-mobile" href="#转发分组的流程"><span class="level-left"><span class="level-item">10.2</span><span class="level-item">转发分组的流程</span></span></a></li><li><a class="level is-mobile" href="#路由表"><span class="level-left"><span class="level-item">10.3</span><span class="level-item">路由表</span></span></a></li></ul></li><li><a class="level is-mobile" href="#路由协议"><span class="level-left"><span class="level-item">11</span><span class="level-item">路由协议</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#内部网关协议RIP"><span class="level-left"><span class="level-item">11.1</span><span class="level-item">内部网关协议RIP</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#RIP协议的特点"><span class="level-left"><span class="level-item">11.1.1</span><span class="level-item">RIP协议的特点</span></span></a></li><li><a class="level is-mobile" href="#路由表的建立"><span class="level-left"><span class="level-item">11.1.2</span><span class="level-item">路由表的建立</span></span></a></li><li><a class="level is-mobile" href="#距离向量算法"><span class="level-left"><span class="level-item">11.1.3</span><span class="level-item">距离向量算法</span></span></a></li><li><a class="level is-mobile" href="#坏消息传播慢"><span class="level-left"><span class="level-item">11.1.4</span><span class="level-item">坏消息传播慢</span></span></a></li><li><a class="level is-mobile" href="#优缺点"><span class="level-left"><span class="level-item">11.1.5</span><span class="level-item">优缺点</span></span></a></li></ul></li><li><a class="level is-mobile" href="#内部网关协议OSPF"><span class="level-left"><span class="level-item">11.2</span><span class="level-item">内部网关协议OSPF</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#特点"><span class="level-left"><span class="level-item">11.2.1</span><span class="level-item">特点</span></span></a></li><li><a class="level is-mobile" href="#OSPF分组类型"><span class="level-left"><span class="level-item">11.2.2</span><span class="level-item">OSPF分组类型</span></span></a></li></ul></li><li><a class="level is-mobile" href="#外部网关协议BGP"><span class="level-left"><span class="level-item">11.3</span><span class="level-item">外部网关协议BGP</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#BGP路由"><span class="level-left"><span class="level-item">11.3.1</span><span class="level-item">BGP路由</span></span></a></li><li><a class="level is-mobile" href="#三种不同的自治系统"><span class="level-left"><span class="level-item">11.3.2</span><span class="level-item">三种不同的自治系统</span></span></a></li><li><a class="level is-mobile" href="#BGP的路由选择"><span class="level-left"><span class="level-item">11.3.3</span><span class="level-item">BGP的路由选择</span></span></a></li></ul></li></ul></li><li><a class="level is-mobile" href="#IPv6"><span class="level-left"><span class="level-item">12</span><span class="level-item">IPv6</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-04-21T12:20:00.000Z">2025-04-21</time></p><p class="title"><a href="/2025/04/21/gonote/%E3%80%90Go%E3%80%91%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">【Go】堆和栈变量</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-19T16:00:00.000Z">2025-03-20</time></p><p class="title"><a href="/2025/03/20/gonote/%E3%80%90Go%E3%80%91atomic%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C/">【Go】atomic原子操作</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-14T16:00:00.000Z">2025-03-15</time></p><p class="title"><a href="/2025/03/15/interview/redis/%E3%80%90redis%E3%80%91%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">【redis】数据类型</a></p><p class="categories"><a href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">知识点整理</a> / <a href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/">redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/%E3%80%90Go%E3%80%91Channel/">【Go】Channel</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/%E3%80%90Go%E3%80%91CSP%E6%A8%A1%E5%9E%8B/">【Go】CSP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Fabric/"><span class="level-start"><span class="level-item">Fabric</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/Golang/"><span class="level-start"><span class="level-item">Golang</span></span><span class="level-end"><span class="level-item tag">45</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Shell%E8%84%9A%E6%9C%AC/"><span class="level-start"><span class="level-item">Shell脚本</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/bytedance/"><span class="level-start"><span class="level-item">bytedance</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"><span class="level-start"><span class="level-item">以太坊</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%88%B7%E9%A2%98%E9%9B%86/"><span class="level-start"><span class="level-item">刷题集</span></span><span class="level-end"><span class="level-item tag">27</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="level-start"><span class="level-item">前端</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="level-start"><span class="level-item">区块链</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AD%A6%E6%9C%AF/"><span class="level-start"><span class="level-item">学术</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"><span class="level-start"><span class="level-item">密码学</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%B0%8F%E7%A8%8B%E5%BA%8F/"><span class="level-start"><span class="level-item">小程序</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><span class="level-start"><span class="level-item">数据结构</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"><span class="level-start"><span class="level-item">机器学习</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9D%82%E9%A1%B9/"><span class="level-start"><span class="level-item">杂项</span></span><span class="level-end"><span class="level-item tag">31</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%AF%94%E7%89%B9%E5%B8%81/"><span class="level-start"><span class="level-item">比特币</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/"><span class="level-start"><span class="level-item">知识点整理</span></span><span class="level-end"><span class="level-item tag">19</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/mysql/"><span class="level-start"><span class="level-item">mysql</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/"><span class="level-start"><span class="level-item">redis</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">算法</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"><span class="level-start"><span class="level-item">网络安全</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li></ul></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">shn&#039;s blog</a><p class="is-size-7"><span>&copy; 2025 ShiHaonan</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">Welcome to shn's blog!</p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

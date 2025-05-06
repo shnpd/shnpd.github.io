@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>网络安全笔记1——Internet协议的安全性 - shn&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="shn&#039;s blog"><meta name="msapplication-TileImage" content="/images/icon_blog.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="shn&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="​​点击阅读更多查看文章内容"><meta property="og:type" content="blog"><meta property="og:title" content="网络安全笔记1——Internet协议的安全性"><meta property="og:url" content="https://shnpd.github.io/2022/07/22/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94Internet%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7/"><meta property="og:site_name" content="shn&#039;s blog"><meta property="og:description" content="​​点击阅读更多查看文章内容"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/414cb7708e7cf1bf6e55b7e0a378991f_1740930501182.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/35b34248c84b56e217c1d8fab7ba2c8d_1740930501182.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/2e1c53c31c88375c1416c6226aff1947_1740930501182.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/780f91589338ba6ef8cc419f85b3b960_1740930501182.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a9064fba55e5463de5a0616b497894b7_1740930501182.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e2809d1f89079e7dddf5da42d631ac64_1740930509371.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/23cca1417a00e77ad12681065b90b7f7_1740930509371.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/61bab9c7ed19ee13ff4a6fb917bfca8c_1740930509371.png"><meta property="article:published_time" content="2022-07-22T08:50:55.000Z"><meta property="article:modified_time" content="2025-03-13T08:46:44.282Z"><meta property="article:author" content="ShiHaonan"><meta property="article:tag" content="web安全 网络 安全"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/414cb7708e7cf1bf6e55b7e0a378991f_1740930501182.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://shnpd.github.io/2022/07/22/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94Internet%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7/"},"headline":"网络安全笔记1——Internet协议的安全性","image":["https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/414cb7708e7cf1bf6e55b7e0a378991f_1740930501182.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/35b34248c84b56e217c1d8fab7ba2c8d_1740930501182.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/2e1c53c31c88375c1416c6226aff1947_1740930501182.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/780f91589338ba6ef8cc419f85b3b960_1740930501182.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a9064fba55e5463de5a0616b497894b7_1740930501182.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e2809d1f89079e7dddf5da42d631ac64_1740930509371.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/23cca1417a00e77ad12681065b90b7f7_1740930509371.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/61bab9c7ed19ee13ff4a6fb917bfca8c_1740930509371.png"],"datePublished":"2022-07-22T08:50:55.000Z","dateModified":"2025-03-13T08:46:44.282Z","author":{"@type":"Person","name":"ShiHaonan"},"publisher":{"@type":"Organization","name":"shn's blog","logo":{"@type":"ImageObject","url":{"text":"shn's blog"}}},"description":"​​点击阅读更多查看文章内容"}</script><link rel="canonical" href="https://shnpd.github.io/2022/07/22/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94Internet%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7/"><link rel="icon" href="/images/icon_blog.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><meta name="msvalidate.01" content="E38AFEA650A8300110261393E7FD0A39"><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">shn&#039;s blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-07-22T08:50:55.000Z" title="7/22/2022, 4:50:55 PM">2022-07-22</time>发表</span><span class="level-item"><time dateTime="2025-03-13T08:46:44.282Z" title="3/13/2025, 4:46:44 PM">2025-03-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/">网络安全</a></span><span class="level-item">1 小时读完 (大约10700个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">网络安全笔记1——Internet协议的安全性</h1><div class="content"><p>​​点击阅读更多查看文章内容<span id="more"></span></p>
+<h1 id="网络安全笔记1——Internet协议的安全性"><a href="#网络安全笔记1——Internet协议的安全性" class="headerlink" title="网络安全笔记1——Internet协议的安全性"></a>网络安全笔记1——Internet协议的安全性</h1><blockquote>
+<p>参考课程：<a target="_blank" rel="noopener" href="https://www.icourse163.org/course/BUAA-1466021165">中国大学MOOC《网络安全》——北京航空航天大学</a></p>
+</blockquote>
+<p>@[toc]</p>
+<h1 id="一、网络层协议"><a href="#一、网络层协议" class="headerlink" title="一、网络层协议"></a><font color="green">一、网络层协议</font></h1><h1 id="1-1、IP协议的安全问题及防护措施"><a href="#1-1、IP协议的安全问题及防护措施" class="headerlink" title="1.1、IP协议的安全问题及防护措施"></a>1.1、IP协议的安全问题及防护措施</h1><ul>
+<li><p><strong>安全问题1</strong>：IP数据报在传递过程中易被攻击者<strong>监听</strong>、<strong>窃取</strong>。这是一种被动攻击，攻击者可截取数据报，解析数据净荷，从而获得数据内容。<br><strong>防护措施1</strong>：对IP数据报进行<strong>加密</strong>。</p>
+</li>
+<li><p><strong>安全问题2</strong>：由于IP层并没有采用任何机制保证数据净荷传输的正确性，攻击者可能截取数据报，<strong>修改数据报中的内容</strong>后，将修改结果发送给接收方。<br><strong>防护措施2</strong>：对IP数据报净荷部分实行<strong>完整性检测</strong>机制。</p>
+</li>
+<li><p><strong>安全问题3</strong>：IP层不能保证IP数据报一定是从源地址发送的。攻击者可伪装成另一个网络主机，发送含有伪造源地址的数据包欺骗接受者。此攻击称为<strong>IP欺骗攻击</strong>。<br><strong>防护措施3</strong>：通过<strong>源地址鉴别</strong>机制加以防御。</p>
+</li>
+<li><p><strong>安全问题4</strong>：IP数据报在传输过程中要经历被分段和重组的过程，攻击者可以在包过滤器中注入大量病态的小数据报，来破坏包过滤器的正常工作。<br><strong>防护措施4</strong>：许多防火墙能够重组分段的IP数据报，以检查其内容。</p>
+</li>
+<li><p><strong>安全问题5</strong>：使用特殊的目的地址发送IP数据报也会引入安全问题。如攻击者可使用目的地址为<strong>定向广播地址</strong>的IP数据报来攻击许多不同类型的主机。<br><strong>防护措施5</strong>：配置路由器时启用禁止发送定向广播数据包的功能。</p>
+</li>
+</ul>
+<h1 id="1-2、ARP协议的安全问题及防护措施"><a href="#1-2、ARP协议的安全问题及防护措施" class="headerlink" title="1.2、ARP协议的安全问题及防护措施"></a>1.2、ARP协议的安全问题及防护措施</h1><blockquote>
+<p>输入 <code>arp -a</code>指令可以看到本机缓存的ARP映射，其中动态类型是经过ARP查询之后得到的响应<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/414cb7708e7cf1bf6e55b7e0a378991f_1740930501182.png" alt="在这里插入图片描述"></p>
+</blockquote>
+<h2 id="1-2-1、ARP欺骗攻击"><a href="#1-2-1、ARP欺骗攻击" class="headerlink" title="1.2.1、ARP欺骗攻击"></a>1.2.1、ARP欺骗攻击</h2><p>在主机A询问主机B的MAC地址时，主机C会伪造ARP响应告诉主机A主机B的MAC地址为攻击者（主机C）的MAC地址<br>同样在主机B询问主机A的MAC地址时，主机C会伪造ARP响应告诉主机B主机A的MAC地址为攻击者（主机C）的MAC地址<br>这样在主机A和主机B向对方发送数据时都会被转发给攻击者C，攻击者就可以拿到A,B通信的数据报</p>
+<p><strong>防火措施</strong></p>
+<ol>
+<li>在交换机上配置IEEE 802.1x协议，攻击者连接交换机时需进行身份认证 <a target="_blank" rel="noopener" href="https://blog.csdn.net/shn111/article/details/125501317">（802.1x协议简述）</a></li>
+<li>建立静态ARP表</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/35b34248c84b56e217c1d8fab7ba2c8d_1740930501182.png" alt="在这里插入图片描述"></p>
+<h1 id="1-3、ICMP协议的安全问题及防护措施"><a href="#1-3、ICMP协议的安全问题及防护措施" class="headerlink" title="1.3、ICMP协议的安全问题及防护措施"></a>1.3、ICMP协议的安全问题及防护措施</h1><blockquote>
+<p><a target="_blank" rel="noopener" href="https://f-sec.blog.csdn.net/article/details/109165302">参考：icmp超详细讲解
+</a></p>
+</blockquote>
+<p>网际控制报文协议（Internet Control Message Protocol，ICMP）是一个重要的错误处理和信息处理协议</p>
+<ul>
+<li>它用于通知主机到达目的地的最佳路由，报告路由故障；</li>
+<li>它有两个非常重要的监控工具——Ping和Tracert的重要组成部分</li>
+<li>它是一种差错和控制报文协议，不仅用于传输差错报文，还传输控制报文</li>
+</ul>
+<h2 id="1-3-1、ICMP重定向攻击"><a href="#1-3-1、ICMP重定向攻击" class="headerlink" title="1.3.1、ICMP重定向攻击"></a>1.3.1、ICMP重定向攻击</h2><p>攻击者可以利用ICMP对消息进行重定向，使得目标机器遭受连接劫持和拒绝服务等攻击。</p>
+<p><strong>攻击原理</strong><br>这里首先假设有两台电脑，正常情况下，两台机器互相进行网络交流的时候需要经过路由，但是路由器有一个策略，就是当发现网络中有一台机器使用的是非优化路由的时候，路由就会向那台机器发送一个ICMP重定向的特殊报文，告诉机器改变路由，让机器的路由改为最优的，这个优化和非优化可以理解两点直接直线最短，怎么快就怎么弄，这本身是一个对网络有益的机制。<br>但是这个更改路由的ICMP重定向特殊报文是可以伪造的，并且不需要经过一些校验，合法性检查。也就是说攻击者完全可以向他向受害主机发送ICMP重定向报文，迫使受害主机更改路由表。</p>
+<p><strong>危害</strong><br>ICMP重定向攻击的数据包可以迫使主机更改路由为攻击者的主机，那么主机的流量就需要经过攻击者的主机。攻击者就可以截获、提取、分析、修改、重放用户user的数据包，对流量进行嗅探劫持、中间人代理，造成多种安全威胁。</p>
+<p><strong>防护</strong><br>一般情况下现有网络的设计是很少发出重定向，那么我们可以禁止网关发出重定向消息，主机不处理重定向。华为设备已经取消发送 ICMP 重定向和接受ICMP重定向数据包</p>
+<h2 id="1-3-2、ICMP路由器发现攻击"><a href="#1-3-2、ICMP路由器发现攻击" class="headerlink" title="1.3.2、ICMP路由器发现攻击"></a>1.3.2、ICMP路由器发现攻击</h2><p>在进行路由发现时，ICMP并不对应答方进行认证，使得它可能遭受严重的中间人攻击。攻击者假冒正常的路由器，使用伪造信息应答ICMP询问。由于ICMP并不对应答方进行认证，因此接收方无法知道响应式伪造的。</p>
+<h2 id="1-3-3、防火墙穿越攻击"><a href="#1-3-3、防火墙穿越攻击" class="headerlink" title="1.3.3、防火墙穿越攻击"></a>1.3.3、防火墙穿越攻击</h2><p>通过防火墙穿越攻击技术（Firewalking），攻击者能够穿越某个防火墙的访问控制列表和规则集，进而确定该防火墙过滤的内容和具体的过滤方式。尽管防火墙面临启用ICMP所带来的风险，但由于主机采用Path MTU的机制，因此在防火墙封堵所有ICMP消息并不妥当。</p>
+<h2 id="1-3-4、ping泛洪攻击与smurf攻击"><a href="#1-3-4、ping泛洪攻击与smurf攻击" class="headerlink" title="1.3.4、ping泛洪攻击与smurf攻击"></a>1.3.4、ping泛洪攻击与smurf攻击</h2><p><strong>ping泛洪</strong><br>它利用ping的原理，向目标服务器发送大量的ICMP回送请求。这是黑客向特定的机器连续发送大量的ICMP回送请求报文。目标机器回答到达的ICMP回送请求已经用尽全力了，原来的通信处理就变得很不稳定了。进一步，目标机器连接的网络也可能由于大量的ICMP数据包而陷入不可使用的状态。<br><strong>smurf</strong><br>黑客恶意的使用ICMP回送请求报文。这一点同ping泛洪是相同的。不过在smurf，对ICMP回送请求实施了一些加工。源IP地址被伪装成攻击对象服务器的地址，目标地址也不是攻击对象服务器的地址，而是成为中转台的网络的广播地址。<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/2e1c53c31c88375c1416c6226aff1947_1740930501182.png" alt="在这里插入图片描述"></p>
+<p>黑客发送伪装了的ICMP 回送请求后，到达在作为踏板的网络的入口处的路由器。这样，路由器将回送请求转发给网内所有的计算机（同2）。假如有100 台计算机，回送请求将到达100 台所有的计算机。收到回送请求的计算机对此作出反应，送出回送回答报文（同3）。这样，黑客送出的一个ICMP回送请求报文，一下子增加到了100 倍。<br>这样增加的ICMP 回送回答报文面向的不是黑客的计算机，而是伪装成回送请求的源IP 地址的攻击对象服务器。变成到达了，从几百台计算机发出的巨大数量的ICMP 回送回答。smurf 与ping 洪水攻击不同，因为到达服务器的是ICMP 回送回答，服务器不用返回回答。但是为了处理大量的ICMP，服务器承受了大量的负载。网路被撑爆了也是一样的（同4）</p>
+<h1 id="1-4、IGMP协议的安全问题及防护措施"><a href="#1-4、IGMP协议的安全问题及防护措施" class="headerlink" title="1.4、IGMP协议的安全问题及防护措施"></a>1.4、IGMP协议的安全问题及防护措施</h1><p>网际组管理协议（Internet Group Management Protocol，IGMP）是TCP&#x2F;IP协议族中负责IP组播成员管理的协议</p>
+<ul>
+<li>主机通过IGMP通知路由器希望接收或离开某个特定组播组的信息</li>
+<li>路由器通过IGMP周期性地查询局域网内的组播组成员是否处于活动状态，实现所连网段组成员关系的收集与维护</li>
+</ul>
+<h2 id="1-4-1、利用查询报文攻击"><a href="#1-4-1、利用查询报文攻击" class="headerlink" title="1.4.1、利用查询报文攻击"></a>1.4.1、利用查询报文攻击</h2><p>当具有较低IP地址的路由器发送伪造的查询报文，那么当前的查询方就认为，查询任务由伪造的查询方执行，当前的查询方转变为响应查询请求，并且不再发出查询报文。</p>
+<h2 id="1-4-2、利用离开报文进行DoS攻击"><a href="#1-4-2、利用离开报文进行DoS攻击" class="headerlink" title="1.4.2、利用离开报文进行DoS攻击"></a>1.4.2、利用离开报文进行DoS攻击</h2><p>子网内非法用户通过截获某个合法用户信息来发送伪造的IGMP离开报文，组播路由器接受报文后误认为该合法用户已经撤离该组播组，则不再向该用户发送询问请求，从而造成拒绝服务攻击。</p>
+<h2 id="1-4-3、利用报告报文攻击"><a href="#1-4-3、利用报告报文攻击" class="headerlink" title="1.4.3、利用报告报文攻击"></a>1.4.3、利用报告报文攻击</h2><p>非法用户伪装报告报文，或截获合法用户的报告报文向组播路由器发送伪造报文，使组播路由器误认为有新用户加入，于是将组播树扩展到非法用户所在的子网。</p>
+<h1 id="1-5、OSPF协议的安全问题及防护措施"><a href="#1-5、OSPF协议的安全问题及防护措施" class="headerlink" title="1.5、OSPF协议的安全问题及防护措施"></a>1.5、OSPF协议的安全问题及防护措施</h1><blockquote>
+<p>开放最短路径优先协议（Open Shortest Path First，OSPF）是一个内部网关协议，用于在单一自治系统内决策路由。<br>OSPF是<strong>分布式的链路状态路由协议</strong><br>在该协议中，只有当链路状态发生变化时，路由器才用洪泛法向所有路由器发送路由信息，每个路由器都有一个保存全网链路信息的链路状态数据库。</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/780f91589338ba6ef8cc419f85b3b960_1740930501182.png" alt="在这里插入图片描述"><br>OSPF协议中规定了认证域（authentication），但其作用非常有限</p>
+<ol>
+<li>即使OSPF提供了较强的认证，但某些节点仍然使用简单的口令认证</li>
+<li>在路由对话中，如果有一个合法的用户遭到破坏，那么它的消息就不再可信</li>
+<li>在许多路由协议中，邻近的计算机会重复旧的对话内容，导致欺骗得到传播扩散。</li>
+</ol>
+<h1 id="1-6、BGP协议的安全问题及防护措施"><a href="#1-6、BGP协议的安全问题及防护措施" class="headerlink" title="1.6、BGP协议的安全问题及防护措施"></a>1.6、BGP协议的安全问题及防护措施</h1><blockquote>
+<p>边界网关协议（Border Gateway Protocol，BGP）将单一管理的网络转化为由多个自治系统分散互连的网络。</p>
+</blockquote>
+<p><strong>安全问题</strong><br>BGP缺乏一个安全可信的路由认证机制，无法对所传播的路由信息的安全性进行验证。</p>
+<p><strong>解决方案</strong><br>路由认证类方案：MD5 BGP认证技术、S-BGP方案、soBGP方案等<br>前缀劫持检测类方案：多源AS检测技术、主动探测技术</p>
+<hr>
+<h1 id="二、传输层协议"><a href="#二、传输层协议" class="headerlink" title="二、传输层协议"></a><font color="green">二、传输层协议</font></h1><h1 id="2-1、TCP协议的安全问题及防护措施"><a href="#2-1、TCP协议的安全问题及防护措施" class="headerlink" title="2.1、TCP协议的安全问题及防护措施"></a>2.1、TCP协议的安全问题及防护措施</h1><blockquote>
+<p>传输控制协议（Transmission Control Protocol，TCP）是一种面向连接的、可靠的传输层通信协议。</p>
+</blockquote>
+<h2 id="2-1-1、SYN-FLOOD攻击"><a href="#2-1-1、SYN-FLOOD攻击" class="headerlink" title="2.1.1、SYN FLOOD攻击"></a>2.1.1、SYN FLOOD攻击</h2><p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/a9064fba55e5463de5a0616b497894b7_1740930501182.png" alt="在这里插入图片描述"></p>
+<p>TCP连接是一个<strong>三次握手</strong>过程，在服务器收到初始的<strong>SYN数据包</strong>后，该连接处于<strong>半开放状态</strong>。此后，服务器返回自己的<strong>序号</strong>，并等待<strong>第三个确认数据包</strong>确认。最后，客户机发送确认数据包，在客户机和服务器之间建立连接。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/e2809d1f89079e7dddf5da42d631ac64_1740930509371.png" alt="在这里插入图片描述"></p>
+<p><strong>SYN Flood攻击</strong><br>攻击者不断向服务器的监听端口发送建立TCP连接的请求SYN数据包，使服务器一直处于半开放连接状态，无法接受其他正常的连接请求。这种攻击属于拒绝服务（DoS）攻击。</p>
+<p><strong>防护措施</strong><br>在服务器前端部署网络安全设备（防火墙）进行数据包过滤</p>
+<h2 id="2-1-2、TCP会话劫持攻击"><a href="#2-1-2、TCP会话劫持攻击" class="headerlink" title="2.1.2、TCP会话劫持攻击"></a>2.1.2、TCP会话劫持攻击</h2><p>针对TCP协议<strong>不对数据包加密和认证</strong>的漏洞发起的TCP会话劫持攻击</p>
+<p><strong>攻击描述</strong><br>TCP协议确认数据包的真实性主要依据是判断数据包中独有的32位序列号是否正确。如果攻击者能够预测目标主机的起始序号，就可以欺骗该目标主机。</p>
+<p><strong>防护措施</strong><br>在TCP连接建立时采用一个随机数作为初始序列号</p>
+<h2 id="2-1-3、拥塞控制攻击"><a href="#2-1-3、拥塞控制攻击" class="headerlink" title="2.1.3、拥塞控制攻击"></a>2.1.3、拥塞控制攻击</h2><p>针对TCP的<strong>拥塞控制机制</strong>的特性，在TCP连接建立后的数据阶段攻击</p>
+<p><strong>攻击描述</strong><br>拥塞控制功能旨在防止过多的数据注入网络。有经验的攻击者可以利用拥塞机制的特性，周期性地制造网络关键节点的拥塞，不断触发拥塞窗口的慢启动过程，最终达到降低正常传输能力的目的。</p>
+<p><strong>防护措施</strong><br>网关实时监测网络异常流量</p>
+<h1 id="2-2、UDP协议的安全问题及防护措施"><a href="#2-2、UDP协议的安全问题及防护措施" class="headerlink" title="2.2、UDP协议的安全问题及防护措施"></a>2.2、UDP协议的安全问题及防护措施</h1><blockquote>
+<p>用户数据报协议（User Datagram Protocol，UDP）是一种无连接的传输层协议，提供面向事务的简单不可靠信息传送服务<br>无需连接，传输高效；无拥塞控制的不可靠交付；数据报首部仅8字节；网络拥塞不会降低发送速率</p>
+</blockquote>
+<p><strong>安全问题</strong><br>最常见的UDP攻击为DoS攻击，而<strong>UDP Flood</strong>攻击又是DoS攻击中最普遍的流量型攻击。</p>
+<p><strong>攻击原理</strong><br>攻击源发送大量的UDP小包到攻击目标，目标可以是服务器或网络设备，使其忙于处理和回应UDP报文，系统资源使用率飙高，最后导致该设备不能提供正常服务或者直接死机，严重的会造成全网瘫痪。</p>
+<p><strong>载荷检查和指纹学习</strong></p>
+<ul>
+<li>载荷检查：当UDP流量超过阈值时，会触发载荷检查。如果UDP报文数据段内容完全一样，例如数据段内容都为1，则会被认为是攻击而丢弃报文。</li>
+<li>指纹学习：当UDP流量超过阈值时，会触发指纹学习。指纹由抗DDoS设备动态学习生成，将攻击报文的一段显著特征学习为指纹后，匹配指纹的报文会被丢弃。动态指纹学习适用于以下类型的UDP Flood攻击：报文载荷具有明显特征。报文负载内容完全一致。<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/23cca1417a00e77ad12681065b90b7f7_1740930509371.png" alt="在这里插入图片描述"></li>
+</ul>
+<p><strong>UDP协议的防护措施</strong><br>UDP协议与TCP协议不同，是无连接状态的协议，并且UDP应用协议五花八门，差异极大，因此针对UDP Flood的防护非常困难。其防护要根据具体情况对待？</p>
+<ul>
+<li>判断包大小，如果是大包攻击则使用防止UDP碎片方法：根据攻击包大小设定包碎片重组大小，通常不小于1500。在极端情况下，可以考虑丢弃所有UDP碎片。</li>
+<li>攻击端口为业务端口：根据该业务UDP最大包长设置UDP最大包大小以过滤异常流量。</li>
+<li>攻击端口为非业务端口：一个是丢弃所有UDP包，可能会误伤正常业务；一个是建立UDP连接规则，要求所有去往该端口的UDP包，必须首先与TCP端口建立TCP连接。不过这种方法需要很专业的防火墙或其他防护设备支持</li>
+</ul>
+<h1 id="三、应用层协议"><a href="#三、应用层协议" class="headerlink" title="三、应用层协议"></a><font color="green">三、应用层协议</font></h1><p align="center"> 协议栈</p>
+
+<p><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/csdn/61bab9c7ed19ee13ff4a6fb917bfca8c_1740930509371.png" alt="在这里插入图片描述"></p>
+<h1 id="3-1、RIP协议的安全问题及防护措施"><a href="#3-1、RIP协议的安全问题及防护措施" class="headerlink" title="3.1、RIP协议的安全问题及防护措施"></a>3.1、RIP协议的安全问题及防护措施</h1><p align="center">端口：UDP 520</p>
+
+<blockquote>
+<p>动态路由选择协议（Routing Information Protocol，RIP）是一种动态内部路由&#x2F;网关协议，用于自治系统内的路由信息的传递。</p>
+</blockquote>
+<p><strong>安全问题</strong><br>攻击者可以伪造RIP路由更新信息，并向邻居路由器发送，伪造内容为目的网络地址、子网掩码地址与下一跳地址，经过若干轮路由更新，网络通信将面临瘫痪的风险。<br>此外，攻击者会利用一些网络嗅探工具（tcpdump和rprobe等）来获得远程网路的RIP路由表，通过欺骗工具（如srip）伪造RIP报文，再利用重定向工具（如fragroute）截取、修改和重写向外发送的报文，以控制网络中报文信息</p>
+<p><strong>防护措施</strong><br>针对RIP的不安全因素，中小型网络通常采取以下两种防护措施</p>
+<ol>
+<li>将路由器的某些接口配置为被动接口，之后该接口停止向它所在的网络广播路由更新报文，但是允许它接收来自其他路由器的更新报文。</li>
+<li>配置路由器的访问控制列表，只允许某些源IP地址的路由更新报文进入列表</li>
+</ol>
+<h1 id="3-2、HTTP协议的安全问题及防护措施"><a href="#3-2、HTTP协议的安全问题及防护措施" class="headerlink" title="3.2、HTTP协议的安全问题及防护措施"></a>3.2、HTTP协议的安全问题及防护措施</h1><p align="center">端口：TCP 80</p>
+
+
+<blockquote>
+<p>超文本传输协议（Hyper Text Transfer Protocol，HTTP）是一个客户端和服务器端请求和应答的标准，是互联网上应用最广泛的一种网络协议。</p>
+</blockquote>
+<p><strong>安全问题</strong><br>HTTP协议中数据是直接通过<strong>明文</strong>进行传输的，不提供任何方式的数据加密，因此存在较大的安全缺陷。</p>
+<ul>
+<li>安全隐患1：攻击者可以通过网络嗅探工具轻易获得明文的传输数据，从而分析出特定的敏感信息，如用户的登录口令、手机号码和信用卡号码等重要资料。</li>
+<li>安全隐患2：HTTP协议是一种无状态连接，在传输客户端请求和服务器响应时，唯一的<strong>完整性检验</strong>是报文头部的数据传输长度，而未对传输内容进行消息完整性检测。攻击者可以轻易篡改传输数据，发动<strong>中间人攻击</strong>。</li>
+</ul>
+<p><strong>防护措施</strong><br>在HTTP协议和TCP协议之间增加安全层来增强安全性。安全层主要通过安全套接层（SSL）及其替代协议传输层安全协议（TLS）实现，其中<strong>SSL</strong>协议通过<strong>443端口</strong>进行传输，主要包含记录协议和握手协议。</p>
+<p><strong>HTTPS协议及其安全性</strong><br>HTTPS协议通过增加安全层，可实现双向身份认证、生成会话密钥、传输数据加密、数据完整性验证和防止数据包重放攻击等安全功能。针对HTTPS协议的攻击方式主要是发生在SSL连接还未发生时的中间人攻击。</p>
+<h1 id="3-3、TELNET协议的安全问题及防护措施"><a href="#3-3、TELNET协议的安全问题及防护措施" class="headerlink" title="3.3、TELNET协议的安全问题及防护措施"></a>3.3、TELNET协议的安全问题及防护措施</h1><p align="center">端口：TCP23</p>
+
+<blockquote>
+<p>远程登录协议（Teletype Network，TELNET）是TCP&#x2F;IP协议族中的一员，是Internet远程登录服务的标准协议和主要方式。</p>
+</blockquote>
+<p><strong>安全问题</strong><br>Telnet提供了简单终端到某台主机的访问。主叫用户输入账户名称和口令来进行登录。Telnet程序可能会泄露秘密信息，攻击者可以通过Sniffer记录用户名和口令组合，或者记录整个会话。攻击者还可以采取主动的攻击方式，比如劫持Telnet会话并在认证完成后篡改或插入一些命令。<br>黑客可以使用TCP劫持攻击在某种条件下劫持Telnet会话。</p>
+<p><strong>防护措施</strong><br>对Telnet会话进行加密。目前出现了几种Telnet的加密解决方案，它们分别为Stel、SSLtelnet、Stelnet、SSH等协议。其中SSH已经成为远程登录的标准协议。</p>
+<h1 id="3-4、SSH协议的安全问题及防护措施"><a href="#3-4、SSH协议的安全问题及防护措施" class="headerlink" title="3.4、SSH协议的安全问题及防护措施"></a>3.4、SSH协议的安全问题及防护措施</h1><p align="center">端口：TCP 22</p>
+
+<blockquote>
+<p>安全壳协议（Secure Shell，SSH）是一种在不安全的网络上建立安全的远程登录或其他安全网络服务的协议。</p>
+</blockquote>
+<p>SSH支持身份认证和数据加密，对所有传输的数据进行加密处理，并采用<a target="_blank" rel="noopener" href="https://www.cnblogs.com/fishou/p/4206980.html">“挑战&#x2F;响应”机制</a>替代传统的主机名和口令认证，它既可以代替Telnet作为安全的远程登录方式，又可以为FTP、POP等服务提供一个安全的“隧道”，能够有效防止中间人攻击。</p>
+<p><strong>SSH通信流程</strong><br>建立TCP连接-&gt;版本协商-&gt;算法协商-&gt;密钥建立和服务器认证-&gt;用户认证-&gt;通信会话</p>
+<p><strong>安全问题及防护措施</strong></p>
+<ul>
+<li>服务器认证<br> <strong>问题描述</strong>：SSH协议在不安全的网络环境中没有可信的认证机构对服务器的真实性进行验证；SSH协议提供了可选功能使得客户机第一次连接到服务器时可以不对服务器主机密钥验证。<br> <strong>防护措施</strong>：必须检验主机密钥来验证服务器的正确性</li>
+<li>协议版本协商<br><strong>问题描述</strong>：SSH协议运行第一步是进行服务器与客户端协议版本的协商。如果攻击者采用有安全漏洞的版本建立连接，则可能采取进一步攻击。<br><strong>防护措施</strong>：对采用有安全问题软件的通信方，服务器可以中断TCP连接</li>
+<li>主机密钥文件安全<br><strong>问题描述</strong>：SSH协议服务器的主机密钥存储在一个主机密钥文件中，若该文件被窃取或篡改，则会对协议的认证机制造成严重威胁，进一步实施假冒、重放和中间人攻击等<br><strong>防护措施</strong>：增强安全机制进行主机密钥文件的管理</li>
+</ul>
+<h1 id="3-5、DNS协议的安全问题及防护措施"><a href="#3-5、DNS协议的安全问题及防护措施" class="headerlink" title="3.5、DNS协议的安全问题及防护措施"></a>3.5、DNS协议的安全问题及防护措施</h1><p align="center">端口：UDP 53</p>
+
+<blockquote>
+<p>域名系统（Domain Name System，DNS）是一个分布式数据库系统，用来实现域名与IP地址之间的映射。</p>
+</blockquote>
+<p><strong>安全问题</strong></p>
+<ul>
+<li><strong>DNS欺骗攻击</strong>：攻击者假冒域名服务器的一种欺骗行为。</li>
+<li><strong>DNS缓存中毒攻击</strong>：攻击者给DNS服务器注入非法网络域名地址，若服务器接受此非法地址，此后域名请求的响应将会受黑客控制。当非法地址写入服务器缓存，用户就会跳转到DNS指定的非法地址。</li>
+<li><strong>DNS重定向攻击</strong>：攻击者将DNS名称查询重定向到恶意DNS服务器上，域名解析就会被劫持，完全处在攻击者的控制之下。</li>
+</ul>
+<p><strong>防护措施</strong></p>
+<ul>
+<li>强烈建议哪些暴露的主机不要采用<strong>基于名称</strong>的认证。<strong>基于地址</strong>的认证虽然也很脆弱，但要优于前者。</li>
+<li>攻击者可以从主机名中找出有用的信息，因此<strong>不要把秘密的信息放在主机名中。</strong></li>
+<li>抵御DNS攻击的有效方法是采用<strong>DNSsec新标准</strong>，但目前此协议还存在很多问题，从而延缓推广。</li>
+</ul>
+<h1 id="3-6、SMTP协议的安全问题及防护措施"><a href="#3-6、SMTP协议的安全问题及防护措施" class="headerlink" title="3.6、SMTP协议的安全问题及防护措施"></a>3.6、SMTP协议的安全问题及防护措施</h1><p align="center">端口：TCP 25</p>
+
+<blockquote>
+<p>简单邮件传输协议（Simple Mail Transfer Protocol，SMTP）是一组用于由源地址到目的地址传送邮件的规则，由它来控制信件的中转方式。</p>
+</blockquote>
+<p><strong>安全问题</strong><br>SMTP自身是完全无害的，但它可能成为拒绝服务攻击（DoS）的发源地，攻击者可以采用DoS攻击阻止合法用户使用该邮件服务器；邮件的别名有时也会给黑客提供一些有用的信息；“开放中继”允许在任何人之间进行邮件传递，这是非常危险的。</p>
+<p><strong>防护措施</strong><br>使用SMTP认证，并与加密SMTP会话结合使用，从而避免“开放中继”。</p>
+<h1 id="3-7、MIME协议的安全问题及防护措施"><a href="#3-7、MIME协议的安全问题及防护措施" class="headerlink" title="3.7、MIME协议的安全问题及防护措施"></a>3.7、MIME协议的安全问题及防护措施</h1><blockquote>
+<p>多用途网间邮件扩充协议（Multipurpose Internet E-mail Extention，MIME）是广泛应用的一种电子邮件技术规范。</p>
+</blockquote>
+<p><strong>安全问题</strong></p>
+<ul>
+<li>当MIME应用于电子邮件系统时，自动运行MIME编码消息隐藏着巨大的风险，这些消息中被编码的结构信息能够指示客户端软件要采取何种行动；</li>
+<li>对MIME存在一种分段攻击；</li>
+<li>MIME的其它安全风险：邮递可执行程序或邮件含有危险的PostScript文件，是传播蠕虫和病毒的主要途径。</li>
+</ul>
+<p><strong>防护措施</strong></p>
+<ul>
+<li>禁用MIME客户端的自动运行功能</li>
+<li>拒守不完整邮件</li>
+<li>禁止下载带有可执行程序的MIME消息</li>
+</ul>
+<h1 id="3-8、POP3协议的安全问题及防护措施"><a href="#3-8、POP3协议的安全问题及防护措施" class="headerlink" title="3.8、POP3协议的安全问题及防护措施"></a>3.8、POP3协议的安全问题及防护措施</h1><p align="center">端口：TCP 110</p>
+
+<blockquote>
+<p>邮局协议（Post Office Protocol，POP）是一个邮件协议，它的第三个版本称为POP3.</p>
+</blockquote>
+<p><strong>安全问题</strong></p>
+<ul>
+<li>POP3协议非常简单，甚至可采用Perl脚本程序非常容易地实现，所以非常不安全。</li>
+<li>POP3口令以明文传输，使用sniffer等网络监听软件很容易捕获用户口令。</li>
+<li>使用APOP对用户名和口令进行“挑战&#x2F;响应”机制进行身份认证，但对邮件内容没有加密保护。</li>
+<li>口令以明文形式存储在服务器上，一旦服务器受到攻击，口令也被黑客窃取。</li>
+</ul>
+<p><strong>防护措施</strong></p>
+<ul>
+<li>在防火墙上对邮件服务器的访问进行限制。</li>
+<li>对POP3服务器的用户数据库进行安全加固。</li>
+<li>采用IMAP4协议替代POP3协议，使用SSL&#x2F;TLS对传输的数据进行加密。</li>
+</ul>
+<h1 id="3-9、IMAP4协议的安全问题及防护措施"><a href="#3-9、IMAP4协议的安全问题及防护措施" class="headerlink" title="3.9、IMAP4协议的安全问题及防护措施"></a>3.9、IMAP4协议的安全问题及防护措施</h1><p align="center">端口：TCP 110，993</p>
+
+<blockquote>
+<p>消息访问协议（Internet Message Access Protocol，IMAP）是一个邮件获取协议，第4个版本是IMAP4</p>
+</blockquote>
+<p><strong>主要特点</strong><br>IMAP4与POP3一样，是收邮件协议，它具有对邮箱更强大的访问控制能力，它可方便地提供邮件下载服务，支持离线阅读；支持在线&#x2F;离线传输数据；服务器端采用分布式存储邮件方式；支持用户对服务器的远程加密访问。</p>
+<p><strong>安全问题</strong><br>IMAP4采用“挑战&#x2F;响应”机制实现用户认证，但这一机制用到保存在服务器端的共享秘密信息，一旦服务器被攻破，用户的秘密信息将被黑客窃取。</p>
+<p><strong>防护措施</strong><br>使用杂凑函数将共享秘密进行杂凑运算，消除共享秘密的等值性。</p>
+<h1 id="3-10、PGP协议的安全问题及防护措施"><a href="#3-10、PGP协议的安全问题及防护措施" class="headerlink" title="3.10、PGP协议的安全问题及防护措施"></a>3.10、PGP协议的安全问题及防护措施</h1><blockquote>
+<p>PGP（Pretty Good Privacy）协议是常用的安全电子邮件标准。PGP包括5种服务：认证、保密、压缩、电子邮件兼容和分段。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>使用算法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数字签名</td>
+<td>DSS&#x2F;SHA或RSA&#x2F;SHA</td>
+<td>消息的hash码利用SHA-1产生，将此消息摘要和消息一起用发送方的私钥按DSS或RSA加密</td>
+</tr>
+<tr>
+<td>消息加密</td>
+<td>CAST或IDEA或使用3DES或RSA</td>
+<td>将消息用发送方生成的一次性会话密钥按CAST-128或IDEA或3DES加密。用接收方公钥按DH或RSA加密会话密钥，并与消息一起加密</td>
+</tr>
+<tr>
+<td>压缩</td>
+<td>ZIP</td>
+<td>消息在传送或存储时可用ZIP压缩</td>
+</tr>
+<tr>
+<td>电子邮件兼容</td>
+<td>基数64转换</td>
+<td>为了对电子邮件应用提供透明性，一个加密消息可以用基数64转换为ASCII串</td>
+</tr>
+<tr>
+<td>分段</td>
+<td></td>
+<td>为了符合最大消息尺寸限制，PGP执行分段和重新组装</td>
+</tr>
+</tbody></table>
+<p><strong>安全问题及防范措施</strong></p>
+<ul>
+<li><strong>公钥篡改</strong>：随着PGP的普及，多用户系统上也出现了PGP，因此暴露密钥和口令的可能性增大，篡改公钥将导致合法通信者无法解密文件，或导致攻击者可以伪造签名。<br><strong>防护措施</strong>：采用数字证书技术确保公钥的可信性。</li>
+<li><strong>时戳不可信</strong>：攻击者可以通过修改系统时间，对时戳进行伪造，从而攻击者可实施重放攻击。<br><strong>防护措施</strong>：1.建立第三方时间公证体系，由公证方在邮件上签上标准时间；2.采用国际标准时戳协议RFC3161。</li>
+<li><strong>信任模型缺陷</strong>：为得到未核实身份的通信对方的有效公钥，PGP中引入了第三方，这带来了对第三方的信任问题。此外，PGP没有采用有效的PKI证书管理体系。<br><strong>防护措施</strong>：对用户的信任度进行规范设置；建立有效的PGP证书管理体系。</li>
+</ul>
+<h1 id="3-11、FTP协议的安全问题及防护措施"><a href="#3-11、FTP协议的安全问题及防护措施" class="headerlink" title="3.11、FTP协议的安全问题及防护措施"></a>3.11、FTP协议的安全问题及防护措施</h1><p align="center">端口：TCP 20/21</p>
+
+<blockquote>
+<p>文件传输协议（File Transfer Protocol，FTP）是Internet文件传送的基础，是TCP&#x2F;IP协议族的重要协议之一。</p>
+</blockquote>
+<p><strong>安全问题</strong></p>
+<ul>
+<li>FTP <strong>反弹攻击</strong>就是攻击者利用FTP协议的<strong>PORT命令</strong>，将数据发送到第三方，攻击者可利用FTP服务器对其他机器进行端口扫描和发送数据。</li>
+<li>攻击者可以将Java程序伪装成FTP客户机发动攻击。</li>
+<li>客户机与服务器之间的消息是以明文的形式传输的，运行FTP协议时，访问FTP服务器的口令很容易被探测或猜测到。</li>
+<li>ftpd后台守护程序开始时以root用户权限运行，若攻击者取得了root权限，就可以为所欲为。</li>
+</ul>
+<p><strong>防护措施</strong></p>
+<ul>
+<li>主动模式下，FTP服务器限制PORT命令的IP地址为客户端IP且端口大于1024。在被动模式下，可使用PASV命令。</li>
+<li>禁止运行含有Java的脚本程序。</li>
+<li>使用SFTP协议对用户名和口令进行加密传输。</li>
+</ul>
+<h1 id="3-12、TFTP协议的安全问题及防护措施"><a href="#3-12、TFTP协议的安全问题及防护措施" class="headerlink" title="3.12、TFTP协议的安全问题及防护措施"></a>3.12、TFTP协议的安全问题及防护措施</h1><p align="center">端口：UDP 69</p>
+
+<blockquote>
+<p>简单文件传输协议（Trivial File Transfer Protocol，TFTP）是用来在客户机与服务器之间进行简单文件传输的协议<br>TFTP用于提供简单、开销较小的文件传输服务，采用UDP协议，提供不可靠的数据流传输服务，不提供授权与认证机制，使用超时重传方式来保证数据的到达。</p>
+</blockquote>
+<p><strong>安全问题</strong><br>只提供文件传输而不验证文件是否成功传送，在可靠性与安全性上没有保证。</p>
+<p><strong>防护措施</strong><br>除非真的需要此协议，否则不应该在任何机器上运行该协议；若要使用应确保对其正确的配置，严禁上传配置文件。</p>
+<p><strong>口令破解攻击实例</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ tftp target.cs.boofhead.edu</span><br><span class="line">tftp&gt; get /etc/passwd /tmp/passwd (下载密码)</span><br><span class="line">Received 1205 bytes <span class="keyword">in</span> 0.5 seconds</span><br><span class="line">Tftp&gt; quit</span><br><span class="line">$ crack &lt;/tmp/passwd（密码破译）</span><br></pre></td></tr></table></figure>
+
+<h1 id="3-13、NFS协议的安全问题及防护措施"><a href="#3-13、NFS协议的安全问题及防护措施" class="headerlink" title="3.13、NFS协议的安全问题及防护措施"></a>3.13、NFS协议的安全问题及防护措施</h1><p align="center">端口：UDP 2049</p>
+
+<blockquote>
+<p>网络文件系统（Network File System，NFS）是一个基于TCP&#x2F;IP网络的文件共享协议。<br>NFS允许一个系统在网络上与他人共享目录和文件。<br>通过NFS协议，用户可以像访问本地文件一样访问远端系统上的文件，在远端系统的共享文件金西行创建、修改和删除操作。<br>NFS协议采用基于远程过程调用的分布式文件系统结构</p>
+</blockquote>
+<p><strong>安全问题及防护措施</strong></p>
+<ul>
+<li><strong>NFS协议缺乏用户验证机制</strong>：NFS只验证RPC&#x2F;Mount请求，此类访问控制措施不安全。<br><strong>防护措施</strong>：加强客户端访问控制</li>
+<li><strong>2049号端口处于无特权范围</strong>：2049端口属于无特权端口，容易分配给其他普通进程。<br><strong>防护措施</strong>：使防火墙禁止其它进程访问2049端口</li>
+<li><strong>客户机可对服务器实施DoS攻击</strong>：客户机可伪造返回数据包，创建setuid程序来发动DoS攻击。<br><strong>防护措施</strong>：利用禁止加载不可信资源选项</li>
+<li><strong>服务器可对客户机植入恶意程序</strong>：服务器很容易在客户机上植入木马和病毒程序。<br><strong>防护措施</strong>：对外来文件进行病毒木马查杀</li>
+</ul>
+<h1 id="3-14、SNMP协议的安全问题及防护措施"><a href="#3-14、SNMP协议的安全问题及防护措施" class="headerlink" title="3.14、SNMP协议的安全问题及防护措施"></a>3.14、SNMP协议的安全问题及防护措施</h1><p align="center">端口：UDP 161/162</p>
+
+<blockquote>
+<p>简单网络管理协议（Simple Network Management Protocol，SNMP）是用于支持网络管理系统的协议。<br>SNMP协议的应用范围广泛，被应用于诸多种类的网络设备、软件和系统中，被认为是首选管理协议。<br>SNMP的主要作用是控制路由器、网桥及其他网络单元，用来读&#x2F;写各种设备信息，如操作系统、版本、路由表、默认的TTL、流量统计、接口名称和ARP映射表等，其中有些信息时非常敏感的。</p>
+</blockquote>
+<p><strong>SNMP v1、v2版本的安全问题</strong></p>
+<ul>
+<li>SNMPv1和v2中代理可被多个管理站管理，管理站合法性认证依靠团体名和源地址检查。团体名为固定长度字符串，易被穷举攻击。</li>
+<li>SNMP数据被封装在UDP中传输，攻击者可以通过嗅探监听，捕获管理站与被管设备之间的交互信息，即可获得SNMP消息中的明文团体名。</li>
+<li>攻击者通过嗅探监听截获管理站发往被管系统的管理消息后，通过对消息数据恶意重组、延迟和重放即可实现对被管设备的攻击。</li>
+</ul>
+<p><strong>防护措施</strong></p>
+<ul>
+<li>在不必要情况下关闭SNMP代理，不提供SNMP服务。</li>
+<li>修改设备缺失的团体名，设置为相对复杂的SNMP团体名。</li>
+<li>管理站IP地址限定，只有SNMP管理站的IP地址可以发起SNMP请求。</li>
+<li>设置访问控制，限制被管设备利用TFTP，FTP和RCP等方式下载上传文件。</li>
+<li>SNMP已经出到v3版本，其认证和加密机制更加完善。</li>
+</ul>
+<h1 id="3-15、DHCP协议的安全问题及防护措施"><a href="#3-15、DHCP协议的安全问题及防护措施" class="headerlink" title="3.15、DHCP协议的安全问题及防护措施"></a>3.15、DHCP协议的安全问题及防护措施</h1><p align="center">端口：UDP 67/68</p>
+
+<blockquote>
+<p>动态主机配置协议（Dynamic Host Configuration Protocol，DHCP）用于分配IP地址、提供启动计算机其他信息的协议。</p>
+<ol>
+<li>提供动态制定IP地址和配置参数的机制；</li>
+<li>能够提供大量信息；</li>
+<li>服务器对IP地址提供集中化管理，简化了管理任务。</li>
+</ol>
+</blockquote>
+<ul>
+<li>出于安全性的考虑，此协议只能在本地网络上使用。</li>
+<li>由于DHCP服务器通常没有对查询消息进行认证，所以查询响应容易受到中间人攻击和拒绝服务（DoS）攻击。</li>
+<li>此外，攻击者可用假冒的DHCP服务器压制合法的服务器，对查询提供响应并导致各种类型的攻击。</li>
+</ul>
+<h1 id="3-16、H-323协议的安全问题及防护措施"><a href="#3-16、H-323协议的安全问题及防护措施" class="headerlink" title="3.16、H.323协议的安全问题及防护措施"></a>3.16、H.323协议的安全问题及防护措施</h1><blockquote>
+<p>H.323是一种用于VoIP（Voice over IP）在分组网上提供实时音频、视频和数据通信的标准（NetMeeting）。</p>
+</blockquote>
+<p><strong>安全问题</strong></p>
+<ul>
+<li>拒绝服务：在通信过程中，要求使用H.323协议的终端开放特定端口时刻处于监听状态，易受DoS攻击。</li>
+<li>注册劫持：攻击者在注册环节截获终端的标识信息，并向网关发送取消注册信息，再冒用该合法用户的身份注册。</li>
+<li>会话中断：会话控制和管理的指令以明文传送，攻击者可截获并伪造结束会话的数据包，强制中断合法用户会话。</li>
+</ul>
+<h1 id="3-17、SIP协议的安全问题及防护措施"><a href="#3-17、SIP协议的安全问题及防护措施" class="headerlink" title="3.17、SIP协议的安全问题及防护措施"></a>3.17、SIP协议的安全问题及防护措施</h1><blockquote>
+<p>会话启动协议（Session Initiation Protocol，SIP）是由IETF制定的基于文本编码的多媒体通信协议（如VoLTE）</p>
+</blockquote>
+<p><strong>安全问题</strong><br>注册劫持、伪装服务器、篡改消息、恶意修改或结束会话、拒绝服务</p>
+<p><strong>防护措施</strong><br>网络层和传输层的安全保护；HTTP摘要认证；应用层端到端加密。</p>
+<h1 id="3-18、NTP协议的安全问题及防护措施"><a href="#3-18、NTP协议的安全问题及防护措施" class="headerlink" title="3.18、NTP协议的安全问题及防护措施"></a>3.18、NTP协议的安全问题及防护措施</h1><p align="center">端口：UDP 123</p>
+
+<blockquote>
+<p>网络时间协议（Network Time Protocol，NTP）可在分布式时间服务器和客户端之间进行时间同步。</p>
+</blockquote>
+<p><strong>安全问题</strong></p>
+<ul>
+<li>修改系统时间，将已过期或已撤销证书变为有效证书。</li>
+<li>修改系统时间，使链接DNSSEC服务器的用户密钥和签名失效。</li>
+<li>绕过时间戳检验，达到发动重放攻击的目的。</li>
+<li>伪造受害主机向NTP服务器不断发送monlist请求，发动DoS攻击。</li>
+</ul>
+<p><strong>防护措施</strong></p>
+<ul>
+<li>采用密码技术对消息进行认证</li>
+<li>对本地时间源到其他时间源直至根时间源的连接加以认证</li>
+<li>管理员合理配置NTP守护程序，拒绝来自外部的跟踪请求</li>
+</ul>
+<h1 id="3-19、FINGER协议的安全问题及防护措施"><a href="#3-19、FINGER协议的安全问题及防护措施" class="headerlink" title="3.19、FINGER协议的安全问题及防护措施"></a>3.19、FINGER协议的安全问题及防护措施</h1><p align="center">端口：UDP 79</p>
+
+<blockquote>
+<p>Finger协议可以帮助用户查询系统中某一个用户的细节，如其全名、住址、电话号码、登录细节等。</p>
+</blockquote>
+<p><strong>安全问题</strong></p>
+<ul>
+<li>利用Finger协议可获得的用户信息或用户登录信息，可以被黑客用来调查并发现潜在的攻击目标。</li>
+<li>它所提供的信息，很可能被黑客用来实施口令猜测攻击。</li>
+<li>黑客可以发现用户最近与哪个实体相连，这个实体可能成为潜在的攻击目标；黑客还可以发现用户最后使用的是哪个账号。</li>
+</ul>
+<p><strong>防护措施</strong></p>
+<ul>
+<li>使用防火墙使其无法运行。</li>
+<li>关闭Finger后台程序，或限制Finger协议的功能。</li>
+</ul>
+<h1 id="3-20、Whois协议的安全问题及防护措施"><a href="#3-20、Whois协议的安全问题及防护措施" class="headerlink" title="3.20、Whois协议的安全问题及防护措施"></a>3.20、Whois协议的安全问题及防护措施</h1><p align="center">端口：TCP 43</p>
+
+<blockquote>
+<p>Whois协议是用来查询域名的IP以及所有者等信息的传输协议。<br><a target="_blank" rel="noopener" href="https://www.whois.com/">Whois查询</a></p>
+</blockquote>
+<h1 id="3-21、LDAP协议的安全问题及防护措施"><a href="#3-21、LDAP协议的安全问题及防护措施" class="headerlink" title="3.21、LDAP协议的安全问题及防护措施"></a>3.21、LDAP协议的安全问题及防护措施</h1><p align="center">端口：TCP 389</p>
+
+<blockquote>
+<p>轻量级目录访问协议（Lightweight Directory Access Protocol,LDAP）是基于X.500的目录访问协议，以目录的形式来管理资源。<br> 信息数据：适合于小数据的存取操作<br> 目录访问：提供基于属性的目录访问<br> 适合读操作：适合于读操作更多的应用<br> 便于应用加载：为定制应用程序加上LDAP的支持<br> 跨平台访问：可以提供跨平台的访问</p>
+</blockquote>
+<p><strong>协议用途</strong></p>
+<ul>
+<li>使用LDAP来替代地址簿</li>
+<li>使用LDAP协议提供目录数据查询，实现对数字证书的存取</li>
+</ul>
+<p><strong>防护措施</strong></p>
+<ul>
+<li>用户认证：保证客户的身份与客户所声明身份相同</li>
+<li>数据完整：保证服务器收到的数据没有被篡改</li>
+<li>数据保密：在可能使数据暴露的地方，对数据进行加密</li>
+<li>用户授权：保证用户的请求在用户的授权范围内得到允许</li>
+</ul>
+<h1 id="3-22、NNTP协议的安全问题及防护措施"><a href="#3-22、NNTP协议的安全问题及防护措施" class="headerlink" title="3.22、NNTP协议的安全问题及防护措施"></a>3.22、NNTP协议的安全问题及防护措施</h1><p align="center">端口：TCP 119</p>
+
+<blockquote>
+<p>网络新闻传输协议（Network News Transfer Protocol，NNTP）是一个用于阅读和张贴新闻文章到Usenet上的Internet应用协议。</p>
+</blockquote>
+<p>网络消息通常通过网络消息传输协议NNTP进行传输，采用的会话与SMTP相类似，接收和发送的消息条目通过网关来处理和转发。这种协议只用来阅读新闻。</p>
+<p><strong>安全性缺陷</strong></p>
+<ul>
+<li>网络消息非常耗费系统资源</li>
+<li>所有的这些程序可能会带来安全漏洞</li>
+<li>很多的防火墙结构在设计时假设网关可能遭受攻击</li>
+<li>若传递消息的NNTP存在漏洞，消息主机会很危险</li>
+</ul>
+<p><strong>防护措施</strong><br>增加对相邻节点的认证，从而拒绝恶意的连接请求</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>网络安全笔记1——Internet协议的安全性</p><p><a href="https://shnpd.github.io/2022/07/22/网络安全/网络安全笔记1——Internet协议的安全性/">https://shnpd.github.io/2022/07/22/网络安全/网络安全笔记1——Internet协议的安全性/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>ShiHaonan</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2022-07-22</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-03-13</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/web%E5%AE%89%E5%85%A8-%E7%BD%91%E7%BB%9C-%E5%AE%89%E5%85%A8/">web安全 网络 安全</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/images/wxpay.jpg" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2022/08/01/%E6%9D%82%E9%A1%B9/%E6%89%A9%E5%B1%95%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E6%B1%82%E9%80%86%E5%85%83%E5%AE%9E%E4%BE%8B/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">扩展欧几里得求逆元实例</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2022/06/28/%E6%9D%82%E9%A1%B9/802.1x%E5%8D%8F%E8%AE%AE%E7%AE%80%E8%BF%B0/"><span class="level-item">802.1x协议简述</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card" id="comments"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://shnpd.github.io/2022/07/22/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E7%AC%94%E8%AE%B01%E2%80%94%E2%80%94Internet%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7/';
+            this.page.identifier = '2022/07/22/网络安全/网络安全笔记1——Internet协议的安全性/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'shns-blog' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#网络安全笔记1——Internet协议的安全性"><span class="level-left"><span class="level-item">1</span><span class="level-item">网络安全笔记1——Internet协议的安全性</span></span></a></li><li><a class="level is-mobile" href="#一、网络层协议"><span class="level-left"><span class="level-item">2</span><span class="level-item">一、网络层协议</span></span></a></li><li><a class="level is-mobile" href="#1-1、IP协议的安全问题及防护措施"><span class="level-left"><span class="level-item">3</span><span class="level-item">1.1、IP协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#1-2、ARP协议的安全问题及防护措施"><span class="level-left"><span class="level-item">4</span><span class="level-item">1.2、ARP协议的安全问题及防护措施</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-2-1、ARP欺骗攻击"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">1.2.1、ARP欺骗攻击</span></span></a></li></ul></li><li><a class="level is-mobile" href="#1-3、ICMP协议的安全问题及防护措施"><span class="level-left"><span class="level-item">5</span><span class="level-item">1.3、ICMP协议的安全问题及防护措施</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-3-1、ICMP重定向攻击"><span class="level-left"><span class="level-item">5.1</span><span class="level-item">1.3.1、ICMP重定向攻击</span></span></a></li><li><a class="level is-mobile" href="#1-3-2、ICMP路由器发现攻击"><span class="level-left"><span class="level-item">5.2</span><span class="level-item">1.3.2、ICMP路由器发现攻击</span></span></a></li><li><a class="level is-mobile" href="#1-3-3、防火墙穿越攻击"><span class="level-left"><span class="level-item">5.3</span><span class="level-item">1.3.3、防火墙穿越攻击</span></span></a></li><li><a class="level is-mobile" href="#1-3-4、ping泛洪攻击与smurf攻击"><span class="level-left"><span class="level-item">5.4</span><span class="level-item">1.3.4、ping泛洪攻击与smurf攻击</span></span></a></li></ul></li><li><a class="level is-mobile" href="#1-4、IGMP协议的安全问题及防护措施"><span class="level-left"><span class="level-item">6</span><span class="level-item">1.4、IGMP协议的安全问题及防护措施</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-4-1、利用查询报文攻击"><span class="level-left"><span class="level-item">6.1</span><span class="level-item">1.4.1、利用查询报文攻击</span></span></a></li><li><a class="level is-mobile" href="#1-4-2、利用离开报文进行DoS攻击"><span class="level-left"><span class="level-item">6.2</span><span class="level-item">1.4.2、利用离开报文进行DoS攻击</span></span></a></li><li><a class="level is-mobile" href="#1-4-3、利用报告报文攻击"><span class="level-left"><span class="level-item">6.3</span><span class="level-item">1.4.3、利用报告报文攻击</span></span></a></li></ul></li><li><a class="level is-mobile" href="#1-5、OSPF协议的安全问题及防护措施"><span class="level-left"><span class="level-item">7</span><span class="level-item">1.5、OSPF协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#1-6、BGP协议的安全问题及防护措施"><span class="level-left"><span class="level-item">8</span><span class="level-item">1.6、BGP协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#二、传输层协议"><span class="level-left"><span class="level-item">9</span><span class="level-item">二、传输层协议</span></span></a></li><li><a class="level is-mobile" href="#2-1、TCP协议的安全问题及防护措施"><span class="level-left"><span class="level-item">10</span><span class="level-item">2.1、TCP协议的安全问题及防护措施</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#2-1-1、SYN-FLOOD攻击"><span class="level-left"><span class="level-item">10.1</span><span class="level-item">2.1.1、SYN FLOOD攻击</span></span></a></li><li><a class="level is-mobile" href="#2-1-2、TCP会话劫持攻击"><span class="level-left"><span class="level-item">10.2</span><span class="level-item">2.1.2、TCP会话劫持攻击</span></span></a></li><li><a class="level is-mobile" href="#2-1-3、拥塞控制攻击"><span class="level-left"><span class="level-item">10.3</span><span class="level-item">2.1.3、拥塞控制攻击</span></span></a></li></ul></li><li><a class="level is-mobile" href="#2-2、UDP协议的安全问题及防护措施"><span class="level-left"><span class="level-item">11</span><span class="level-item">2.2、UDP协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#三、应用层协议"><span class="level-left"><span class="level-item">12</span><span class="level-item">三、应用层协议</span></span></a></li><li><a class="level is-mobile" href="#3-1、RIP协议的安全问题及防护措施"><span class="level-left"><span class="level-item">13</span><span class="level-item">3.1、RIP协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#3-2、HTTP协议的安全问题及防护措施"><span class="level-left"><span class="level-item">14</span><span class="level-item">3.2、HTTP协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#3-3、TELNET协议的安全问题及防护措施"><span class="level-left"><span class="level-item">15</span><span class="level-item">3.3、TELNET协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#3-4、SSH协议的安全问题及防护措施"><span class="level-left"><span class="level-item">16</span><span class="level-item">3.4、SSH协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#3-5、DNS协议的安全问题及防护措施"><span class="level-left"><span class="level-item">17</span><span class="level-item">3.5、DNS协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#3-6、SMTP协议的安全问题及防护措施"><span class="level-left"><span class="level-item">18</span><span class="level-item">3.6、SMTP协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#3-7、MIME协议的安全问题及防护措施"><span class="level-left"><span class="level-item">19</span><span class="level-item">3.7、MIME协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#3-8、POP3协议的安全问题及防护措施"><span class="level-left"><span class="level-item">20</span><span class="level-item">3.8、POP3协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#3-9、IMAP4协议的安全问题及防护措施"><span class="level-left"><span class="level-item">21</span><span class="level-item">3.9、IMAP4协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#3-10、PGP协议的安全问题及防护措施"><span class="level-left"><span class="level-item">22</span><span class="level-item">3.10、PGP协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#3-11、FTP协议的安全问题及防护措施"><span class="level-left"><span class="level-item">23</span><span class="level-item">3.11、FTP协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#3-12、TFTP协议的安全问题及防护措施"><span class="level-left"><span class="level-item">24</span><span class="level-item">3.12、TFTP协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#3-13、NFS协议的安全问题及防护措施"><span class="level-left"><span class="level-item">25</span><span class="level-item">3.13、NFS协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#3-14、SNMP协议的安全问题及防护措施"><span class="level-left"><span class="level-item">26</span><span class="level-item">3.14、SNMP协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#3-15、DHCP协议的安全问题及防护措施"><span class="level-left"><span class="level-item">27</span><span class="level-item">3.15、DHCP协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#3-16、H-323协议的安全问题及防护措施"><span class="level-left"><span class="level-item">28</span><span class="level-item">3.16、H.323协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#3-17、SIP协议的安全问题及防护措施"><span class="level-left"><span class="level-item">29</span><span class="level-item">3.17、SIP协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#3-18、NTP协议的安全问题及防护措施"><span class="level-left"><span class="level-item">30</span><span class="level-item">3.18、NTP协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#3-19、FINGER协议的安全问题及防护措施"><span class="level-left"><span class="level-item">31</span><span class="level-item">3.19、FINGER协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#3-20、Whois协议的安全问题及防护措施"><span class="level-left"><span class="level-item">32</span><span class="level-item">3.20、Whois协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#3-21、LDAP协议的安全问题及防护措施"><span class="level-left"><span class="level-item">33</span><span class="level-item">3.21、LDAP协议的安全问题及防护措施</span></span></a></li><li><a class="level is-mobile" href="#3-22、NNTP协议的安全问题及防护措施"><span class="level-left"><span class="level-item">34</span><span class="level-item">3.22、NNTP协议的安全问题及防护措施</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-04-21T12:20:00.000Z">2025-04-21</time></p><p class="title"><a href="/2025/04/21/gonote/%E3%80%90Go%E3%80%91%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">【Go】堆和栈变量</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-19T16:00:00.000Z">2025-03-20</time></p><p class="title"><a href="/2025/03/20/gonote/%E3%80%90Go%E3%80%91atomic%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C/">【Go】atomic原子操作</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-14T16:00:00.000Z">2025-03-15</time></p><p class="title"><a href="/2025/03/15/interview/redis/%E3%80%90redis%E3%80%91%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">【redis】数据类型</a></p><p class="categories"><a href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">知识点整理</a> / <a href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/">redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/%E3%80%90Go%E3%80%91Channel/">【Go】Channel</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/%E3%80%90Go%E3%80%91CSP%E6%A8%A1%E5%9E%8B/">【Go】CSP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Fabric/"><span class="level-start"><span class="level-item">Fabric</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/Golang/"><span class="level-start"><span class="level-item">Golang</span></span><span class="level-end"><span class="level-item tag">45</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Shell%E8%84%9A%E6%9C%AC/"><span class="level-start"><span class="level-item">Shell脚本</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/bytedance/"><span class="level-start"><span class="level-item">bytedance</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"><span class="level-start"><span class="level-item">以太坊</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%88%B7%E9%A2%98%E9%9B%86/"><span class="level-start"><span class="level-item">刷题集</span></span><span class="level-end"><span class="level-item tag">27</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="level-start"><span class="level-item">前端</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="level-start"><span class="level-item">区块链</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AD%A6%E6%9C%AF/"><span class="level-start"><span class="level-item">学术</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"><span class="level-start"><span class="level-item">密码学</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%B0%8F%E7%A8%8B%E5%BA%8F/"><span class="level-start"><span class="level-item">小程序</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><span class="level-start"><span class="level-item">数据结构</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"><span class="level-start"><span class="level-item">机器学习</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9D%82%E9%A1%B9/"><span class="level-start"><span class="level-item">杂项</span></span><span class="level-end"><span class="level-item tag">31</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%AF%94%E7%89%B9%E5%B8%81/"><span class="level-start"><span class="level-item">比特币</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/"><span class="level-start"><span class="level-item">知识点整理</span></span><span class="level-end"><span class="level-item tag">19</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/mysql/"><span class="level-start"><span class="level-item">mysql</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/"><span class="level-start"><span class="level-item">redis</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">算法</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"><span class="level-start"><span class="level-item">网络安全</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li></ul></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">shn&#039;s blog</a><p class="is-size-7"><span>&copy; 2025 ShiHaonan</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">Welcome to shn's blog!</p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

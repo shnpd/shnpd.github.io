@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>文献总结 - shn&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="shn&#039;s blog"><meta name="msapplication-TileImage" content="/images/icon_blog.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="shn&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="完整性验证完整性验证的本质用户首先对数据进行预处理，保存一些私有验证元数据，然后将文件发送给服务器存储。在验证完整性时用户向服务器发送挑战，服务器根据挑战返回给用户证明，用户验证证明的正确性。"><meta property="og:type" content="blog"><meta property="og:title" content="文献总结"><meta property="og:url" content="https://shnpd.github.io/2024/05/17/%E6%9D%82%E9%A1%B9/%E6%96%87%E7%8C%AE%E6%80%BB%E7%BB%93/"><meta property="og:site_name" content="shn&#039;s blog"><meta property="og:description" content="完整性验证完整性验证的本质用户首先对数据进行预处理，保存一些私有验证元数据，然后将文件发送给服务器存储。在验证完整性时用户向服务器发送挑战，服务器根据挑战返回给用户证明，用户验证证明的正确性。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/20240517152735.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/20240517153049.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/20240521193914.png"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/20240521194248.png"><meta property="article:published_time" content="2024-05-17T07:07:53.000Z"><meta property="article:modified_time" content="2025-03-13T08:46:25.282Z"><meta property="article:author" content="ShiHaonan"><meta property="article:tag" content="区块链审计"><meta property="article:tag" content="完整性验证"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/20240517152735.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://shnpd.github.io/2024/05/17/%E6%9D%82%E9%A1%B9/%E6%96%87%E7%8C%AE%E6%80%BB%E7%BB%93/"},"headline":"文献总结","image":["https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/20240517152735.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/20240517153049.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/20240521193914.png","https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/20240521194248.png"],"datePublished":"2024-05-17T07:07:53.000Z","dateModified":"2025-03-13T08:46:25.282Z","author":{"@type":"Person","name":"ShiHaonan"},"publisher":{"@type":"Organization","name":"shn's blog","logo":{"@type":"ImageObject","url":{"text":"shn's blog"}}},"description":"完整性验证完整性验证的本质用户首先对数据进行预处理，保存一些私有验证元数据，然后将文件发送给服务器存储。在验证完整性时用户向服务器发送挑战，服务器根据挑战返回给用户证明，用户验证证明的正确性。"}</script><link rel="canonical" href="https://shnpd.github.io/2024/05/17/%E6%9D%82%E9%A1%B9/%E6%96%87%E7%8C%AE%E6%80%BB%E7%BB%93/"><link rel="icon" href="/images/icon_blog.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><meta name="msvalidate.01" content="E38AFEA650A8300110261393E7FD0A39"><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">shn&#039;s blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-05-17T07:07:53.000Z" title="5/17/2024, 3:07:53 PM">2024-05-17</time>发表</span><span class="level-item"><time dateTime="2025-03-13T08:46:25.282Z" title="3/13/2025, 4:46:25 PM">2025-03-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/%E5%AD%A6%E6%9C%AF/">学术</a></span><span class="level-item">17 分钟读完 (大约2494个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">文献总结</h1><div class="content"><h2 id="完整性验证"><a href="#完整性验证" class="headerlink" title="完整性验证"></a>完整性验证</h2><p>完整性验证的本质用户首先对数据进行预处理，保存一些私有验证元数据，然后将文件发送给服务器存储。在验证完整性时用户向服务器发送挑战，服务器根据挑战返回给用户证明，用户验证证明的正确性。<span id="more"></span><br>验证证明时通常是判断某两个值是否相等，其中一个值是根据服务器返回的证明构造的，另一个值是用户根据私有的验证元信息构造的，这里通常使用的技术有双线性映射、同态验证标签等。</p>
+<h3 id="基于密钥哈希的方案"><a href="#基于密钥哈希的方案" class="headerlink" title="基于密钥哈希的方案"></a>基于密钥哈希的方案</h3><p>不推荐该方案</p>
+<p>在存储文件 F 之前，验证者计算并存储哈希值 r &#x3D; hκ(F) 以及秘密随机密钥 κ。为了检查证明者是否拥有 F，验证者向证明者出示 κ 并要求证明者计算并返回 r。这个简单的协议就提供了证明者知道 F 的有力证明。通过在不同的密钥上存储多个哈希值，验证者可以发起多个独立的检查。</p>
+<p>注意：这里使用基于密钥的哈希而不能使用单独的哈希，因为证明者可能只保存文件的哈希而不保存原始文件，使用密钥哈希这样证明者返回的证明值需要根据用户提供的密钥计算，每次都不同，所以必须保存原始文件</p>
+<p>缺点：资源成本高，要求验证者存储与其要执行的检查数量成线性关系的多个哈希值。并且每次调用都要求证明者处理整个文件F，对于大的 F ，即使是像散列这样的轻量级计算操作也可能非常繁重。</p>
+<h3 id="PDP方案（同态可验证标签）"><a href="#PDP方案（同态可验证标签）" class="headerlink" title="PDP方案（同态可验证标签）"></a>PDP方案（同态可验证标签）</h3><blockquote>
+<p>ATENIESE G, BURNS R, CURTMOLA R, 等. Provable data possession at untrusted stores[C&#x2F;OL]</p>
+</blockquote>
+<p>基于<strong>同态可验证标签</strong></p>
+<p>同态特性可以将多个标签组合成单个标签，可以实现常量大小且比实际文件小得多的证明</p>
+<p>本方案对文件进行分块处理，在验证时会抽样验证文件块的子集，减少通信开销，实验证明验证的成功率也比较高。</p>
+<p>PDP方案包括四个算法</p>
+<ul>
+<li>KeyGen(1^k^)→(pk,sk)：客户端执行，生成密钥对</li>
+<li>TagBlock(pk,sk,m)→Tm：客户端执行，生成验证元数据。m是文件</li>
+<li>GenProof(pk,F,chal,Σ)→V：服务器运行，生成所有权证明。F是文件块集合、chal是挑战 、Σ是F中对应块的验证元数据集合。</li>
+<li>CheckProof(pk,sk,chal,v)→{“success”,“failure”}：客户端执行，验证所有权证明</li>
+</ul>
+<p>具体算法:<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/20240517152735.png"></p>
+<blockquote>
+<p>个人理解，这里同态特性体现在将多个标签T相乘后得到的黄色部分，随后在计算ρ的时候也得到了对应的部分，这样在验证的时候可以相互抵消。即一次可以验证任意个标签，证明的大小始终是相乘后的结果为一个常量。</p>
+</blockquote>
+<p>这里aj的作用是：由于aj​ 是随机生成的，服务器无法预测哪些 aj​ 将被用于下一个证明。因此，服务器不能只存储数据块的总和或任何其他简化形式的数据表示，因为这样做将无法满足 aj​ 系数的特定组合。</p>
+<p>另一种方案是去掉aj：去掉aj可以减少计算量，但是只能保证服务器具有m的总和，而不一定拥有每个文件块</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/20240517153049.png">
+
+<h3 id="POR方案（随机哨兵）"><a href="#POR方案（随机哨兵）" class="headerlink" title="POR方案（随机哨兵）"></a>POR方案（随机哨兵）</h3><blockquote>
+<p>JUELS A, KALISKI B S. Pors: proofs of retrievability for large files[C&#x2F;OL]</p>
+</blockquote>
+<p>简而言之，我们的 POR 协议对 F 进行加密并随机嵌入一组称为哨兵的随机值校验块。这里使用加密使得哨兵与其他文件块无法区分。验证者通过指定哨兵集合的位置并要求证明者返回相关的哨兵值来挑战证明者。如果证明者修改或删除了 F 的很大一部分，那么它也很有可能删除了一些哨兵。因此它不太可能正确响应验证者。为了防止 F 的一小部分的证明者损坏，我们还使用了纠错码。F ̃表示证明者存储的完整文件</p>
+<p>本方案的两种情况：</p>
+<ul>
+<li>假设证明者在接收到编码文件F ̃后，破坏了三个随机选择的位：β1、β2、β3。这些位不太可能驻留在哨兵中，哨兵只构成F ̃的一小部分。因此，验证器可能不会通过 POR 执行检测到损坏。然而，由于 F 中存在错误纠正，验证者可以完整地恢复原始文件 F。</li>
+<li>相反，假设证明者损坏了 F 中的许多块，例如文件的 20%。在这种情况下（没有非常严重的错误编码），验证者不太可能恢复原始文件 F 。另一方面，验证者在 POR 中请求的每个哨兵将以大约 1&#x2F;5 的概率检测到损坏。通过请求数百个哨兵，验证者可以以压倒性的概率检测到损坏。</li>
+</ul>
+<blockquote>
+<p>前面提到的PDP方案依赖于文件的模幂运算，属于计算密集型的运算</p>
+</blockquote>
+<p><strong>过程细节：</strong></p>
+<p>用户只在本地存储哨兵的值作为验证元数据</p>
+<ol>
+<li>密钥生成</li>
+<li>文件编码：将文件分成多个块并使用纠错码以恢复原始数据；加密文件，生成随机的哨兵值，并将其嵌入到加密文件的随机位置中。并使用伪随机排列对加密文件的数据块进行重新排列，以隐藏哨兵的位置。  </li>
+<li>挑战生成：根据预先排列的策略，验证者选择一组哨兵，将该组哨兵的位置作为挑战发送给证明者  </li>
+<li>证明生成：证明者将该位置上的内容返回给验证者  </li>
+<li>验证：验证证明者返回的值是否与本地存储的哨兵值相匹配</li>
+</ol>
+<h3 id="基于Merkle树的方案"><a href="#基于Merkle树的方案" class="headerlink" title="基于Merkle树的方案"></a>基于Merkle树的方案</h3><blockquote>
+<p>YUE D, LI R, ZHANG Y, 等. Blockchain-based verification framework for data integrity in edge-cloud storage[J&#x2F;OL]</p>
+</blockquote>
+<p><strong>准备阶段</strong></p>
+<ol>
+<li>客户端将数据分成多个分片，并使用这些分片构建哈希 Merkle 树。</li>
+<li>客户端将该哈希树的<strong>根</strong>存储在区块链上，表示为root1。</li>
+<li>客户端将其数据和<strong>公共</strong> Merkle 树上传到 ECS</li>
+</ol>
+<p><strong>验证阶段</strong></p>
+<ol>
+<li>客户端向ECS节点<strong>发送挑战数si</strong>，ECS节点选择分片i进行验证。</li>
+<li>ECS根据si和分片i，使用哈希函数计算<strong>哈希摘要i</strong>‘。（si+i -&gt; i’）</li>
+<li>ECS将<strong>摘要i’和相应的辅助信息</strong>发送给BC。  </li>
+<li>区块链上的智能合约计算一个新的哈希根，记为root2，并将root1与root2进行比较。如果相等，则保证数据完整性；否则，数据完整性将被破坏。</li>
+<li>BC将验证结果返回给客户端。</li>
+</ol>
+<p>Merkle树的结构：</p>
+<img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/20240521193914.png">
+Merkle树分为公共和私有两部分，私有部分的底层由分片和挑战数组成。私有部分的第二层包含摘要，Digesti=H(si+shardi)。公共部分的Leafmn是第m层的第n个节点，树的根记为R。
+
+<p>Merkle树的公共部分需要上传到ECS节点，以协助验证每个数据分片。私有部分的数据分片shardi也会上传到ECS节点。至于随机挑战数si，只有当客户端需要验证相应的数据分片时才可以发送给ECS节点。因此，si是由客户端保存在本地的。</p>
+<p>辅助信息：<br>假设原始数据分为12个分片，分支数为4，创建如下merkle 树，假设验证shard0，我们需要D1,D2,D3,D13,D14，这些就是验证shard0需要的辅助信息。<br><img src="https://cdn.jsdelivr.net/gh/shnpd/blog-pic@main/20240521194248.png"></p>
+<p>TODO:如何保证区块链收到的摘要和辅助信息就是对应的客户端发送的挑战的文件块呢？这里感觉客户端在发送挑战的时候应该将文件块摘要发给区块链，然后由区块链根据辅助信息验证（也不行那样的话ECS可以只保存摘要而不保存原始数据，ECS仍需发送摘要，ECS发送摘要可以证明它保存了原始数据，因为s是客户端私有的，只有ECS收到了s后才能结合本地保存的原始数据计算摘要，但是这只能使用一次，因为下一次ECS就可以只保存摘要而不保存原始数据，这在该场景下不可行，但是在我们跨链的场景下应该是可行的，因为我们只需要在接收数据时验证一次正确性即可。）（区块链需要能够验证数据摘要确实是用户发起挑战对应的数据，用户同步将挑战发给区块链，区块链进行比对！但是用户没有原始数据！用户只有随机数s）</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>文献总结</p><p><a href="https://shnpd.github.io/2024/05/17/杂项/文献总结/">https://shnpd.github.io/2024/05/17/杂项/文献总结/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>ShiHaonan</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2024-05-17</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-03-13</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%AE%A1%E8%AE%A1/">区块链审计</a><a class="link-muted mr-2" rel="tag" href="/tags/%E5%AE%8C%E6%95%B4%E6%80%A7%E9%AA%8C%E8%AF%81/">完整性验证</a></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/images/wxpay.jpg" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2024/05/18/%E6%9D%82%E9%A1%B9/dig%E5%91%BD%E4%BB%A4/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">dig命令</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2024/04/08/%E6%9D%82%E9%A1%B9/DNS%E6%9C%8D%E5%8A%A1%E5%99%A8/"><span class="level-item">DNS服务器</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card" id="comments"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://shnpd.github.io/2024/05/17/%E6%9D%82%E9%A1%B9/%E6%96%87%E7%8C%AE%E6%80%BB%E7%BB%93/';
+            this.page.identifier = '2024/05/17/杂项/文献总结/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'shns-blog' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#完整性验证"><span class="level-left"><span class="level-item">1</span><span class="level-item">完整性验证</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#基于密钥哈希的方案"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">基于密钥哈希的方案</span></span></a></li><li><a class="level is-mobile" href="#PDP方案（同态可验证标签）"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">PDP方案（同态可验证标签）</span></span></a></li><li><a class="level is-mobile" href="#POR方案（随机哨兵）"><span class="level-left"><span class="level-item">1.3</span><span class="level-item">POR方案（随机哨兵）</span></span></a></li><li><a class="level is-mobile" href="#基于Merkle树的方案"><span class="level-left"><span class="level-item">1.4</span><span class="level-item">基于Merkle树的方案</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-04-21T12:20:00.000Z">2025-04-21</time></p><p class="title"><a href="/2025/04/21/gonote/%E3%80%90Go%E3%80%91%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">【Go】堆和栈变量</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-19T16:00:00.000Z">2025-03-20</time></p><p class="title"><a href="/2025/03/20/gonote/%E3%80%90Go%E3%80%91atomic%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C/">【Go】atomic原子操作</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-14T16:00:00.000Z">2025-03-15</time></p><p class="title"><a href="/2025/03/15/interview/redis/%E3%80%90redis%E3%80%91%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">【redis】数据类型</a></p><p class="categories"><a href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">知识点整理</a> / <a href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/">redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/%E3%80%90Go%E3%80%91Channel/">【Go】Channel</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/%E3%80%90Go%E3%80%91CSP%E6%A8%A1%E5%9E%8B/">【Go】CSP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Fabric/"><span class="level-start"><span class="level-item">Fabric</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/Golang/"><span class="level-start"><span class="level-item">Golang</span></span><span class="level-end"><span class="level-item tag">45</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Shell%E8%84%9A%E6%9C%AC/"><span class="level-start"><span class="level-item">Shell脚本</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/bytedance/"><span class="level-start"><span class="level-item">bytedance</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"><span class="level-start"><span class="level-item">以太坊</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%88%B7%E9%A2%98%E9%9B%86/"><span class="level-start"><span class="level-item">刷题集</span></span><span class="level-end"><span class="level-item tag">27</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="level-start"><span class="level-item">前端</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="level-start"><span class="level-item">区块链</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AD%A6%E6%9C%AF/"><span class="level-start"><span class="level-item">学术</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"><span class="level-start"><span class="level-item">密码学</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%B0%8F%E7%A8%8B%E5%BA%8F/"><span class="level-start"><span class="level-item">小程序</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><span class="level-start"><span class="level-item">数据结构</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"><span class="level-start"><span class="level-item">机器学习</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9D%82%E9%A1%B9/"><span class="level-start"><span class="level-item">杂项</span></span><span class="level-end"><span class="level-item tag">31</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%AF%94%E7%89%B9%E5%B8%81/"><span class="level-start"><span class="level-item">比特币</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/"><span class="level-start"><span class="level-item">知识点整理</span></span><span class="level-end"><span class="level-item tag">19</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/mysql/"><span class="level-start"><span class="level-item">mysql</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/"><span class="level-start"><span class="level-item">redis</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">算法</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"><span class="level-start"><span class="level-item">网络安全</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li></ul></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">shn&#039;s blog</a><p class="is-size-7"><span>&copy; 2025 ShiHaonan</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">Welcome to shn's blog!</p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

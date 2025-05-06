@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>go mod 依赖管理 - shn&#039;s blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="shn&#039;s blog"><meta name="msapplication-TileImage" content="/images/icon_blog.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="shn&#039;s blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="本文介绍了 Go 语言的依赖管理工具 go mod，它通过模块化的方式来管理项目的依赖关系。"><meta property="og:type" content="blog"><meta property="og:title" content="go mod 依赖管理"><meta property="og:url" content="https://shnpd.github.io/2024/10/13/%E6%9D%82%E9%A1%B9/go-mod-%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/"><meta property="og:site_name" content="shn&#039;s blog"><meta property="og:description" content="本文介绍了 Go 语言的依赖管理工具 go mod，它通过模块化的方式来管理项目的依赖关系。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://shnpd.github.io/img/og_image.png"><meta property="article:published_time" content="2024-10-13T02:31:52.000Z"><meta property="article:modified_time" content="2025-03-13T08:46:24.453Z"><meta property="article:author" content="ShiHaonan"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://shnpd.github.io/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://shnpd.github.io/2024/10/13/%E6%9D%82%E9%A1%B9/go-mod-%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/"},"headline":"go mod 依赖管理","image":["https://shnpd.github.io/img/og_image.png"],"datePublished":"2024-10-13T02:31:52.000Z","dateModified":"2025-03-13T08:46:24.453Z","author":{"@type":"Person","name":"ShiHaonan"},"publisher":{"@type":"Organization","name":"shn's blog","logo":{"@type":"ImageObject","url":{"text":"shn's blog"}}},"description":"本文介绍了 Go 语言的依赖管理工具 go mod，它通过模块化的方式来管理项目的依赖关系。"}</script><link rel="canonical" href="https://shnpd.github.io/2024/10/13/%E6%9D%82%E9%A1%B9/go-mod-%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/"><link rel="icon" href="/images/icon_blog.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link data-pjax rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link data-pjax rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><meta name="msvalidate.01" content="E38AFEA650A8300110261393E7FD0A39"><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/">shn&#039;s blog</a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-10-13T02:31:52.000Z" title="10/13/2024, 10:31:52 AM">2024-10-13</time>发表</span><span class="level-item"><time dateTime="2025-03-13T08:46:24.453Z" title="3/13/2025, 4:46:24 PM">2025-03-13</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Golang/">Golang</a></span><span class="level-item">13 分钟读完 (大约1923个字)</span></div></div><h1 class="title is-3 is-size-4-mobile">go mod 依赖管理</h1><div class="content"><p>本文介绍了 Go 语言的依赖管理工具 go mod，它通过模块化的方式来管理项目的依赖关系。<span id="more"></span>文章详细阐述了 go mod 的基本概念、如何启用模块化、go.mod 文件的结构以及常用命令。此外，还介绍了 go.sum 文件的作用、Go 模块版本控制、Go 模块代理的配置方法，以及一个简单的 Go 模块项目的工作流程示例。最后，总结了 go mod 的主要功能和特点，包括初始化模块、下载更新依赖包、清理未使用的依赖等，并强调了 go.mod 和 go.sum 文件在依赖管理中的重要性。</p>
+<p><strong>go mod</strong> 是 Go 1.11 引入的依赖管理工具，它通过模块化的方式来管理项目的依赖关系，使得 Go 项目不再依赖于 GOPATH 目录，可以在任意位置管理项目及其依赖。模块系统解决了之前版本中依赖包管理的复杂性问题，并且支持依赖版本控制。</p>
+<h2 id="1-什么是-Go-模块-go-mod-？"><a href="#1-什么是-Go-模块-go-mod-？" class="headerlink" title="1. 什么是 Go 模块 (go mod)？"></a>1. 什么是 Go 模块 (go mod)？</h2><p>Go 模块（Go Modules）是一种项目和依赖包管理的方式。它通过定义一个 go.mod 文件，来管理你的项目及其所依赖的其他模块。每个模块包含了一个版本化的 Go 包集合，支持对包的版本管理和依赖解析。</p>
+<ul>
+<li>模块：Go 模块是一个版本化的依赖管理单元，可以是一个仓库中的所有包，也可以是某个包的子目录。</li>
+<li><strong>go.mod</strong> 文件：这是模块的配置文件，描述了当前项目的模块路径和依赖信息（模块的版本号等）。</li>
+<li><strong>go.sum</strong> 文件：这个文件包含了所有依赖模块的校验和信息，用于验证依赖的正确性和完整性。</li>
+</ul>
+<h2 id="2-启用模块化"><a href="#2-启用模块化" class="headerlink" title="2. 启用模块化"></a>2. 启用模块化</h2><p>Go 模块化管理默认开启，你可以在任何地方使用 go mod，而不必把项目放到 GOPATH&#x2F;src 目录中。</p>
+<p>启用 Go 模块： 当你在一个新的项目中使用 Go 模块时，首先需要在项目根目录下初始化一个模块，生成 go.mod 文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go mod init &lt;module-path&gt;</span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go mod init github.com/username/myproject</span><br></pre></td></tr></table></figure>
+
+<p>这会生成一个 go.mod 文件，它包含了模块的名称（路径）和当前使用的 Go 版本。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">module github.com/username/myproject</span><br><span class="line"></span><br><span class="line">go 1.21</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-go-mod-文件结构"><a href="#3-go-mod-文件结构" class="headerlink" title="3. go.mod 文件结构"></a>3. go.mod 文件结构</h2><p>go.mod 文件定义了当前项目的模块路径和依赖的版本。其典型结构如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">module github.com/username/myproject</span><br><span class="line"></span><br><span class="line">go 1.21</span><br><span class="line"></span><br><span class="line">require (</span><br><span class="line">    github.com/pkg/errors v0.9.1</span><br><span class="line">    golang.org/x/net v0.0.0-20211012123533-c345ae6c3143</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>module: 指定模块的路径(通常是代码库的 URL)。</li>
+<li>go: 指定使用的 Go 版本。</li>
+<li>require: 列出了项目依赖的模块及其版本。</li>
+</ul>
+<h2 id="4-go-mod-常用命令"><a href="#4-go-mod-常用命令" class="headerlink" title="4. go.mod 常用命令"></a>4. go.mod 常用命令</h2><ol>
+<li>go mod init<br>初始化一个新的 Go 模块，生成 go.mod 文件。命令格式：<br><code>go mod init &lt;module-path&gt;</code></li>
+<li>go get<br>用于获取并安装依赖包或者更新依赖包的版本。常见用法：<ul>
+<li>添加新的依赖：<code>go get github.com/pkg/errors</code></li>
+<li>升级到某个特定版本：<code>go get github.com/pkg/errors@v0.9.1</code></li>
+<li>获取最新的次要版本或补丁版本：<code>go get github.com/pkg/errors@latest</code><br>go get 命令会自动更新 go.mod 和 go.sum 文件。</li>
+</ul>
+</li>
+<li>go mod tidy<br>清理 go.mod 和 go.sum 文件，移除未使用的依赖项，并下载所需的依赖。运行这个命令有助于保持模块依赖文件的整洁：<br><code>go mod tidy</code></li>
+<li>go mod vendor<br>将所有依赖包下载到本地项目的 vendor&#x2F; 目录中。使用 vendor 可以确保在构建时项目不依赖外部网络，所有依赖都在本地:<br><code>go mod vendor</code></li>
+<li>go mod verify<br>验证模块的依赖包是否与 go.sum 中的校验和一致，确保依赖包没有被篡改或损坏：<br><code>go mod verify</code></li>
+<li>go mod graph<br>列出当前项目的模块依赖关系图，帮助分析依赖的层次结构：<br><code>go mod graph</code></li>
+<li>go mod edit<br>手动编辑 go.mod 文件，用于添加、删除或更改模块依赖。例如，修改模块的 require 字段：<br><code>go mod edit -require=github.com/pkg/errors@v0.9.1</code></li>
+<li>go list -m all<br>列出所有模块依赖及其版本信息。可以用来查看项目当前使用的所有依赖包：<br><code>go list -m all</code></li>
+</ol>
+<h2 id="5-go-sum-文件"><a href="#5-go-sum-文件" class="headerlink" title="5. go.sum 文件"></a>5. go.sum 文件</h2><p>当你下载模块时，Go 会生成或更新 go.sum 文件，记录每个模块版本的哈希值和其所有依赖包的版本。这是为了确保依赖的模块没有被篡改，go.sum 文件帮助验证模块的完整性。</p>
+<h2 id="6-Go-模块版本控制"><a href="#6-Go-模块版本控制" class="headerlink" title="6. Go 模块版本控制"></a>6. Go 模块版本控制</h2><p>在 Go 模块中，版本号遵循 语义化版本控制（SemVer）规范，格式为 vX.Y.Z，其中：</p>
+<ul>
+<li>X：主版本号（大版本），进行不兼容的 API 修改时增加。</li>
+<li>Y：次版本号，向下兼容的新功能增加时增加。</li>
+<li>Z：修订号，仅做向下兼容的问题修复时增加。</li>
+</ul>
+<p>使用 go get 时，可以指定依赖的版本，或者让 Go 自动处理版本升级：</p>
+<ul>
+<li>升级到指定版本：<code>go get github.com/pkg/errors@v0.9.1</code></li>
+<li>升级到最新稳定版：<code>go get github.com/pkg/errors@latest</code></li>
+</ul>
+<h2 id="7-Go-模块代理"><a href="#7-Go-模块代理" class="headerlink" title="7. Go 模块代理"></a>7. Go 模块代理</h2><p>为了加快模块下载速度，Go 允许使用模块代理（Module Proxy）。Go 的默认代理是 proxy.golang.org，如果你的网络环境访问 Golang 官方模块仓库比较慢或被限制，你可以选择配置代理，如 goproxy.cn（适用于中国用户）。</p>
+<p>配置代理的方法：<br><code>go env -w GOPROXY=https://goproxy.cn,direct</code><br>这将显著加快模块下载速度。</p>
+<h2 id="8-示例流程"><a href="#8-示例流程" class="headerlink" title="8. 示例流程"></a>8. 示例流程</h2><p>下面是一个简单的 Go 模块项目的工作流程示例：</p>
+<ol>
+<li>初始化项目：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> myproject</span><br><span class="line"><span class="built_in">cd</span> myproject</span><br><span class="line">go mod init github.com/username/myproject</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>添加依赖：在代码中引入第三方依赖，例如：</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/pkg/errors&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get github.com/pkg/errors</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>编译项目：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go build</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>清理依赖：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go mod tidy</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>查看依赖关系：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go mod graph</span><br></pre></td></tr></table></figure>
+
+<h2 id="9-依赖管理目录"><a href="#9-依赖管理目录" class="headerlink" title="9. 依赖管理目录"></a>9. 依赖管理目录</h2><p>Go 在模块化模式下（go mod），依赖包下载路径与传统的 GOPATH 模式不同，<strong>它下载依赖到一个全局的缓存目录，而不是直接放到项目目录中</strong>。</p>
+<p>在 Go 模块化管理中，依赖包会被下载到本地的模块缓存目录，而不是 GOPATH&#x2F;src 目录下。默认情况下，依赖包下载到以下路径：<code>$GOPATH/pkg/mod</code></p>
+<p>如果你希望将所有依赖包下载到<strong>项目的 vendor 目录</strong>下，可以使用 go mod vendor 命令，它会将所有依赖拷贝到本地项目的 vendor&#x2F; 目录。这样在构建项目时，Go 会优先使用本地的 vendor&#x2F; 目录而不是全局缓存。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>go mod init：初始化模块，生成 go.mod 文件。</li>
+<li>go get：下载、更新和管理依赖包。</li>
+<li>go mod tidy：清理未使用的依赖。</li>
+<li>go.mod 文件记录项目依赖，go.sum 文件记录模块校验和，确保模块一致性。</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>go mod 依赖管理</p><p><a href="https://shnpd.github.io/2024/10/13/杂项/go-mod-依赖管理/">https://shnpd.github.io/2024/10/13/杂项/go-mod-依赖管理/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>ShiHaonan</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2024-10-13</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-03-13</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/images/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/images/wxpay.jpg" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2024/11/28/gonote/%E3%80%90Go%E3%80%91slice%E5%88%87%E7%89%87%E8%AF%A6%E8%A7%A3/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">【Go】slice切片详解</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2024/07/09/gonote/%E3%80%90Go%E3%80%91%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/"><span class="level-item">【Go】字符串相关问题</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card" id="comments"><div class="card-content"><h3 class="title is-5">评论</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://shnpd.github.io/2024/10/13/%E6%9D%82%E9%A1%B9/go-mod-%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/';
+            this.page.identifier = '2024/10/13/杂项/go-mod-依赖管理/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'shns-blog' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#1-什么是-Go-模块-go-mod-？"><span class="level-left"><span class="level-item">1</span><span class="level-item">1. 什么是 Go 模块 (go mod)？</span></span></a></li><li><a class="level is-mobile" href="#2-启用模块化"><span class="level-left"><span class="level-item">2</span><span class="level-item">2. 启用模块化</span></span></a></li><li><a class="level is-mobile" href="#3-go-mod-文件结构"><span class="level-left"><span class="level-item">3</span><span class="level-item">3. go.mod 文件结构</span></span></a></li><li><a class="level is-mobile" href="#4-go-mod-常用命令"><span class="level-left"><span class="level-item">4</span><span class="level-item">4. go.mod 常用命令</span></span></a></li><li><a class="level is-mobile" href="#5-go-sum-文件"><span class="level-left"><span class="level-item">5</span><span class="level-item">5. go.sum 文件</span></span></a></li><li><a class="level is-mobile" href="#6-Go-模块版本控制"><span class="level-left"><span class="level-item">6</span><span class="level-item">6. Go 模块版本控制</span></span></a></li><li><a class="level is-mobile" href="#7-Go-模块代理"><span class="level-left"><span class="level-item">7</span><span class="level-item">7. Go 模块代理</span></span></a></li><li><a class="level is-mobile" href="#8-示例流程"><span class="level-left"><span class="level-item">8</span><span class="level-item">8. 示例流程</span></span></a></li><li><a class="level is-mobile" href="#9-依赖管理目录"><span class="level-left"><span class="level-item">9</span><span class="level-item">9. 依赖管理目录</span></span></a></li><li><a class="level is-mobile" href="#总结"><span class="level-left"><span class="level-item">10</span><span class="level-item">总结</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-04-21T12:20:00.000Z">2025-04-21</time></p><p class="title"><a href="/2025/04/21/gonote/%E3%80%90Go%E3%80%91%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">【Go】堆和栈变量</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-19T16:00:00.000Z">2025-03-20</time></p><p class="title"><a href="/2025/03/20/gonote/%E3%80%90Go%E3%80%91atomic%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C/">【Go】atomic原子操作</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-14T16:00:00.000Z">2025-03-15</time></p><p class="title"><a href="/2025/03/15/interview/redis/%E3%80%90redis%E3%80%91%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">【redis】数据类型</a></p><p class="categories"><a href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">知识点整理</a> / <a href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/">redis</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/%E3%80%90Go%E3%80%91Channel/">【Go】Channel</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-02T16:00:00.000Z">2025-03-03</time></p><p class="title"><a href="/2025/03/03/gonote/%E3%80%90Go%E3%80%91CSP%E6%A8%A1%E5%9E%8B/">【Go】CSP模型</a></p><p class="categories"><a href="/categories/Golang/">Golang</a></p></div></article></div></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Fabric/"><span class="level-start"><span class="level-item">Fabric</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/Golang/"><span class="level-start"><span class="level-item">Golang</span></span><span class="level-end"><span class="level-item tag">45</span></span></a></li><li><a class="level is-mobile" href="/categories/Java/"><span class="level-start"><span class="level-item">Java</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/Shell%E8%84%9A%E6%9C%AC/"><span class="level-start"><span class="level-item">Shell脚本</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/categories/bytedance/"><span class="level-start"><span class="level-item">bytedance</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"><span class="level-start"><span class="level-item">以太坊</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%88%B7%E9%A2%98%E9%9B%86/"><span class="level-start"><span class="level-item">刷题集</span></span><span class="level-end"><span class="level-item tag">27</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="level-start"><span class="level-item">前端</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="level-start"><span class="level-item">区块链</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AD%A6%E6%9C%AF/"><span class="level-start"><span class="level-item">学术</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"><span class="level-start"><span class="level-item">密码学</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%E5%B0%8F%E7%A8%8B%E5%BA%8F/"><span class="level-start"><span class="level-item">小程序</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">14</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><span class="level-start"><span class="level-item">数据结构</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"><span class="level-start"><span class="level-item">机器学习</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%9D%82%E9%A1%B9/"><span class="level-start"><span class="level-item">杂项</span></span><span class="level-end"><span class="level-item tag">31</span></span></a></li><li><a class="level is-mobile" href="/categories/%E6%AF%94%E7%89%B9%E5%B8%81/"><span class="level-start"><span class="level-item">比特币</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/"><span class="level-start"><span class="level-item">知识点整理</span></span><span class="level-end"><span class="level-item tag">19</span></span></a><ul><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/mysql/"><span class="level-start"><span class="level-item">mysql</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/redis/"><span class="level-start"><span class="level-item">redis</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><span class="level-start"><span class="level-item">操作系统</span></span><span class="level-end"><span class="level-item tag">8</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%E7%AE%97%E6%B3%95/"><span class="level-start"><span class="level-item">算法</span></span><span class="level-end"><span class="level-item tag">13</span></span></a></li><li><a class="level is-mobile" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/"><span class="level-start"><span class="level-item">网络安全</span></span><span class="level-end"><span class="level-item tag">9</span></span></a></li><li><a class="level is-mobile" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><span class="level-start"><span class="level-item">计算机网络</span></span><span class="level-end"><span class="level-item tag">7</span></span></a></li></ul></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/">shn&#039;s blog</a><p class="is-size-7"><span>&copy; 2025 ShiHaonan</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">Welcome to shn's blog!</p></div><div class="level-end"></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script data-pjax src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script data-pjax src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script data-pjax src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
